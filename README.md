@@ -1,6 +1,6 @@
 # Doktor-TV
 
-Offline access to DR videos
+Offline access to DR videos – download or stream.
 
 
 
