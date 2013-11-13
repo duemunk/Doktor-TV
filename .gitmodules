@@ -1,0 +1,6 @@
+[submodule "iOS/Doktor TV/Doktor TV/Submodules/KeepLayout"]
+	path = iOS/Doktor TV/Doktor TV/Submodules/KeepLayout
+	url = git://github.com/iMartinKiss/KeepLayout.git
+[submodule "iOS/Doktor TV/Doktor TV/Submodules/AFNetworking"]
+	path = iOS/Doktor TV/Doktor TV/Submodules/AFNetworking
+	url = git://github.com/AFNetworking/AFNetworking.git
