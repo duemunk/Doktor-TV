@@ -8,6 +8,8 @@
 
 #import "VideoViewController.h"
 
+#import "KeepLayout.h"
+
 @interface VideoViewController ()
 
 @end
@@ -37,7 +39,7 @@
 	
 	[self.view addSubview:moviePlayerController.view];
 	
-	moviePlayerController.view.frame = self.view.bounds;
+	moviePlayerController.view.keepInsets.equal = KeepRequired(0.0f);
 	
 	[moviePlayerController play];
 }
