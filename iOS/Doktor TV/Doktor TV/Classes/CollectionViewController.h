@@ -20,4 +20,6 @@
 @property (nonatomic, strong) NSString *sortKey;
 @property (nonatomic, assign) BOOL sortAscending;
 
+- (void)resetFetchResultsController;
+
 @end

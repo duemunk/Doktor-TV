@@ -20,9 +20,17 @@
 	_objectChanges = [NSMutableArray array];
     _sectionChanges = [NSMutableArray array];
 	
-	self.collectionView.backgroundColor = [UIColor whiteColor];
+	self.collectionView.backgroundColor = [UIColor clearColor];
 	
 	self.managedObjectContext = [DataHandler sharedInstance].managedObjectContext;
+}
+
+
+#define kCache @"ProgramCache"
+- (void)resetFetchResultsController
+{
+	[NSFetchedResultsController deleteCacheWithName:kCache];
+	self.fetchedResultsController = nil;
 }
 
 
@@ -35,7 +43,6 @@
 
 - (NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section
 {
-    
     id <NSFetchedResultsSectionInfo> sectionInfo = [self.fetchedResultsController sections][section];
     return [sectionInfo numberOfObjects];
 }
@@ -73,7 +80,7 @@
     
     // Edit the section name key path and cache name if appropriate.
     // nil for section name key path means "no sections".
-    NSFetchedResultsController *aFetchedResultsController = [[NSFetchedResultsController alloc] initWithFetchRequest:fetchRequest managedObjectContext:self.managedObjectContext sectionNameKeyPath:nil cacheName:@"Master"];
+    NSFetchedResultsController *aFetchedResultsController = [[NSFetchedResultsController alloc] initWithFetchRequest:fetchRequest managedObjectContext:self.managedObjectContext sectionNameKeyPath:nil cacheName:kCache];
     aFetchedResultsController.delegate = self;
     self.fetchedResultsController = aFetchedResultsController;
     
@@ -91,7 +98,6 @@
 - (void)controller:(NSFetchedResultsController *)controller didChangeSection:(id <NSFetchedResultsSectionInfo>)sectionInfo
            atIndex:(NSUInteger)sectionIndex forChangeType:(NSFetchedResultsChangeType)type
 {
-    
     NSMutableDictionary *change = [NSMutableDictionary new];
     
     switch(type) {
@@ -110,7 +116,6 @@
        atIndexPath:(NSIndexPath *)indexPath forChangeType:(NSFetchedResultsChangeType)type
       newIndexPath:(NSIndexPath *)newIndexPath
 {
-    
     NSMutableDictionary *change = [NSMutableDictionary new];
     switch(type)
     {
@@ -187,7 +192,7 @@
                                 [self.collectionView deleteItemsAtIndexPaths:@[obj]];
                                 break;
                             case NSFetchedResultsChangeUpdate:
-                                [self.collectionView reloadItemsAtIndexPaths:@[obj]];
+//                                [self.collectionView reloadItemsAtIndexPaths:@[obj]];
                                 break;
                             case NSFetchedResultsChangeMove:
                                 [self.collectionView moveItemAtIndexPath:obj[0] toIndexPath:obj[1]];
@@ -203,7 +208,8 @@
     [_objectChanges removeAllObjects];
 }
 
-- (BOOL)shouldReloadCollectionViewToPreventKnownIssue {
+- (BOOL)shouldReloadCollectionViewToPreventKnownIssue
+{
     __block BOOL shouldReload = NO;
     for (NSDictionary *change in _objectChanges) {
         [change enumerateKeysAndObjectsUsingBlock:^(id key, id obj, BOOL *stop) {

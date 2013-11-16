@@ -13,6 +13,15 @@
 @implementation Episode
 
 @dynamic number;
+@dynamic drID;
+@dynamic image;
+@dynamic slug;
+@dynamic title;
+@dynamic desc;
+@dynamic duration;
+@dynamic uri;
+@dynamic dkOnly;
+@dynamic subtitle;
 @dynamic season;
 
 @end

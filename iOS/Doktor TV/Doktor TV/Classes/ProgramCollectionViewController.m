@@ -9,6 +9,7 @@
 #import "ProgramCollectionViewController.h"
 
 #import "EpisodeCollectionViewCell.h"
+#import "DRHandler.h"
 
 @interface ProgramCollectionViewController ()
 
@@ -34,12 +35,13 @@
 	// Do any additional setup after loading the view.
 	
 	self.collectionView.backgroundColor = [UIColor clearColor];
+	self.collectionView.alwaysBounceVertical = YES;
 	
 	self.entity = @"Episode";
 	self.sortKey = @"season.number";
 	self.sortAscending = YES;
 	
-	self.predicate = [NSPredicate predicateWithFormat:@"season.program = %@", self.program];
+	[self updateToProgram];
 	
 	self.managedObjectContext = self.program.managedObjectContext;
 	
@@ -52,14 +54,42 @@
     // Dispose of any resources that can be recreated.
 }
 
+- (void)viewDidAppear:(BOOL)animated
+{
+	[[DRHandler sharedInstance] validateEpisodesForProgram:self.program];
+}
+
+- (void)updateToProgram
+{
+	[self resetFetchResultsController];
+	self.predicate = [NSPredicate predicateWithFormat:@"season.program = %@", self.program];
+	[self.collectionView reloadData];
+}
+
+
+- (void)setProgram:(Program *)program
+{
+	if (program != _program) {
+		_program = program;
+		[self updateToProgram];
+	}
+}
 
 
 - (UICollectionViewLayout *)defaultLayout
 {
 	UICollectionViewFlowLayout *layout = [UICollectionViewFlowLayout new];
-	layout.itemSize = CGSizeMake(100, 100);
+	layout.itemSize = CGSizeMake(130.0f, 100.0f);
+	layout.minimumInteritemSpacing =
+	layout.minimumLineSpacing = 20.0f;
+	layout.sectionInset = UIEdgeInsetsMake(0.0f, 20.0f, 0.0f, 20.0f);
 	layout.headerReferenceSize = CGSizeMake(10.0f, 10.0f);
 	return layout;
+}
+
+- (void)willRotateToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation duration:(NSTimeInterval)duration
+{
+	[self.collectionView setCollectionViewLayout:[self defaultLayout] animated:YES];
 }
 
 

@@ -26,6 +26,8 @@
     [super viewDidLoad];
 	// Do any additional setup after loading the view.
 	
+	self.view.backgroundColor = [UIColor blackColor];
+	
 	collectionViewController = [ProgramsCollectionViewController new];
 	[self addViewController:collectionViewController];
 	[collectionViewController.view keepInsets:UIEdgeInsetsZero];
@@ -33,14 +35,17 @@
 //	UINavigationController *navigationController = [[UINavigationController alloc] initWithRootViewController:collectionViewController];
 //	[self addViewController:navigationController];
 //	[navigationController.view keepInsets:UIEdgeInsetsZero];
-	
-	[DRHandler sharedInstance];
 }
 
 - (void)didReceiveMemoryWarning
 {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
+}
+
+- (void)viewDidAppear:(BOOL)animated
+{
+	[DRHandler sharedInstance];
 }
 
 @end

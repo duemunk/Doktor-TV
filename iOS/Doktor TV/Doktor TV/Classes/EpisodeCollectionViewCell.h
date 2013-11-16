@@ -10,7 +10,9 @@
 
 @class Episode;
 
-@interface EpisodeCollectionViewCell : UICollectionViewCell
+#import "CollectionViewCell.h"
+
+@interface EpisodeCollectionViewCell : CollectionViewCell
 
 @property (nonatomic, strong) Episode *episode;
 

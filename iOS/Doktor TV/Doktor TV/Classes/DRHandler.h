@@ -10,10 +10,14 @@
 
 #import "AFNetworking.h"
 
+@class Program;
+
 @interface DRHandler : NSObject
 
 @property (nonatomic, strong) AFHTTPSessionManager *afHttpSessionManager;
 
 + (DRHandler *)sharedInstance;
+
+- (void)validateEpisodesForProgram:(Program *)program;
 
 @end

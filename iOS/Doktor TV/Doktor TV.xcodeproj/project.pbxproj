@@ -49,15 +49,16 @@
 		4ECF10E21836EDF300D4C62C /* MainViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4ECF10E11836EDF300D4C62C /* MainViewController.m */; };
 		4ECF10E51836EE4400D4C62C /* UIViewController+Containment.m in Sources */ = {isa = PBXBuildFile; fileRef = 4ECF10E41836EE4400D4C62C /* UIViewController+Containment.m */; };
 		4ECF10E81836EEFF00D4C62C /* ProgramsCollectionViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4ECF10E71836EEFF00D4C62C /* ProgramsCollectionViewController.m */; };
-		4ECF10EB1836F0D200D4C62C /* ProgramCollectionCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 4ECF10EA1836F0D200D4C62C /* ProgramCollectionCell.m */; };
+		4ECF10EB1836F0D200D4C62C /* ProgramCollectionViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 4ECF10EA1836F0D200D4C62C /* ProgramCollectionViewCell.m */; };
 		4ECF10F31836F6B600D4C62C /* CollectionViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4ECF10F21836F6B600D4C62C /* CollectionViewController.m */; };
 		4ECF10F61836FA3500D4C62C /* ProgramCollectionViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4ECF10F51836FA3500D4C62C /* ProgramCollectionViewController.m */; };
 		4ECF10F9183702FE00D4C62C /* EpisodeCollectionViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 4ECF10F8183702FE00D4C62C /* EpisodeCollectionViewCell.m */; };
 		4ECF10FC1837752300D4C62C /* DRHandler.m in Sources */ = {isa = PBXBuildFile; fileRef = 4ECF10FB1837752300D4C62C /* DRHandler.m */; };
 		4ECF1101183777ED00D4C62C /* UIColor+iOS7Colors.m in Sources */ = {isa = PBXBuildFile; fileRef = 4ECF1100183777ED00D4C62C /* UIColor+iOS7Colors.m */; };
-		4ECF110418377B8E00D4C62C /* Episode.m in Sources */ = {isa = PBXBuildFile; fileRef = 4ECF110318377B8E00D4C62C /* Episode.m */; };
 		4ECF110D18378FA300D4C62C /* Program.m in Sources */ = {isa = PBXBuildFile; fileRef = 4ECF110C18378FA300D4C62C /* Program.m */; };
 		4ECF11141837A52600D4C62C /* UIImage+ImageEffects.m in Sources */ = {isa = PBXBuildFile; fileRef = 4ECF11131837A52600D4C62C /* UIImage+ImageEffects.m */; };
+		4ECF11201837CC1800D4C62C /* Episode.m in Sources */ = {isa = PBXBuildFile; fileRef = 4ECF111F1837CC1800D4C62C /* Episode.m */; };
+		4ECF11231837DA9400D4C62C /* CollectionViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 4ECF11221837DA9400D4C62C /* CollectionViewCell.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -147,8 +148,8 @@
 		4ECF10E41836EE4400D4C62C /* UIViewController+Containment.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "UIViewController+Containment.m"; path = "Classes/UIViewController+Containment.m"; sourceTree = "<group>"; };
 		4ECF10E61836EEFF00D4C62C /* ProgramsCollectionViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ProgramsCollectionViewController.h; path = Classes/ProgramsCollectionViewController.h; sourceTree = "<group>"; };
 		4ECF10E71836EEFF00D4C62C /* ProgramsCollectionViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ProgramsCollectionViewController.m; path = Classes/ProgramsCollectionViewController.m; sourceTree = "<group>"; };
-		4ECF10E91836F0D200D4C62C /* ProgramCollectionCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ProgramCollectionCell.h; path = Classes/ProgramCollectionCell.h; sourceTree = "<group>"; };
-		4ECF10EA1836F0D200D4C62C /* ProgramCollectionCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ProgramCollectionCell.m; path = Classes/ProgramCollectionCell.m; sourceTree = "<group>"; };
+		4ECF10E91836F0D200D4C62C /* ProgramCollectionViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ProgramCollectionViewCell.h; path = Classes/ProgramCollectionViewCell.h; sourceTree = "<group>"; };
+		4ECF10EA1836F0D200D4C62C /* ProgramCollectionViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ProgramCollectionViewCell.m; path = Classes/ProgramCollectionViewCell.m; sourceTree = "<group>"; };
 		4ECF10F11836F6B600D4C62C /* CollectionViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; indentWidth = 4; lastKnownFileType = sourcecode.c.h; name = CollectionViewController.h; path = Classes/CollectionViewController.h; sourceTree = "<group>"; tabWidth = 4; usesTabs = 1; wrapsLines = 1; };
 		4ECF10F21836F6B600D4C62C /* CollectionViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; indentWidth = 4; lastKnownFileType = sourcecode.c.objc; name = CollectionViewController.m; path = Classes/CollectionViewController.m; sourceTree = "<group>"; tabWidth = 4; usesTabs = 1; wrapsLines = 1; };
 		4ECF10F41836FA3500D4C62C /* ProgramCollectionViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ProgramCollectionViewController.h; path = Classes/ProgramCollectionViewController.h; sourceTree = "<group>"; };
@@ -159,12 +160,14 @@
 		4ECF10FB1837752300D4C62C /* DRHandler.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = DRHandler.m; path = Classes/DRHandler.m; sourceTree = "<group>"; };
 		4ECF10FF183777ED00D4C62C /* UIColor+iOS7Colors.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "UIColor+iOS7Colors.h"; path = "iOS7Colors/UIColor+iOS7Colors.h"; sourceTree = "<group>"; };
 		4ECF1100183777ED00D4C62C /* UIColor+iOS7Colors.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "UIColor+iOS7Colors.m"; path = "iOS7Colors/UIColor+iOS7Colors.m"; sourceTree = "<group>"; };
-		4ECF110218377B8E00D4C62C /* Episode.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Episode.h; path = Classes/Episode.h; sourceTree = "<group>"; };
-		4ECF110318377B8E00D4C62C /* Episode.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = Episode.m; path = Classes/Episode.m; sourceTree = "<group>"; };
 		4ECF110B18378FA300D4C62C /* Program.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Program.h; path = Classes/Program.h; sourceTree = "<group>"; };
 		4ECF110C18378FA300D4C62C /* Program.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = Program.m; path = Classes/Program.m; sourceTree = "<group>"; };
 		4ECF11121837A52600D4C62C /* UIImage+ImageEffects.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIImage+ImageEffects.h"; sourceTree = "<group>"; };
 		4ECF11131837A52600D4C62C /* UIImage+ImageEffects.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIImage+ImageEffects.m"; sourceTree = "<group>"; };
+		4ECF111E1837CC1800D4C62C /* Episode.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Episode.h; path = Classes/Episode.h; sourceTree = "<group>"; };
+		4ECF111F1837CC1800D4C62C /* Episode.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = Episode.m; path = Classes/Episode.m; sourceTree = "<group>"; };
+		4ECF11211837DA9400D4C62C /* CollectionViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; indentWidth = 4; lastKnownFileType = sourcecode.c.h; name = CollectionViewCell.h; path = Classes/CollectionViewCell.h; sourceTree = "<group>"; tabWidth = 4; usesTabs = 1; wrapsLines = 1; };
+		4ECF11221837DA9400D4C62C /* CollectionViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; indentWidth = 4; lastKnownFileType = sourcecode.c.objc; name = CollectionViewCell.m; path = Classes/CollectionViewCell.m; sourceTree = "<group>"; tabWidth = 4; usesTabs = 1; wrapsLines = 1; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -372,10 +375,10 @@
 		4ECF10DF1836EB7700D4C62C /* Model */ = {
 			isa = PBXGroup;
 			children = (
-				4ECF110218377B8E00D4C62C /* Episode.h */,
-				4ECF110318377B8E00D4C62C /* Episode.m */,
 				4ECF110B18378FA300D4C62C /* Program.h */,
 				4ECF110C18378FA300D4C62C /* Program.m */,
+				4ECF111E1837CC1800D4C62C /* Episode.h */,
+				4ECF111F1837CC1800D4C62C /* Episode.m */,
 				4ECF10D31836E85800D4C62C /* Model.xcdatamodeld */,
 				4ECF10D61836EB6D00D4C62C /* Season.h */,
 				4ECF10D71836EB6D00D4C62C /* Season.m */,
@@ -419,8 +422,10 @@
 				4ECF10F21836F6B600D4C62C /* CollectionViewController.m */,
 				4ECF10E61836EEFF00D4C62C /* ProgramsCollectionViewController.h */,
 				4ECF10E71836EEFF00D4C62C /* ProgramsCollectionViewController.m */,
-				4ECF10E91836F0D200D4C62C /* ProgramCollectionCell.h */,
-				4ECF10EA1836F0D200D4C62C /* ProgramCollectionCell.m */,
+				4ECF11211837DA9400D4C62C /* CollectionViewCell.h */,
+				4ECF11221837DA9400D4C62C /* CollectionViewCell.m */,
+				4ECF10E91836F0D200D4C62C /* ProgramCollectionViewCell.h */,
+				4ECF10EA1836F0D200D4C62C /* ProgramCollectionViewCell.m */,
 				4ECF10F41836FA3500D4C62C /* ProgramCollectionViewController.h */,
 				4ECF10F51836FA3500D4C62C /* ProgramCollectionViewController.m */,
 				4ECF10F7183702FE00D4C62C /* EpisodeCollectionViewCell.h */,
@@ -539,7 +544,7 @@
 				4ECF110D18378FA300D4C62C /* Program.m in Sources */,
 				4E1F16B5183440A30068E5BD /* AFURLConnectionOperation.m in Sources */,
 				4ECF1101183777ED00D4C62C /* UIColor+iOS7Colors.m in Sources */,
-				4ECF10EB1836F0D200D4C62C /* ProgramCollectionCell.m in Sources */,
+				4ECF10EB1836F0D200D4C62C /* ProgramCollectionViewCell.m in Sources */,
 				4ECF10FC1837752300D4C62C /* DRHandler.m in Sources */,
 				4E1F16CC183440AD0068E5BD /* UIButton+AFNetworking.m in Sources */,
 				4E1F16CE183440AD0068E5BD /* UIProgressView+AFNetworking.m in Sources */,
@@ -565,12 +570,13 @@
 				4E1F169B1834407D0068E5BD /* UIView+KeepLayout.m in Sources */,
 				4E1F16B4183440A30068E5BD /* AFSecurityPolicy.m in Sources */,
 				4E1F169A1834407D0068E5BD /* NSArray+KeepLayout.m in Sources */,
+				4ECF11231837DA9400D4C62C /* CollectionViewCell.m in Sources */,
 				4E1F16B6183440A30068E5BD /* AFURLRequestSerialization.m in Sources */,
-				4ECF110418377B8E00D4C62C /* Episode.m in Sources */,
 				4ECF10F9183702FE00D4C62C /* EpisodeCollectionViewCell.m in Sources */,
 				4ECF10D21836E7F600D4C62C /* DataHandler.m in Sources */,
 				4E1F16CF183440AD0068E5BD /* UIWebView+AFNetworking.m in Sources */,
 				4E1F16B3183440A30068E5BD /* AFNetworkReachabilityManager.m in Sources */,
+				4ECF11201837CC1800D4C62C /* Episode.m in Sources */,
 				4E1F16B7183440A30068E5BD /* AFURLResponseSerialization.m in Sources */,
 				4E1F16971834407D0068E5BD /* KeepAttribute.m in Sources */,
 			);

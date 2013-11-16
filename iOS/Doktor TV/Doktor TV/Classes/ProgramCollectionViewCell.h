@@ -9,7 +9,9 @@
 #import <UIKit/UIKit.h>
 #import "Program.h"
 
-@interface ProgramCollectionCell : UICollectionViewCell
+#import "CollectionViewCell.h"
+
+@interface ProgramCollectionViewCell : CollectionViewCell
 
 @property (nonatomic, strong) Program *program;
 @property (nonatomic, assign) BOOL showContent;

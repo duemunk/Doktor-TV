@@ -8,8 +8,7 @@
 
 #import "EpisodeCollectionViewCell.h"
 
-#import "Episode.h"
-#import "Season.h"
+#import "DataHandler.h"
 
 @implementation EpisodeCollectionViewCell
 {
@@ -21,25 +20,47 @@
     self = [super initWithFrame:frame];
     if (self) {
         // Initialization code
-		self.backgroundColor = [UIColor iOS7lightGrayColor];
+		self.backgroundColor = [UIColor colorWithWhite:0.5 alpha:0.4];
     }
     return self;
 }
 
 - (void)setEpisode:(Episode *)episode
 {
-	if (episode != _episode) {
+	if (episode != _episode)
+	{
+		if (_episode)
+			[_episode removeObserver:self forKeyPath:@"image"];
 		_episode = episode;
+		[_episode addObserver:self forKeyPath:@"image" options:0 context:0];
 		
-		if (!testLabel) {
-			testLabel = [UILabel new];
-			[self addSubview:testLabel];
-			[testLabel keepInsets:UIEdgeInsetsZero];
-			testLabel.numberOfLines = 0;
-			testLabel.textColor = [UIColor whiteColor];
-		}
 		
-		testLabel.text = [NSString stringWithFormat:@"Season %@, \nEpisode %@",self.episode.season.number,self.episode.number];
+		self.titleLabel.text = _episode.title;
+		
+		[self setupImage];
+	}
+}
+
+
+- (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context
+{
+	if ([keyPath isEqualToString:@"image"])
+	{
+		[self setupImage];
+	}
+}
+
+- (void)setupImage
+{
+	if (_episode.image)
+	{
+		NSString *imagePath = [DataHandler pathForFileName:_episode.image];
+		UIImage *image = [[UIImage alloc] initWithContentsOfFile:imagePath];
+		self.backgroundImage = image;
+	}
+	else
+	{
+		self.backgroundImage = nil;
 	}
 }
 

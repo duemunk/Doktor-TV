@@ -8,7 +8,9 @@
 
 #import "ProgramsCollectionViewController.h"
 
-#import "ProgramCollectionCell.h"
+#import "DRHandler.h"
+
+#import "ProgramCollectionViewCell.h"
 #define PROGRAM_COLLECTION_CELL_ID @"PROGRAM_COLLECTION_CELL_ID"
 
 @interface ProgramsCollectionViewController ()
@@ -40,7 +42,7 @@
 	
 	self.collectionView.alwaysBounceVertical = YES;
 	
-	[self.collectionView registerClass:[ProgramCollectionCell class] forCellWithReuseIdentifier:PROGRAM_COLLECTION_CELL_ID];
+	[self.collectionView registerClass:[ProgramCollectionViewCell class] forCellWithReuseIdentifier:PROGRAM_COLLECTION_CELL_ID];
 }
 
 - (void)didReceiveMemoryWarning
@@ -75,9 +77,9 @@
 // The cell that is returned must be retrieved from a call to -dequeueReusableCellWithReuseIdentifier:forIndexPath:
 - (UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath
 {
-	ProgramCollectionCell *cell = (ProgramCollectionCell *)[collectionView dequeueReusableCellWithReuseIdentifier:PROGRAM_COLLECTION_CELL_ID forIndexPath:indexPath];
+	ProgramCollectionViewCell *cell = (ProgramCollectionViewCell *)[collectionView dequeueReusableCellWithReuseIdentifier:PROGRAM_COLLECTION_CELL_ID forIndexPath:indexPath];
     
-    Program *program = [self progamForIndexPath:indexPath];
+    Program *program = [self programForIndexPath:indexPath];
 	if (program) {
 		cell.program = program;
 		cell.showContent = isBig;
@@ -88,7 +90,7 @@
 
 
 
-- (Program *)progamForIndexPath:(NSIndexPath *)indexPath
+- (Program *)programForIndexPath:(NSIndexPath *)indexPath
 {
 	NSManagedObject *object = [self.fetchedResultsController objectAtIndexPath:indexPath];
 	
@@ -107,15 +109,26 @@
 
 - (void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath
 {
-	for (UICollectionViewCell *cell in [collectionView visibleCells] ) {
-		ProgramCollectionCell *programCell = (ProgramCollectionCell *)cell;
+//	for (UICollectionViewCell *cell in [collectionView visibleCells] ) {
+//		ProgramCollectionViewCell *programCell = (ProgramCollectionViewCell *)cell;
+//		programCell.showContent = !isBig;
+//	}
+	
+	ProgramCollectionViewCell *programCell = (ProgramCollectionViewCell *)[collectionView cellForItemAtIndexPath:indexPath];
+	if (programCell) {
 		programCell.showContent = !isBig;
+//		[[DRHandler sharedInstance] validateEpisodesForProgram:self.program];
 	}
+	
+//	Program *program = [self programForIndexPath:indexPath];
+//	[[DRHandler sharedInstance] validateEpisodesForProgram:program];
+	
 	
 	if (isBig)
 	{
 		isBig = NO;
 		[self.collectionView setCollectionViewLayout:[self defaultCollectionViewLayout] animated:YES completion:^(BOOL finished) {
+			
 			collectionView.pagingEnabled = NO;
 			collectionView.alwaysBounceVertical = YES;
 		}];
@@ -124,6 +137,7 @@
 	{
 		isBig = YES;
 		[self.collectionView setCollectionViewLayout:[self bigCollectionViewLayout] animated:YES completion:^(BOOL finished) {
+			
 			collectionView.alwaysBounceVertical = NO;
 			collectionView.pagingEnabled = YES;
 		}];
