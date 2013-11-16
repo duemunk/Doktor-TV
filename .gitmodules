@@ -4,3 +4,6 @@
 [submodule "iOS/Doktor TV/Doktor TV/Submodules/AFNetworking"]
 	path = iOS/Doktor TV/Doktor TV/Submodules/AFNetworking
 	url = git://github.com/AFNetworking/AFNetworking.git
+[submodule "iOS/Doktor TV/Doktor TV/Submodules/iOS7Colors"]
+	path = iOS/Doktor TV/Doktor TV/Submodules/iOS7Colors
+	url = https://github.com/claaslange/iOS7Colors.git
