@@ -13,6 +13,9 @@
 @implementation Program
 
 @dynamic title;
+@dynamic drID;
+@dynamic slug;
+@dynamic image;
 @dynamic seasons;
 
 @end

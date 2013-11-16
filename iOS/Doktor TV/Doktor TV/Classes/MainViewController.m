@@ -10,6 +10,8 @@
 
 #import "ProgramsCollectionViewController.h"
 
+#import "DRHandler.h"
+
 @interface MainViewController ()
 
 @end
@@ -29,6 +31,8 @@
 	UINavigationController *navigationController = [[UINavigationController alloc] initWithRootViewController:collectionViewController];
 	[self addViewController:navigationController];
 	[navigationController.view keepInsets:UIEdgeInsetsZero];
+	
+	[DRHandler sharedInstance];
 }
 
 - (void)didReceiveMemoryWarning

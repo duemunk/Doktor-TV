@@ -24,46 +24,6 @@
     dispatch_once(&onceToken, ^{
         sharedInstance = [DataHandler new];
         // Do any other initialisation stuff here
-		
-		if (![sharedInstance programs].count) {
-			Program *program = [sharedInstance newProgram];
-			program.title = @"Program1";
-			
-			Season *season1 = [sharedInstance newSeason];
-			season1.number = @(1);
-			season1.program = program;
-			
-			Season *season2 = [sharedInstance newSeason];
-			season2.number = @(2);
-			season2.program = program;
-			
-			Episode *episode1 = [sharedInstance newEpisode];
-			episode1.number = @(1);
-			episode1.season = season1;
-			Episode *episode2 = [sharedInstance newEpisode];
-			episode2.number = @(2);
-			episode2.season = season1;
-			
-			Program *program2 = [sharedInstance newProgram];
-			program2.title = @"Program2";
-			
-			Program *program3 = [sharedInstance newProgram];
-			program3.title = @"Program3";
-			
-			for (int i = 0; i<4; i++)
-			{
-				Season *season = [sharedInstance newSeason];
-				season.number = @(i+1);
-				season.program = program3;
-
-				for (int p = 0; p<10-i; p++)
-				{
-					Episode *episode = [sharedInstance newEpisode];
-					episode.number = @(p+1);
-					episode.season = season;
-				}
-			}
-		}
     });
     return sharedInstance;
 }
@@ -208,6 +168,24 @@
 	NSManagedObject *newMangedObject = [[NSManagedObject alloc] initWithEntity:entity insertIntoManagedObjectContext:self.managedObjectContext];
 	
 	return newMangedObject;
+}
+
+- (void)addObject:(NSManagedObject *)managedObject
+{
+	[self.managedObjectContext insertObject:managedObject];
+}
+
+
+
+
+
+#pragma mark - File Handling
+
++ (NSString *)pathForFileName:(NSString *)filename
+{
+	NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
+	NSString *path = [[paths objectAtIndex:0] stringByAppendingPathComponent:filename];
+	return path;
 }
 
 @end

@@ -33,7 +33,7 @@
     [super viewDidLoad];
 	// Do any additional setup after loading the view.
 	
-	self.collectionView.backgroundColor = [UIColor iOS7darkBlueColor];
+	self.collectionView.backgroundColor = [UIColor clearColor];
 	
 //	self.entity = @"Episode";
 //	self.sortKey = @"season";

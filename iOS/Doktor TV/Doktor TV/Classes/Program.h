@@ -14,6 +14,9 @@
 @interface Program : NSManagedObject
 
 @property (nonatomic, retain) NSString * title;
+@property (nonatomic, retain) NSString * drID;
+@property (nonatomic, retain) NSString * slug;
+@property (nonatomic, retain) NSString * image;
 @property (nonatomic, retain) NSOrderedSet *seasons;
 @end
 

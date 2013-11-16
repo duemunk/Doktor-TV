@@ -24,4 +24,14 @@
 - (void)saveContext;
 - (NSURL *)applicationDocumentsDirectory;
 
+- (NSArray *)programs;
+
+- (Program *)newProgram;
+- (Season *)newSeason;
+- (Episode *)newEpisode;
+
+- (void)addObject:(NSManagedObject *)managedObject;
+
++ (NSString *)pathForFileName:(NSString *)filename;
+
 @end
