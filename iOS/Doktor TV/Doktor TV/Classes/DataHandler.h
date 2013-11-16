@@ -27,10 +27,11 @@
 - (NSArray *)programs;
 
 - (Program *)newProgram;
+- (Program *)newProgramAssociated:(BOOL)associated;
 - (Season *)newSeason;
 - (Episode *)newEpisode;
 
-- (void)addObject:(NSManagedObject *)managedObject;
+- (void)associateObject:(NSManagedObject *)managedObject;
 
 + (NSString *)pathForFileName:(NSString *)filename;
 

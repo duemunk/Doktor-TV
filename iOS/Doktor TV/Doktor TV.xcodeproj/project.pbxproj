@@ -57,6 +57,7 @@
 		4ECF1101183777ED00D4C62C /* UIColor+iOS7Colors.m in Sources */ = {isa = PBXBuildFile; fileRef = 4ECF1100183777ED00D4C62C /* UIColor+iOS7Colors.m */; };
 		4ECF110418377B8E00D4C62C /* Episode.m in Sources */ = {isa = PBXBuildFile; fileRef = 4ECF110318377B8E00D4C62C /* Episode.m */; };
 		4ECF110D18378FA300D4C62C /* Program.m in Sources */ = {isa = PBXBuildFile; fileRef = 4ECF110C18378FA300D4C62C /* Program.m */; };
+		4ECF11141837A52600D4C62C /* UIImage+ImageEffects.m in Sources */ = {isa = PBXBuildFile; fileRef = 4ECF11131837A52600D4C62C /* UIImage+ImageEffects.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -162,6 +163,8 @@
 		4ECF110318377B8E00D4C62C /* Episode.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = Episode.m; path = Classes/Episode.m; sourceTree = "<group>"; };
 		4ECF110B18378FA300D4C62C /* Program.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Program.h; path = Classes/Program.h; sourceTree = "<group>"; };
 		4ECF110C18378FA300D4C62C /* Program.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = Program.m; path = Classes/Program.m; sourceTree = "<group>"; };
+		4ECF11121837A52600D4C62C /* UIImage+ImageEffects.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIImage+ImageEffects.h"; sourceTree = "<group>"; };
+		4ECF11131837A52600D4C62C /* UIImage+ImageEffects.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIImage+ImageEffects.m"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -196,8 +199,8 @@
 				4E1F168618343D9B0068E5BD /* Submodules */,
 				4E1F1654183428470068E5BD /* Doktor TV */,
 				4E1F166D183428470068E5BD /* Doktor TVTests */,
-				4E1F164D183428460068E5BD /* Frameworks */,
 				4E1F164C183428460068E5BD /* Products */,
+				4E1F164D183428460068E5BD /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -245,6 +248,7 @@
 		4E1F1655183428470068E5BD /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
+				4ECF11111837A52600D4C62C /* UIImageEffects */,
 				4E1F1656183428470068E5BD /* Doktor TV-Info.plist */,
 				4E1F1657183428470068E5BD /* InfoPlist.strings */,
 				4E1F165A183428470068E5BD /* main.m */,
@@ -425,6 +429,16 @@
 			name = Navigation;
 			sourceTree = "<group>";
 		};
+		4ECF11111837A52600D4C62C /* UIImageEffects */ = {
+			isa = PBXGroup;
+			children = (
+				4ECF11121837A52600D4C62C /* UIImage+ImageEffects.h */,
+				4ECF11131837A52600D4C62C /* UIImage+ImageEffects.m */,
+			);
+			name = UIImageEffects;
+			path = Classes/UIImageEffects;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -534,6 +548,7 @@
 				4ECF10F31836F6B600D4C62C /* CollectionViewController.m in Sources */,
 				4ECF10D81836EB6D00D4C62C /* Season.m in Sources */,
 				4E1F16CB183440AD0068E5BD /* UIAlertView+AFNetworking.m in Sources */,
+				4ECF11141837A52600D4C62C /* UIImage+ImageEffects.m in Sources */,
 				4ECF10E51836EE4400D4C62C /* UIViewController+Containment.m in Sources */,
 				4E1F16B1183440A30068E5BD /* AFHTTPRequestOperationManager.m in Sources */,
 				4ECF10F61836FA3500D4C62C /* ProgramCollectionViewController.m in Sources */,

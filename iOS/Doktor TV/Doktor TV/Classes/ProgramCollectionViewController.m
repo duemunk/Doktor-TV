@@ -35,12 +35,6 @@
 	
 	self.collectionView.backgroundColor = [UIColor clearColor];
 	
-//	self.entity = @"Episode";
-//	self.sortKey = @"season";
-//	self.sortAscending = YES;
-//	
-//	self.predicate = [NSPredicate predicateWithFormat:@"season.program = %@", self.program];
-
 	self.entity = @"Episode";
 	self.sortKey = @"season.number";
 	self.sortAscending = YES;

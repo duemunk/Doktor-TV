@@ -14,7 +14,7 @@
 @implementation ProgramCollectionCell
 {
 	UILabel *titleLabel;
-	UIImageView *imageView;
+	UIImageView *imageView, *blurredImageView;
 	ProgramCollectionViewController *programCollectionViewController;
 }
 
@@ -27,6 +27,13 @@
 		self.clipsToBounds = YES;
     }
     return self;
+}
+
+- (void)dealloc
+{
+	if (_program) {
+		[_program removeObserver:self forKeyPath:@"image"];
+	}
 }
 
 
@@ -45,13 +52,13 @@
 		if (!titleLabel) {
 			titleLabel = [UILabel new];
 			[self addSubview:titleLabel];
-			titleLabel.keepInsets.min = KeepRequired(10.0f);
-			[titleLabel keepCentered];
+			titleLabel.keepInsets.min = KeepRequired(0.0f);
+			titleLabel.keepLeftInset.equal =
+			titleLabel.keepTopInset.equal = KeepRequired(0.0f);
 			titleLabel.textColor = [UIColor whiteColor];
 			titleLabel.numberOfLines = 0;
-			titleLabel.textAlignment = NSTextAlignmentCenter;
 			titleLabel.font = [UIFont preferredFontForTextStyle:UIFontTextStyleHeadline];
-			titleLabel.backgroundColor = [self.backgroundColor colorWithAlphaComponent:0.3];
+			titleLabel.backgroundColor = [self.backgroundColor colorWithAlphaComponent:0.5];
 		}
 		titleLabel.text = _program.title;
 		
@@ -66,16 +73,32 @@
 	if (showContent != _showContent) {
 		_showContent = showContent;
 		
-		titleLabel.hidden = showContent;
+//		titleLabel.hidden = showContent;
 		
-		if (_showContent) {
+		if (_showContent)
+		{
+			if (imageView) {
+				UIImage *image = [imageView.image copy];
+				image = [image applyBlurWithRadius:4.0f
+										 tintColor:[self.backgroundColor colorWithAlphaComponent:0.0]
+							 saturationDeltaFactor:0.5f
+										 maskImage:nil];
+				blurredImageView = [UIImageView new];
+				blurredImageView.image = image;
+				[self insertSubview:blurredImageView aboveSubview:imageView];
+				[blurredImageView keepInsets:UIEdgeInsetsZero];
+				blurredImageView.contentMode = UIViewContentModeScaleAspectFill;
+				blurredImageView.hidden = NO;
+			}
 			
 			if (!programCollectionViewController) {
 				programCollectionViewController = [ProgramCollectionViewController new];
 				programCollectionViewController.program = self.program;
 				
 				[self addSubview:programCollectionViewController.view];
-				[programCollectionViewController.view keepInsets:UIEdgeInsetsZero];
+				programCollectionViewController.view.keepHorizontalInsets.equal =
+				programCollectionViewController.view.keepBottomInset.equal = KeepRequired(0.0f);
+				programCollectionViewController.view.keepTopOffsetTo(titleLabel).equal = KeepRequired(10.0f);
 			}
 		}
 		else
@@ -84,6 +107,8 @@
 				[programCollectionViewController.view removeFromSuperview];
 				programCollectionViewController = nil;
 			}
+			if (blurredImageView)
+				blurredImageView.hidden = YES;
 		}
 		[self setNeedsDisplay];
 	}

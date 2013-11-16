@@ -40,7 +40,8 @@
 
 - (void)queryPrograms
 {
-	NSString *query =  @"http://www.dr.dk/mu/bundle?BundleType=%22Series%22";
+	NSString *query =  @"http://www.dr.dk/mu/view/bundles-with-public-asset?ChannelType=TV";
+	query = [self addLimit:16 urlString:query];
 	
 	[self.afHttpSessionManager GET:query parameters:nil success:^(NSURLSessionDataTask *task, id responseObject)
 	{
@@ -50,6 +51,16 @@
 		NSLog(@"ERROR: %@",error);
 	}];
 }
+
+- (NSString *)addLimit:(NSUInteger)limit urlString:(NSString *)urlString
+{
+	return [urlString stringByAppendingFormat:@"&limit=$eq(%d)",limit];
+}
+- (NSString *)addOffset:(NSUInteger)offset urlString:(NSString *)urlString
+{
+	return [urlString stringByAppendingFormat:@"&offset=$eq(%d)",offset];
+}
+
 
 
 #define kDRResultsGeneratedDate @"ResultsGeneratedDate"
@@ -84,7 +95,7 @@
 			// Check if program has content
 			
 			// Create new program
-			Program *program = [[DataHandler sharedInstance] newProgram];
+			Program *program = [[DataHandler sharedInstance] newProgramAssociated:NO];
 			program.drID = drID;
 			program.title = dict[kDRTitle];
 			program.slug = dict[kDRSlug];
@@ -134,28 +145,26 @@
 		if (!imageAsset.count) {
 			imageAsset = [assets filteredArrayUsingPredicate:[NSPredicate predicateWithFormat:@"%K = %@",kDRKind,@"Image"]];
 		}
-		if (imageAsset.count) {
+		if (imageAsset.count)
+		{
+			[[DataHandler sharedInstance] associateObject:program];
+			[[DataHandler sharedInstance] saveContext];
+			
 			NSDictionary *imageDict = imageAsset.firstObject;
 			NSString *imageUrlString = imageDict[kDRUri];
+			imageUrlString = [imageUrlString stringByAppendingString:@"?width=320&height=320"];
 			NSString *fileName = [NSString stringWithFormat:@"ProgramImage__%@.jpg",program.drID];
-			[self dowload:imageUrlString toFileName:fileName forObject:program key:@"image"];
-			
-			failed = NO;
+			[self download:imageUrlString toFileName:fileName forObject:program key:@"image"];
 		}
 	}
-	if (failed) {
-		[program.managedObjectContext deleteObject:program];
-	}
 	
-	
-//	[[DataHandler sharedInstance] saveContext];
 	
 	return;
 }
 
 
 
-- (void)dowload:(NSString *)urlString toFileName:(NSString *)filename forObject:(NSManagedObject *)object key:(NSString *)key
+- (void)download:(NSString *)urlString toFileName:(NSString *)filename forObject:(NSManagedObject *)object key:(NSString *)key
 {
 	NSURLRequest *request = [NSURLRequest requestWithURL:[NSURL URLWithString:urlString]];
 	AFHTTPRequestOperation *operation = [[AFHTTPRequestOperation alloc] initWithRequest:request];
@@ -163,10 +172,14 @@
 	NSString *path = [DataHandler pathForFileName:filename];
 	operation.outputStream = [NSOutputStream outputStreamToFileAtPath:path append:NO];
 	
+	__block NSManagedObjectID *__objectID = object.objectID;
 	[operation setCompletionBlockWithSuccess:^(AFHTTPRequestOperation *operation, id responseObject) {
-		NSLog(@"Successfully downloaded file to %@", path);
+//		NSLog(@"Successfully downloaded file to %@", path);
 		
+		NSManagedObject *object = [[DataHandler sharedInstance].managedObjectContext objectWithID:__objectID];
 		[object setValue:filename forKey:key];
+		
+		[[DataHandler sharedInstance] saveContext];
 		
 	} failure:^(AFHTTPRequestOperation *operation, NSError *error) {
 		NSLog(@"Error: %@", error);

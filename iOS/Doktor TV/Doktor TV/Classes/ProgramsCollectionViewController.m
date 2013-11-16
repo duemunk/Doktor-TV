@@ -38,6 +38,8 @@
 	self.sortKey = @"title";
 	self.sortAscending = YES;
 	
+	self.collectionView.alwaysBounceVertical = YES;
+	
 	[self.collectionView registerClass:[ProgramCollectionCell class] forCellWithReuseIdentifier:PROGRAM_COLLECTION_CELL_ID];
 }
 
@@ -51,7 +53,9 @@
 - (UICollectionViewLayout *)defaultCollectionViewLayout
 {
 	UICollectionViewFlowLayout *layout = [UICollectionViewFlowLayout new];
-	layout.itemSize = CGSizeMake(155, 120);
+	layout.itemSize = CGSizeMake(160, 120);
+	layout.minimumInteritemSpacing =
+	layout.minimumLineSpacing = 0.0f;
 	return layout;
 }
 - (UICollectionViewLayout *)bigCollectionViewLayout
@@ -103,24 +107,26 @@
 
 - (void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath
 {
-	ProgramCollectionCell *cell = (ProgramCollectionCell *)[self.collectionView cellForItemAtIndexPath:indexPath];
+	for (UICollectionViewCell *cell in [collectionView visibleCells] ) {
+		ProgramCollectionCell *programCell = (ProgramCollectionCell *)cell;
+		programCell.showContent = !isBig;
+	}
 	
-	if (cell) {
-		cell.showContent = !isBig;
-		
-		if (isBig) {
-			[self.collectionView setCollectionViewLayout:[self defaultCollectionViewLayout] animated:YES completion:^(BOOL finished) {
-				isBig = NO;
-				collectionView.pagingEnabled = NO;
-			}];
-		}
-		else {
-			[self.collectionView setCollectionViewLayout:[self bigCollectionViewLayout] animated:YES completion:^(BOOL finished) {
-				isBig = YES;
-				collectionView.pagingEnabled = YES;
-			}];
-			
-		}
+	if (isBig)
+	{
+		isBig = NO;
+		[self.collectionView setCollectionViewLayout:[self defaultCollectionViewLayout] animated:YES completion:^(BOOL finished) {
+			collectionView.pagingEnabled = NO;
+			collectionView.alwaysBounceVertical = YES;
+		}];
+	}
+	else
+	{
+		isBig = YES;
+		[self.collectionView setCollectionViewLayout:[self bigCollectionViewLayout] animated:YES completion:^(BOOL finished) {
+			collectionView.alwaysBounceVertical = NO;
+			collectionView.pagingEnabled = YES;
+		}];
 	}
 }
 

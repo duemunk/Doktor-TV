@@ -148,7 +148,16 @@
 
 - (Program *)newProgram
 {
-	return (Program *)[self newManagedObjectWithKey:@"Program"];
+	return [self newProgramAssociated:YES];
+}
+
+- (Program *)newProgramAssociated:(BOOL)associated
+{
+	NSString *key = @"Program";
+	if (associated)
+		return (Program *)[self newManagedObjectWithKey:key];
+	else
+		return (Program *)[self newManagedObjectUnassociatedWithKey:key];
 }
 - (Season *)newSeason
 {
@@ -170,9 +179,16 @@
 	return newMangedObject;
 }
 
-- (void)addObject:(NSManagedObject *)managedObject
+- (NSManagedObject *)newManagedObjectUnassociatedWithKey:(NSString *)key
+{
+	NSEntityDescription *entity = [NSEntityDescription entityForName:key inManagedObjectContext:self.managedObjectContext];
+	NSManagedObject *unassociatedObject = [[NSManagedObject alloc] initWithEntity:entity insertIntoManagedObjectContext:nil];
+	return unassociatedObject;
+}
+- (void)associateObject:(NSManagedObject *)managedObject
 {
 	[self.managedObjectContext insertObject:managedObject];
+	[self saveContext];
 }
 
 

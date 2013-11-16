@@ -17,4 +17,5 @@
 	#import "KeepLayout.h"
 	#import "UIViewController+Containment.h"
 	#import "UIColor+iOS7Colors.h"
+	#import "UIImage+ImageEffects.h"
 #endif
