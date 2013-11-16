@@ -24,9 +24,7 @@
     [super viewDidLoad];
 	// Do any additional setup after loading the view.
 	
-	UICollectionViewFlowLayout *layout = [UICollectionViewFlowLayout new];
-	layout.itemSize = CGSizeMake(130, 130);
-	collectionViewController = [[ProgramsCollectionViewController alloc] initWithCollectionViewLayout:layout];
+	collectionViewController = [ProgramsCollectionViewController new];
 	
 	UINavigationController *navigationController = [[UINavigationController alloc] initWithRootViewController:collectionViewController];
 	[self addViewController:navigationController];

@@ -7,10 +7,12 @@
 //
 
 #import "ProgramCollectionCell.h"
+#import "ProgramCollectionViewController.h"
 
 @implementation ProgramCollectionCell
 {
 	UILabel *titleLabel;
+	ProgramCollectionViewController *programCollectionViewController;
 }
 
 - (id)initWithFrame:(CGRect)frame
@@ -24,10 +26,10 @@
 }
 
 
-- (void)setTitle:(NSString *)title
+- (void)setProgram:(Program *)program
 {
-	if (![title isEqualToString:_title]) {
-		_title = title;
+	if (program != _program) {
+		_program = program;
 		
 		if (!titleLabel) {
 			titleLabel = [UILabel new];
@@ -35,9 +37,39 @@
 			[titleLabel keepCentered];
 			titleLabel.textColor = [UIColor whiteColor];
 		}
-		titleLabel.text = _title;
+		titleLabel.text = _program.title;
 	}
 }
+
+
+- (void)setShowContent:(BOOL)showContent
+{
+	if (showContent != _showContent) {
+		_showContent = showContent;
+		
+		titleLabel.hidden = showContent;
+		
+		if (_showContent) {
+			
+			if (!programCollectionViewController) {
+				programCollectionViewController = [ProgramCollectionViewController new];
+				programCollectionViewController.program = self.program;
+				
+				[self addSubview:programCollectionViewController.view];
+				[programCollectionViewController.view keepInsets:UIEdgeInsetsZero];
+			}
+		}
+		else
+		{
+			if (programCollectionViewController) {
+				[programCollectionViewController.view removeFromSuperview];
+				programCollectionViewController = nil;
+			}
+		}
+		[self setNeedsDisplay];
+	}
+}
+
 /*
 // Only override drawRect: if you perform custom drawing.
 // An empty implementation adversely affects performance during animation.

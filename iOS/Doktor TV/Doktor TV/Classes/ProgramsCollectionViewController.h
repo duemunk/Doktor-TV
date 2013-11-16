@@ -8,9 +8,9 @@
 
 #import <UIKit/UIKit.h>
 
-@interface ProgramsCollectionViewController : UICollectionViewController <NSFetchedResultsControllerDelegate>
+#import "CollectionViewController.h"
 
-@property (strong, nonatomic) NSFetchedResultsController *fetchedResultsController;
-@property (strong, nonatomic) NSManagedObjectContext *managedObjectContext;
+@interface ProgramsCollectionViewController : CollectionViewController
+
 
 @end

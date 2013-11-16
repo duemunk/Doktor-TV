@@ -38,8 +38,10 @@
 			season2.program = program;
 			
 			Episode *episode1 = [sharedInstance newEpisode];
+			episode1.number = @(1);
 			episode1.season = season1;
 			Episode *episode2 = [sharedInstance newEpisode];
+			episode2.number = @(2);
 			episode2.season = season1;
 			
 			Program *program2 = [sharedInstance newProgram];
@@ -47,7 +49,20 @@
 			
 			Program *program3 = [sharedInstance newProgram];
 			program3.title = @"Program3";
+			
+			for (int i = 0; i<4; i++)
+			{
+				Season *season = [sharedInstance newSeason];
+				season.number = @(i+1);
+				season.program = program3;
 
+				for (int p = 0; p<10-i; p++)
+				{
+					Episode *episode = [sharedInstance newEpisode];
+					episode.number = @(p+1);
+					episode.season = season;
+				}
+			}
 		}
     });
     return sharedInstance;
