@@ -153,12 +153,19 @@
 
 
 
-
-
 - (void)download:(NSString *)urlString toFileName:(NSString *)filename forObject:(NSManagedObject *)object key:(NSString *)key
+{
+	[self download:urlString toFileName:filename forObject:object key:key block:^(NSUInteger bytesRead, long long totalBytesRead, long long totalBytesExpectedToRead) {
+		NSLog(@"Progess: %f", (float)totalBytesRead / (float)totalBytesExpectedToRead);
+	}];
+}
+
+- (void)download:(NSString *)urlString toFileName:(NSString *)filename forObject:(NSManagedObject *)object key:(NSString *)key block:(void (^)(NSUInteger bytesRead, long long totalBytesRead, long long totalBytesExpectedToRead))progressBlock
 {
 	NSURLRequest *request = [NSURLRequest requestWithURL:[NSURL URLWithString:urlString]];
 	AFHTTPRequestOperation *operation = [[AFHTTPRequestOperation alloc] initWithRequest:request];
+	
+	[operation setDownloadProgressBlock:progressBlock];
 	
 	NSString *path = [DataHandler pathForFileName:filename];
 	operation.outputStream = [NSOutputStream outputStreamToFileAtPath:path append:NO];
@@ -265,9 +272,55 @@
 				episode.dkOnly = @([videoDict[kDRRestrictedToDenmark] boolValue]);
 			}
 		}
-		
 		[[DataHandler sharedInstance] saveContext];
 	}
+}
+
+#define kDRLinks @"Links"
+#define kDRTarget @"Target"
+#define kDRBitrate @"Bitrate"
+- (void)runVideo:(void (^)(NSString *))completion forEpisode:(Episode *)episode
+{
+	NSString *uri = episode.uri;
+	
+	NSString *query = uri;
+	NSLog(@"\nURI: \n %@ \n\n",query);
+	[self.afHttpSessionManager GET:query parameters:nil success:^(NSURLSessionDataTask *task, id responseObject)
+	 {
+		 NSDictionary *dict = responseObject;
+		 NSArray *links = dict[kDRLinks];
+		 
+		 NSString *urlString;
+		 for (NSDictionary *link in links)
+		 {
+			 if ([link[kDRTarget] isEqualToString:@"Streaming"] && [link[kDRBitrate] integerValue] < 200)
+			 {
+				 urlString = link[kDRUri];
+				 break;
+			 }
+		 }
+		 if (urlString) {
+			 urlString = [urlString stringByReplacingOccurrencesOfString:@"rtmp://vod.dr.dk/cms/mp4:CMS" withString:@"http://vodfiles.dr.dk/CMS"];
+			 completion(urlString);
+		 }
+
+	 } failure:^(NSURLSessionDataTask *task, NSError *error) {
+		 NSLog(@"ERROR: %@",error);
+	 }];
+}
+
+- (void)downloadVideoForEpisode:(Episode *)episode block:(void (^)(NSUInteger bytesRead, long long totalBytesRead, long long totalBytesExpectedToRead))progressBlock
+{
+	__block NSManagedObjectID *__objectID = episode.objectID;
+	[self runVideo:^(NSString *urlString) {
+		
+		// Download
+		Episode *episode = (Episode *)[[DataHandler sharedInstance].managedObjectContext objectWithID:__objectID];
+		Program *program = (Program *)episode.season.program;
+		NSString *filename = [NSString stringWithFormat:@"EpisodeVideo__%@__%@.mp4",program.drID,episode.drID];
+		[self download:urlString toFileName:filename forObject:episode key:@"video" block:progressBlock];
+		
+	} forEpisode:episode];
 }
 
 

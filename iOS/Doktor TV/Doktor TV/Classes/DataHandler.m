@@ -204,4 +204,10 @@
 	return path;
 }
 
++ (BOOL)fileExists:(NSString *)filename
+{
+	BOOL fileExists = [[NSFileManager defaultManager] fileExistsAtPath:[DataHandler pathForFileName:filename]];
+	return fileExists;
+}
+
 @end

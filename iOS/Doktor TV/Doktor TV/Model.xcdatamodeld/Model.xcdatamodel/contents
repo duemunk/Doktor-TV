@@ -11,6 +11,7 @@
         <attribute name="subtitle" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="title" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="uri" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="video" optional="YES" attributeType="String" syncable="YES"/>
         <relationship name="season" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Season" inverseName="episodes" inverseEntity="Season" syncable="YES"/>
     </entity>
     <entity name="Program" representedClassName="Program" syncable="YES">

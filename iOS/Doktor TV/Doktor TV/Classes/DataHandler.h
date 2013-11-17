@@ -34,5 +34,6 @@
 - (void)associateObject:(NSManagedObject *)managedObject;
 
 + (NSString *)pathForFileName:(NSString *)filename;
++ (BOOL)fileExists:(NSString *)filename;
 
 @end

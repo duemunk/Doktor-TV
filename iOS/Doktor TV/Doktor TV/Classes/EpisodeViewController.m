@@ -8,7 +8,11 @@
 
 #import "EpisodeViewController.h"
 
+#import "DRHandler.h"
+#import "DataHandler.h"
 #import "Button.h"
+
+@import MediaPlayer;
 
 @interface EpisodeViewController ()
 
@@ -23,27 +27,8 @@
 {
     [super viewDidLoad];
 	
-	// Do any additional setup after loading the view.
-	downloadButton = [Button new];
-	downloadButton.title = @"Hent";
-	[self.view addSubview:downloadButton];
-	[downloadButton addTarget:self action:@selector(download) forControlEvents:UIControlEventTouchUpInside];
-	
-	streamButton = [Button new];
-	[streamButton setTitle:@"Afspil" forState:UIControlStateNormal];
-	[self.view addSubview:streamButton];
-	[streamButton addTarget:self action:@selector(stream) forControlEvents:UIControlEventTouchUpInside];
-	
-	CGFloat padding = 20.0f;
-	downloadButton.keepLeftInset.equal =
-	streamButton.keepRightInset.equal = KeepRequired(padding);
-	
-	NSArray *buttons = @[downloadButton,streamButton];
-	[buttons keepBaselineAligned];
-	[buttons keepHorizontalOffsets:KeepRequired(padding)];
-	[buttons keepSizesEqual];
-	 
-	[downloadButton keepVerticallyCentered];
+	// Do any additional setup after loading the view
+	[self layoutButtons];
 }
 
 
@@ -56,24 +41,135 @@
 
 - (void)setEpisode:(Episode *)episode
 {
-	if (episode != _episode) {
+	if (episode != _episode)
+	{
+		if (_episode)
+		{
+			[_episode removeObserver:self forKeyPath:@"video"];
+		}
 		_episode = episode;
+		[_episode addObserver:self forKeyPath:@"video" options:0 context:0];
 		
-		streamButton.enabled =
-		downloadButton.enabled = episode.uri.boolValue;
+//		streamButton.enabled =
+//		downloadButton.enabled = (episode.uri.length > 0);
+		
+		[self layoutButtons];
+		
+	}
+}
+
+- (void)layoutButtons
+{
+	CGFloat padding = 20.0f;
+	CGFloat maxWidth = 130.0f;
+
+	// Clear
+	if (downloadButton)
+	{
+		[downloadButton removeFromSuperview];
+		downloadButton = nil;
+	}
+	if (streamButton)
+	{
+		[streamButton removeFromSuperview];
+		streamButton = nil;
+	}
+	
+	// Has potential for video
+	if (!self.episode.uri)
+		return;
+	
+	//
+	downloadButton = [Button new];
+	[self.view addSubview:downloadButton];
+	[downloadButton addTarget:self action:@selector(download) forControlEvents:UIControlEventTouchUpInside];
+	
+
+	
+	BOOL noVideoFile = ![DataHandler fileExists:self.episode.video];
+	if (noVideoFile)
+	{
+		streamButton = [Button new];
+		[self.view addSubview:streamButton];
+		[streamButton addTarget:self action:@selector(stream) forControlEvents:UIControlEventTouchUpInside];
+		
+		downloadButton.title = @"Hent";
+		streamButton.title = @"Afspil (Stream)";
+		
+		
+		downloadButton.keepLeftInset.equal =
+		streamButton.keepRightInset.equal = KeepHigh(padding);
+		
+		NSArray *buttons = @[downloadButton,streamButton];
+		[buttons keepBaselineAligned];
+		[buttons keepHorizontalOffsets:KeepRequired(padding)];
+		[buttons keepSizesEqualWithPriority:KeepPriorityHigh];
+		buttons.keepWidth.max = KeepRequired(maxWidth);
+		
+		[downloadButton keepVerticallyCentered];
+	}
+	else // Has link, only show play
+	{
+		downloadButton.title = @"Afspil";
+		
+		downloadButton.keepWidth.min = KeepRequired(maxWidth);
+		[downloadButton keepCentered];
 	}
 }
 
 
 
+- (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context
+{
+	if ([keyPath isEqualToString:@"video"])
+	{
+		[self layoutButtons];
+	}
+}
+
+
 - (void)download
 {
-	
+	BOOL noVideoFile = ![DataHandler fileExists:self.episode.video];
+	if (noVideoFile)
+	{
+		[[DRHandler sharedInstance] downloadVideoForEpisode:self.episode block:^(NSUInteger bytesRead, long long totalBytesRead, long long totalBytesExpectedToRead) {
+			dispatch_async(dispatch_get_main_queue(), ^{
+				
+				CGFloat progress = (float)totalBytesRead / (float)totalBytesExpectedToRead;
+				downloadButton.title = [NSString stringWithFormat:@"Henter %.0f%%",ceilf(100.0f*progress)];
+			});
+		}];
+	}
+	else
+	{
+		NSString *urlString = [DataHandler pathForFileName:self.episode.video];
+		NSURL *url = [NSURL fileURLWithPath:urlString];
+		MPMoviePlayerViewController *moviePlayerViewController = [[MPMoviePlayerViewController alloc] initWithContentURL:url];
+		moviePlayerViewController.moviePlayer.fullscreen = YES;
+		moviePlayerViewController.moviePlayer.controlStyle = MPMovieControlStyleFullscreen;
+		
+		UIViewController *rootViewController = [UIApplication sharedApplication].keyWindow.rootViewController;
+		[rootViewController presentMoviePlayerViewControllerAnimated:moviePlayerViewController];
+	}
 }
 
 - (void)stream
 {
+	[[DRHandler sharedInstance] runVideo:^(NSString *urlString) {
 	
+		NSURL *url = [NSURL URLWithString:urlString];
+		MPMoviePlayerViewController *moviePlayerViewController = [[MPMoviePlayerViewController alloc] initWithContentURL:url];
+		moviePlayerViewController.moviePlayer.fullscreen = YES;
+		moviePlayerViewController.moviePlayer.controlStyle = MPMovieControlStyleFullscreen;
+		
+		UIViewController *rootViewController = [UIApplication sharedApplication].keyWindow.rootViewController;
+		[rootViewController presentMoviePlayerViewControllerAnimated:moviePlayerViewController];
+		
+	} forEpisode:self.episode];
 }
+
+
+
 
 @end
