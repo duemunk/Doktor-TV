@@ -11,18 +11,20 @@
 #import "DataHandler.h"
 
 @implementation EpisodeCollectionViewCell
+
+- (void)dealloc
 {
-	UILabel *testLabel;
+	if (_episode) {
+		[_episode removeObserver:self forKeyPath:@"image"];
+	}
 }
 
-- (id)initWithFrame:(CGRect)frame
+- (void)setManagedObject:(NSManagedObject *)managedObject
 {
-    self = [super initWithFrame:frame];
-    if (self) {
-        // Initialization code
-		self.backgroundColor = [UIColor colorWithWhite:0.5 alpha:0.4];
-    }
-    return self;
+	[super setManagedObject:managedObject];
+	
+	NSAssert([self.managedObject isKindOfClass:[Episode class]], @"Incorrect class for managedObject (Episode)");
+	self.episode = (Episode *)self.managedObject;
 }
 
 - (void)setEpisode:(Episode *)episode
@@ -34,20 +36,16 @@
 		_episode = episode;
 		[_episode addObserver:self forKeyPath:@"image" options:0 context:0];
 		
-		
 		self.titleLabel.text = _episode.title;
-		
 		[self setupImage];
+		self.managedObject = _episode;
 	}
 }
-
 
 - (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context
 {
 	if ([keyPath isEqualToString:@"image"])
-	{
 		[self setupImage];
-	}
 }
 
 - (void)setupImage
@@ -63,14 +61,5 @@
 		self.backgroundImage = nil;
 	}
 }
-
-/*
-// Only override drawRect: if you perform custom drawing.
-// An empty implementation adversely affects performance during animation.
-- (void)drawRect:(CGRect)rect
-{
-    // Drawing code
-}
-*/
 
 @end

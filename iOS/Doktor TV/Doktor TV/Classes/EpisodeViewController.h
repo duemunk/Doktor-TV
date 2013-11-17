@@ -1,5 +1,5 @@
 //
-//  CollectionViewController.h
+//  EpisodeViewController.h
 //  Doktor TV
 //
 //  Created by Tobias DM on 16/11/13.
@@ -8,9 +8,6 @@
 
 #import <UIKit/UIKit.h>
 
-#import "ZoomCollectionViewController.h"
-
-@interface ProgramsCollectionViewController : ZoomCollectionViewController
-
+@interface EpisodeViewController : UIViewController
 
 @end

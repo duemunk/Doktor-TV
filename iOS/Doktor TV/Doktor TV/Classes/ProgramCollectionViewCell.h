@@ -9,11 +9,10 @@
 #import <UIKit/UIKit.h>
 #import "Program.h"
 
-#import "CollectionViewCell.h"
+#import "ZoomCollectionViewCell.h"
 
-@interface ProgramCollectionViewCell : CollectionViewCell
+@interface ProgramCollectionViewCell : ZoomCollectionViewCell
 
 @property (nonatomic, strong) Program *program;
-@property (nonatomic, assign) BOOL showContent;
 
 @end

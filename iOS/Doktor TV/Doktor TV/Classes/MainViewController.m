@@ -24,17 +24,13 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-	// Do any additional setup after loading the view.
 	
+	// Do any additional setup after loading the view.
 	self.view.backgroundColor = [UIColor blackColor];
 	
 	collectionViewController = [ProgramsCollectionViewController new];
 	[self addViewController:collectionViewController];
 	[collectionViewController.view keepInsets:UIEdgeInsetsZero];
-	
-//	UINavigationController *navigationController = [[UINavigationController alloc] initWithRootViewController:collectionViewController];
-//	[self addViewController:navigationController];
-//	[navigationController.view keepInsets:UIEdgeInsetsZero];
 }
 
 - (void)didReceiveMemoryWarning

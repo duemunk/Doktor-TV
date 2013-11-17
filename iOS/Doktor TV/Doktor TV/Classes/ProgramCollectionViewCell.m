@@ -14,8 +14,17 @@
 
 @implementation ProgramCollectionViewCell
 {
-	UIImageView *blurredImageView;
 	ProgramCollectionViewController *programCollectionViewController;
+}
+
+- (instancetype)initWithFrame:(CGRect)frame
+{
+    self = [super initWithFrame:frame];
+    if (self) {
+        // Initialization code
+		self.backgroundColor = [UIColor iOS7lightBlueColor];
+    }
+    return self;
 }
 
 - (void)dealloc
@@ -25,6 +34,13 @@
 	}
 }
 
+- (void)setManagedObject:(NSManagedObject *)managedObject
+{
+	[super setManagedObject:managedObject];
+	
+	NSAssert([self.managedObject isKindOfClass:[Program class]], @"Incorrect class for managedObject (Program)");
+	self.program = (Program *)self.managedObject;
+}
 
 - (void)setProgram:(Program *)program
 {
@@ -36,36 +52,16 @@
 		[_program addObserver:self forKeyPath:@"image" options:0 context:0];
 		
 		self.titleLabel.text = _program.title;
-		
 		[self setupImage];
-		
-		[self setupCollectionViewController];
+		self.managedObject = _program;
 	}
 }
-
-
-- (void)setShowContent:(BOOL)showContent
-{
-	if (showContent != _showContent)
-	{
-		_showContent = showContent;
-		
-		self.blurBackgroundImage = showContent;
-
-		[self setupCollectionViewController];
-	}
-}
-
 
 - (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context
 {
 	if ([keyPath isEqualToString:@"image"])
-	{
 		[self setupImage];
-	}
 }
-
-
 
 - (void)setupImage 
 {
@@ -81,37 +77,22 @@
 	}
 }
 
-- (void)setupCollectionViewController
+- (void)setupChildViewController
 {
-	if (_showContent)
+	if (self.isZoomed)
 	{
 		if (!programCollectionViewController) {
 			programCollectionViewController = [ProgramCollectionViewController new];
 			programCollectionViewController.program = self.program;
 			
-			[self insertSubview:programCollectionViewController.view belowSubview:self.titleLabel];
-			[programCollectionViewController.view keepInsets:UIEdgeInsetsZero];
-			programCollectionViewController.collectionView.contentInset = UIEdgeInsetsMake(100.0f, 0, 0, 0);
+			self.childViewController = programCollectionViewController;
 		}
 		else
 			programCollectionViewController.program = self.program;
 	}
-	else
-	{
-		if (programCollectionViewController) {
-			[programCollectionViewController.view removeFromSuperview];
-			programCollectionViewController = nil;
-		}
-	}
+	
+	[super setupChildViewController];
 }
 
-/*
-// Only override drawRect: if you perform custom drawing.
-// An empty implementation adversely affects performance during animation.
-- (void)drawRect:(CGRect)rect
-{
-    // Drawing code
-}
-*/
 
 @end

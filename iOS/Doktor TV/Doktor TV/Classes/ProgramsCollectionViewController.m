@@ -13,23 +13,16 @@
 #import "ProgramCollectionViewCell.h"
 #define PROGRAM_COLLECTION_CELL_ID @"PROGRAM_COLLECTION_CELL_ID"
 
-@interface ProgramsCollectionViewController ()
-
-@end
-
 @implementation ProgramsCollectionViewController
-{
-	BOOL isBig;
-}
 
-- (instancetype)init
+- (instancetype)initWithCollectionViewLayout:(UICollectionViewLayout *)layout
 {
-	self = [super initWithCollectionViewLayout:[self defaultCollectionViewLayout]];
+	self = [super init];
 	if (self) {
-		
 	}
 	return self;
 }
+
 
 - (void)viewDidLoad
 {
@@ -40,9 +33,8 @@
 	self.sortKey = @"title";
 	self.sortAscending = YES;
 	
-	self.collectionView.alwaysBounceVertical = YES;
-	
-	[self.collectionView registerClass:[ProgramCollectionViewCell class] forCellWithReuseIdentifier:PROGRAM_COLLECTION_CELL_ID];
+	self.cellIdentifier = PROGRAM_COLLECTION_CELL_ID;
+	[self.collectionView registerClass:[ProgramCollectionViewCell class] forCellWithReuseIdentifier:self.cellIdentifier];
 }
 
 - (void)didReceiveMemoryWarning
@@ -60,88 +52,6 @@
 	layout.minimumLineSpacing = 0.0f;
 	return layout;
 }
-- (UICollectionViewLayout *)bigCollectionViewLayout
-{
-	UICollectionViewFlowLayout *layout = [UICollectionViewFlowLayout new];
-	CGSize itemSize = self.collectionView.bounds.size;
-	itemSize.height -= self.topLayoutGuide.length;
-	layout.itemSize = itemSize;
-	layout.minimumInteritemSpacing =
-	layout.minimumLineSpacing = 0.0f;
-	layout.sectionInset = UIEdgeInsetsMake(0, 0, 0, 0);
-	layout.scrollDirection = UICollectionViewScrollDirectionHorizontal;
-	return layout;
-}
 
-
-// The cell that is returned must be retrieved from a call to -dequeueReusableCellWithReuseIdentifier:forIndexPath:
-- (UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath
-{
-	ProgramCollectionViewCell *cell = (ProgramCollectionViewCell *)[collectionView dequeueReusableCellWithReuseIdentifier:PROGRAM_COLLECTION_CELL_ID forIndexPath:indexPath];
-    
-    Program *program = [self programForIndexPath:indexPath];
-	if (program) {
-		cell.program = program;
-		cell.showContent = isBig;
-	}
-    
-    return cell;
-}
-
-
-
-- (Program *)programForIndexPath:(NSIndexPath *)indexPath
-{
-	NSManagedObject *object = [self.fetchedResultsController objectAtIndexPath:indexPath];
-	
-	if ([object isKindOfClass:[Program class]]) {
-		Program *program = (Program *)object;
-		return program;
-	}
-	return nil;
-}
-
-
-
-
-
-#pragma mark - UICollectionViewDelegate
-
-- (void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath
-{
-//	for (UICollectionViewCell *cell in [collectionView visibleCells] ) {
-//		ProgramCollectionViewCell *programCell = (ProgramCollectionViewCell *)cell;
-//		programCell.showContent = !isBig;
-//	}
-	
-	ProgramCollectionViewCell *programCell = (ProgramCollectionViewCell *)[collectionView cellForItemAtIndexPath:indexPath];
-	if (programCell) {
-		programCell.showContent = !isBig;
-//		[[DRHandler sharedInstance] validateEpisodesForProgram:self.program];
-	}
-	
-//	Program *program = [self programForIndexPath:indexPath];
-//	[[DRHandler sharedInstance] validateEpisodesForProgram:program];
-	
-	
-	if (isBig)
-	{
-		isBig = NO;
-		[self.collectionView setCollectionViewLayout:[self defaultCollectionViewLayout] animated:YES completion:^(BOOL finished) {
-			
-			collectionView.pagingEnabled = NO;
-			collectionView.alwaysBounceVertical = YES;
-		}];
-	}
-	else
-	{
-		isBig = YES;
-		[self.collectionView setCollectionViewLayout:[self bigCollectionViewLayout] animated:YES completion:^(BOOL finished) {
-			
-			collectionView.alwaysBounceVertical = NO;
-			collectionView.pagingEnabled = YES;
-		}];
-	}
-}
 
 @end

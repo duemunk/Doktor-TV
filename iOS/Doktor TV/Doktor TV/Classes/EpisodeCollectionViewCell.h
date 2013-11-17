@@ -10,9 +10,9 @@
 
 @class Episode;
 
-#import "CollectionViewCell.h"
+#import "ZoomCollectionViewCell.h"
 
-@interface EpisodeCollectionViewCell : CollectionViewCell
+@interface EpisodeCollectionViewCell : ZoomCollectionViewCell
 
 @property (nonatomic, strong) Episode *episode;
 

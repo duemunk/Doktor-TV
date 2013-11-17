@@ -6,11 +6,11 @@
 //  Copyright (c) 2013 developmunk. All rights reserved.
 //
 
-#import "CollectionViewController.h"
+#import "ZoomCollectionViewController.h"
 #import "Program.h"
 #import	"Season.h"
 
-@interface ProgramCollectionViewController : CollectionViewController
+@interface ProgramCollectionViewController : ZoomCollectionViewController
 
 @property (nonatomic, strong) Program *program;
 

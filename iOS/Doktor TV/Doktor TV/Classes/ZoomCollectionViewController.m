@@ -6,12 +6,25 @@
 //
 //
 
-#import "CollectionViewController.h"
+#import "ZoomCollectionViewController.h"
+#import "ZoomCollectionViewCell.h"
 
-@implementation CollectionViewController
+@implementation ZoomCollectionViewController
 {
     NSMutableArray *_objectChanges;
     NSMutableArray *_sectionChanges;
+	
+	BOOL isZoomed;
+}
+
+
+- (instancetype)init
+{
+	self = [super initWithCollectionViewLayout:self.defaultCollectionViewLayout];
+	if (self) {
+		
+	}
+	return self;
 }
 
 
@@ -21,8 +34,16 @@
     _sectionChanges = [NSMutableArray array];
 	
 	self.collectionView.backgroundColor = [UIColor clearColor];
+	self.collectionView.alwaysBounceVertical = YES;
 	
 	self.managedObjectContext = [DataHandler sharedInstance].managedObjectContext;
+}
+
+
+- (void)willRotateToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation duration:(NSTimeInterval)duration
+{
+	UICollectionViewLayout *layout = isZoomed ? [self zoomedCollectionViewLayout] : self.defaultCollectionViewLayout;
+	[self.collectionView setCollectionViewLayout:layout animated:YES];
 }
 
 
@@ -34,18 +55,85 @@
 }
 
 
+
+- (UICollectionViewLayout *)zoomedCollectionViewLayout
+{
+	UICollectionViewFlowLayout *layout = [UICollectionViewFlowLayout new];
+	CGSize itemSize = self.collectionView.bounds.size;
+	layout.itemSize = itemSize;
+	layout.minimumInteritemSpacing =
+	layout.minimumLineSpacing = 0.0f;
+	layout.sectionInset = UIEdgeInsetsMake(0, 0, 0, 0);
+	layout.scrollDirection = UICollectionViewScrollDirectionHorizontal;
+	return layout;
+}
+
+
+
+
+
 #pragma mark - UICollectionViewDataSource
 
 - (NSInteger)numberOfSectionsInCollectionView:(UICollectionView *)collectionView
 {
-    return [[self.fetchedResultsController sections] count];
+    return self.fetchedResultsController.sections.count;
 }
 
 - (NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section
 {
-    id <NSFetchedResultsSectionInfo> sectionInfo = [self.fetchedResultsController sections][section];
+    id <NSFetchedResultsSectionInfo> sectionInfo = self.fetchedResultsController.sections[section];
     return [sectionInfo numberOfObjects];
 }
+
+
+
+
+
+
+#pragma mark - UICollectionViewDelegate
+
+// The cell that is returned must be retrieved from a call to -dequeueReusableCellWithReuseIdentifier:forIndexPath:
+- (UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath
+{
+	ZoomCollectionViewCell *cell = (ZoomCollectionViewCell *)[collectionView dequeueReusableCellWithReuseIdentifier:self.cellIdentifier forIndexPath:indexPath];
+    
+	cell.managedObject = [self.fetchedResultsController objectAtIndexPath:indexPath];
+	cell.zoom = isZoomed;
+    
+    return cell;
+}
+
+- (void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath
+{
+	ZoomCollectionViewCell *zoomCell = (ZoomCollectionViewCell *)[collectionView cellForItemAtIndexPath:indexPath];
+	if (zoomCell) {
+		zoomCell.zoom = !isZoomed;
+	}
+	
+	if (isZoomed)
+	{
+		isZoomed = NO;
+		[self.collectionView setCollectionViewLayout:self.defaultCollectionViewLayout animated:YES completion:^(BOOL finished) {
+			
+			collectionView.pagingEnabled = NO;
+			collectionView.alwaysBounceVertical = YES;
+		}];
+	}
+	else
+	{
+		isZoomed = YES;
+		[self.collectionView setCollectionViewLayout:[self zoomedCollectionViewLayout] animated:YES completion:^(BOOL finished) {
+			
+			collectionView.alwaysBounceVertical = NO;
+			collectionView.pagingEnabled = YES;
+		}];
+	}
+}
+
+
+
+
+
 
 
 #pragma mark - Fetched results controller
