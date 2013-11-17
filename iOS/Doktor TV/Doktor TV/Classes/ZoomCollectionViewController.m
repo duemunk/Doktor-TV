@@ -14,7 +14,7 @@
     NSMutableArray *_objectChanges;
     NSMutableArray *_sectionChanges;
 	
-	BOOL isZoomed;
+	BOOL isZoomed, isZooming;
 }
 
 
@@ -35,6 +35,8 @@
 	
 	self.collectionView.backgroundColor = [UIColor clearColor];
 	self.collectionView.alwaysBounceVertical = YES;
+	self.view.clipsToBounds =
+	self.collectionView.clipsToBounds = YES;
 	
 	self.managedObjectContext = [DataHandler sharedInstance].managedObjectContext;
 }
@@ -60,6 +62,9 @@
 {
 	UICollectionViewFlowLayout *layout = [UICollectionViewFlowLayout new];
 	CGSize itemSize = self.collectionView.bounds.size;
+	UIEdgeInsets insets = self.collectionView.contentInset;
+	itemSize.height -= insets.top + insets.bottom;
+	itemSize.width -= insets.left + insets.right;
 	layout.itemSize = itemSize;
 	layout.minimumInteritemSpacing =
 	layout.minimumLineSpacing = 0.0f;
@@ -69,6 +74,14 @@
 }
 
 
+
+- (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context
+{
+	if ([keyPath isEqualToString:@"zoom"])
+	{
+		[self toggleZoom];
+	}
+}
 
 
 
@@ -99,39 +112,47 @@
     
 	cell.managedObject = [self.fetchedResultsController objectAtIndexPath:indexPath];
 	cell.zoom = isZoomed;
+//	[cell removeObserver:self forKeyPath:@"zoom"];
+	[cell addObserver:self forKeyPath:@"zoom" options:0 context:0];
     
     return cell;
 }
 
 - (void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath
 {
+	[self toggleZoom];
+	
 	ZoomCollectionViewCell *zoomCell = (ZoomCollectionViewCell *)[collectionView cellForItemAtIndexPath:indexPath];
 	if (zoomCell) {
-		zoomCell.zoom = !isZoomed;
-	}
-	
-	if (isZoomed)
-	{
-		isZoomed = NO;
-		[self.collectionView setCollectionViewLayout:self.defaultCollectionViewLayout animated:YES completion:^(BOOL finished) {
-			
-			collectionView.pagingEnabled = NO;
-			collectionView.alwaysBounceVertical = YES;
-		}];
-	}
-	else
-	{
-		isZoomed = YES;
-		[self.collectionView setCollectionViewLayout:[self zoomedCollectionViewLayout] animated:YES completion:^(BOOL finished) {
-			
-			collectionView.alwaysBounceVertical = NO;
-			collectionView.pagingEnabled = YES;
-		}];
+		zoomCell.zoom = isZoomed;
 	}
 }
 
-
-
+- (void)toggleZoom
+{
+	if (!isZooming) {
+		__block UICollectionView *__collectionView = self.collectionView;
+		isZooming = YES;
+		if (isZoomed)
+		{
+			isZoomed = NO;
+			[self.collectionView setCollectionViewLayout:self.defaultCollectionViewLayout animated:YES completion:^(BOOL finished) {
+				isZooming = NO;
+				__collectionView.pagingEnabled = NO;
+				__collectionView.alwaysBounceVertical = YES;
+			}];
+		}
+		else
+		{
+			isZoomed = YES;
+			[self.collectionView setCollectionViewLayout:[self zoomedCollectionViewLayout] animated:YES completion:^(BOOL finished) {
+				isZooming = NO;
+				__collectionView.alwaysBounceVertical = NO;
+				__collectionView.pagingEnabled = YES;
+			}];
+		}
+	}
+}
 
 
 

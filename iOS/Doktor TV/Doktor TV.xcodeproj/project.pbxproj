@@ -42,6 +42,8 @@
 		4E1F16CD183440AD0068E5BD /* UIImageView+AFNetworking.m in Sources */ = {isa = PBXBuildFile; fileRef = 4E1F16C3183440AD0068E5BD /* UIImageView+AFNetworking.m */; };
 		4E1F16CE183440AD0068E5BD /* UIProgressView+AFNetworking.m in Sources */ = {isa = PBXBuildFile; fileRef = 4E1F16C6183440AD0068E5BD /* UIProgressView+AFNetworking.m */; };
 		4E1F16CF183440AD0068E5BD /* UIWebView+AFNetworking.m in Sources */ = {isa = PBXBuildFile; fileRef = 4E1F16C8183440AD0068E5BD /* UIWebView+AFNetworking.m */; };
+		4E9520FA18384E0800DCC2DF /* Button.m in Sources */ = {isa = PBXBuildFile; fileRef = 4E9520F918384E0800DCC2DF /* Button.m */; };
+		4E9520FD1838517500DCC2DF /* UIFont+CustomFont.m in Sources */ = {isa = PBXBuildFile; fileRef = 4E9520FB1838517500DCC2DF /* UIFont+CustomFont.m */; };
 		4ECF108E1836E79000D4C62C /* CoreData.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4ECF108D1836E79000D4C62C /* CoreData.framework */; };
 		4ECF10D21836E7F600D4C62C /* DataHandler.m in Sources */ = {isa = PBXBuildFile; fileRef = 4ECF10D11836E7F500D4C62C /* DataHandler.m */; };
 		4ECF10D51836E85800D4C62C /* Model.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 4ECF10D31836E85800D4C62C /* Model.xcdatamodeld */; };
@@ -137,6 +139,10 @@
 		4E1F16C6183440AD0068E5BD /* UIProgressView+AFNetworking.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIProgressView+AFNetworking.m"; sourceTree = "<group>"; };
 		4E1F16C7183440AD0068E5BD /* UIWebView+AFNetworking.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIWebView+AFNetworking.h"; sourceTree = "<group>"; };
 		4E1F16C8183440AD0068E5BD /* UIWebView+AFNetworking.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIWebView+AFNetworking.m"; sourceTree = "<group>"; };
+		4E9520F818384E0800DCC2DF /* Button.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Button.h; path = Classes/Button.h; sourceTree = "<group>"; };
+		4E9520F918384E0800DCC2DF /* Button.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = Button.m; path = Classes/Button.m; sourceTree = "<group>"; };
+		4E9520FB1838517500DCC2DF /* UIFont+CustomFont.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "UIFont+CustomFont.m"; path = "Classes/UIFont+CustomFont.m"; sourceTree = "<group>"; };
+		4E9520FC1838517500DCC2DF /* UIFont+CustomFont.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "UIFont+CustomFont.h"; path = "Classes/UIFont+CustomFont.h"; sourceTree = "<group>"; };
 		4ECF108D1836E79000D4C62C /* CoreData.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreData.framework; path = System/Library/Frameworks/CoreData.framework; sourceTree = SDKROOT; };
 		4ECF10D01836E7F500D4C62C /* DataHandler.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = DataHandler.h; path = Classes/DataHandler.h; sourceTree = "<group>"; };
 		4ECF10D11836E7F500D4C62C /* DataHandler.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = DataHandler.m; path = Classes/DataHandler.m; sourceTree = "<group>"; };
@@ -254,6 +260,7 @@
 		4E1F1655183428470068E5BD /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
+				4E9520FE1838517B00DCC2DF /* CustomFont */,
 				4ECF11111837A52600D4C62C /* UIImageEffects */,
 				4E1F1656183428470068E5BD /* Doktor TV-Info.plist */,
 				4E1F1657183428470068E5BD /* InfoPlist.strings */,
@@ -375,6 +382,15 @@
 			path = "UIKit+AFNetworking";
 			sourceTree = "<group>";
 		};
+		4E9520FE1838517B00DCC2DF /* CustomFont */ = {
+			isa = PBXGroup;
+			children = (
+				4E9520FC1838517500DCC2DF /* UIFont+CustomFont.h */,
+				4E9520FB1838517500DCC2DF /* UIFont+CustomFont.m */,
+			);
+			name = CustomFont;
+			sourceTree = "<group>";
+		};
 		4ECF10DF1836EB7700D4C62C /* Model */ = {
 			isa = PBXGroup;
 			children = (
@@ -432,6 +448,8 @@
 				4ECF10F8183702FE00D4C62C /* EpisodeCollectionViewCell.m */,
 				4ECF11251838252100D4C62C /* EpisodeViewController.h */,
 				4ECF11261838252100D4C62C /* EpisodeViewController.m */,
+				4E9520F818384E0800DCC2DF /* Button.h */,
+				4E9520F918384E0800DCC2DF /* Button.m */,
 			);
 			name = Navigation;
 			sourceTree = "<group>";
@@ -563,10 +581,12 @@
 				4E1F16CE183440AD0068E5BD /* UIProgressView+AFNetworking.m in Sources */,
 				4ECF11271838252100D4C62C /* EpisodeViewController.m in Sources */,
 				4E1F16B0183440A30068E5BD /* AFHTTPRequestOperation.m in Sources */,
+				4E9520FD1838517500DCC2DF /* UIFont+CustomFont.m in Sources */,
 				4E1F16991834407D0068E5BD /* KeepTypes.m in Sources */,
 				4ECF10F31836F6B600D4C62C /* ZoomCollectionViewController.m in Sources */,
 				4ECF10D81836EB6D00D4C62C /* Season.m in Sources */,
 				4E1F16CB183440AD0068E5BD /* UIAlertView+AFNetworking.m in Sources */,
+				4E9520FA18384E0800DCC2DF /* Button.m in Sources */,
 				4ECF11141837A52600D4C62C /* UIImage+ImageEffects.m in Sources */,
 				4ECF10E51836EE4400D4C62C /* UIViewController+Containment.m in Sources */,
 				4E1F16B1183440A30068E5BD /* AFHTTPRequestOperationManager.m in Sources */,

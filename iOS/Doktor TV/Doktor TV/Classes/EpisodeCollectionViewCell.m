@@ -7,10 +7,14 @@
 //
 
 #import "EpisodeCollectionViewCell.h"
+#import "EpisodeViewController.h"
 
 #import "DataHandler.h"
 
 @implementation EpisodeCollectionViewCell
+{
+	EpisodeViewController *episodeViewController;
+}
 
 - (void)dealloc
 {
@@ -60,6 +64,23 @@
 	{
 		self.backgroundImage = nil;
 	}
+}
+
+- (void)setupChildViewController
+{
+	if (self.isZoomed)
+	{
+		if (!episodeViewController) {
+			episodeViewController = [EpisodeViewController new];
+			episodeViewController.episode = self.episode;
+			
+			self.childViewController = episodeViewController;
+		}
+		else
+			episodeViewController.episode = self.episode;
+	}
+	
+	[super setupChildViewController];
 }
 
 @end

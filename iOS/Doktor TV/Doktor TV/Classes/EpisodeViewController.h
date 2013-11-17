@@ -8,6 +8,10 @@
 
 #import <UIKit/UIKit.h>
 
+#import "Episode.h"
+
 @interface EpisodeViewController : UIViewController
+
+@property (nonatomic, strong) Episode *episode;
 
 @end

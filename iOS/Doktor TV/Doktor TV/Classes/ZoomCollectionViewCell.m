@@ -7,11 +7,13 @@
 //
 
 #import "ZoomCollectionViewCell.h"
+#import "Button.h"
 
 @implementation ZoomCollectionViewCell
 {
 	UIImageView *backgroundImageView;
 	BOOL _blurBackgroundImage;
+	Button *closeButton;
 }
 
 
@@ -36,6 +38,7 @@
 		
 		[self blurBackgroundImage:zoom];
 		[self setupChildViewController];
+		[self setupCloseButton];
 	}
 }
 
@@ -84,17 +87,23 @@
 {
 	if (!_titleLabel) {
 		_titleLabel = [UILabel new];
-		[self addSubview:_titleLabel];
+		[self.contentView addSubview:_titleLabel];
 		_titleLabel.keepLeftInset.equal =
 		_titleLabel.keepTopInset.equal = KeepRequired(0.0f);
 		
-		_titleLabel.font = [UIFont preferredFontForTextStyle:UIFontTextStyleHeadline];
+		_titleLabel.font = [UIFont preferredCustomFontForTextStyle:UIFontTextStyleHeadline];
 		
 		[self applyDefaultLabelStyling:_titleLabel];
 	}
 	
 	return _titleLabel;
 }
+- (void)close
+{
+	self.zoom = NO;
+}
+
+
 
 - (void)applyDefaultLabelStyling:(UILabel *)label
 {
@@ -110,8 +119,8 @@
 {
 	if (self.isZoomed)
 	{
-		if (![self.subviews containsObject:self.childViewController.view]) {
-			[self insertSubview:self.childViewController.view belowSubview:self.titleLabel];
+		if (![self.contentView.subviews containsObject:self.childViewController.view]) {
+			[self.contentView insertSubview:self.childViewController.view belowSubview:self.titleLabel];
 			
 			UIEdgeInsets insets = UIEdgeInsetsMake(100.0f, 0, 0, 0);
 			if ([self.childViewController.view isKindOfClass:[UIScrollView class]])
@@ -126,15 +135,39 @@
 			}
 			else
 				[self.childViewController.view keepInsets:insets];
-			
 		}
-		
 	}
 	else
 	{
 		if (_childViewController) {
 			[_childViewController.view removeFromSuperview];
 			_childViewController = nil;
+		}
+	}
+}
+
+
+- (void)setupCloseButton
+{
+	if (self.isZoomed)
+	{
+		if (!closeButton) {
+			closeButton = [Button new];
+			closeButton.title = @"Close";
+			[self.contentView addSubview:closeButton];
+			
+			[closeButton addTarget:self action:@selector(close) forControlEvents:UIControlEventTouchUpInside];
+			
+			closeButton.keepRightInset.equal =
+			closeButton.keepTopInset.equal = KeepRequired(0.0f);
+		}
+	}
+	else
+	{
+		if (closeButton) {
+			[closeButton removeTarget:self action:@selector(close) forControlEvents:UIControlEventTouchUpInside];
+			[closeButton removeFromSuperview];
+			closeButton = nil;
 		}
 	}
 }
