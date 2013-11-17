@@ -122,7 +122,7 @@
 		if (![self.contentView.subviews containsObject:self.childViewController.view]) {
 			[self.contentView insertSubview:self.childViewController.view belowSubview:self.titleLabel];
 			
-			UIEdgeInsets insets = UIEdgeInsetsMake(100.0f, 0, 0, 0);
+			UIEdgeInsets insets = UIEdgeInsetsMake(100.0f, 0, 200.0f, 0);
 			if ([self.childViewController.view isKindOfClass:[UIScrollView class]])
 			{
 				[self.childViewController.view keepInsets:UIEdgeInsetsZero];

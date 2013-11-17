@@ -19,4 +19,11 @@
 	#import "UIColor+iOS7Colors.h"
 	#import "UIImage+ImageEffects.h"
 	#import "UIFont+CustomFont.h"
+
+	#ifdef DEBUG
+	#define DLog( s, ... ) NSLog( @"%sl%d | %@", __func__, __LINE__, [NSString stringWithFormat:(s), ##__VA_ARGS__] )
+	#else
+	#define DLog( s, ... )
+	#endif
+
 #endif

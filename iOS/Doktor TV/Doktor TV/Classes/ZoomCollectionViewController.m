@@ -95,7 +95,9 @@
 - (NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section
 {
     id <NSFetchedResultsSectionInfo> sectionInfo = self.fetchedResultsController.sections[section];
-    return [sectionInfo numberOfObjects];
+	NSInteger count = [sectionInfo numberOfObjects];
+	DLog(@"%d",count);
+    return count;
 }
 
 
@@ -197,7 +199,7 @@
 	if (![self.fetchedResultsController performFetch:&error]) {
 		// Replace this implementation with code to handle the error appropriately.
 		// abort() causes the application to generate a crash log and terminate. You should not use this function in a shipping application, although it may be useful during development.
-		NSLog(@"Unresolved error %@, %@", error, [error userInfo]);
+		DLog(@"Unresolved error %@, %@", error, [error userInfo]);
 		abort();
 	}
     
@@ -301,7 +303,8 @@
                                 [self.collectionView deleteItemsAtIndexPaths:@[obj]];
                                 break;
                             case NSFetchedResultsChangeUpdate:
-//                                [self.collectionView reloadItemsAtIndexPaths:@[obj]];
+								if (!isZoomed)
+									[self.collectionView reloadItemsAtIndexPaths:@[obj]];
                                 break;
                             case NSFetchedResultsChangeMove:
                                 [self.collectionView moveItemAtIndexPath:obj[0] toIndexPath:obj[1]];

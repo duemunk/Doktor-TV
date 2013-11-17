@@ -42,25 +42,30 @@
 {
 	NSString *query =  @"http://www.dr.dk/mu/view/bundles-with-public-asset?BundleType=Series&ChannelType=TV";
 	query = [self addLimit:10 urlString:query];
-	query = [self addTitle:@"Broen II" urlString:query];
-//	query = [self addTitle:@"Absurdistan" urlString:query];
 	
-	[self.afHttpSessionManager GET:query parameters:nil success:^(NSURLSessionDataTask *task, id responseObject)
+	NSArray *titles = @[@"Broen II",@"Absurdistan",@"Rejseholdet"];
+	for (NSString *title in titles)
 	{
-		[self validateProgramsData:responseObject];
+		NSString *query1 = [self addTitle:title urlString:query];
 		
-	} failure:^(NSURLSessionDataTask *task, NSError *error) {
-		NSLog(@"ERROR: %@",error);
-	}];
+		DLog(@"Reqest %@",query1);
+		[self.afHttpSessionManager GET:query1 parameters:nil success:^(NSURLSessionDataTask *task, id responseObject)
+		 {
+			 DLog(@"Received %@",query1);
+			 [self validateProgramsData:responseObject];
+		 } failure:^(NSURLSessionDataTask *task, NSError *error) {
+			 DLog(@"ERROR: %@",error);
+		 }];
+	}
 }
 
 - (NSString *)addLimit:(NSUInteger)limit urlString:(NSString *)urlString
 {
-	return [urlString stringByAppendingFormat:@"&limit=$eq(%d)",limit];
+	return [urlString stringByAppendingFormat:@"&limit=$eq(%@)",@(limit).stringValue];
 }
 - (NSString *)addOffset:(NSUInteger)offset urlString:(NSString *)urlString
 {
-	return [urlString stringByAppendingFormat:@"&offset=$eq(%d)",offset];
+	return [urlString stringByAppendingFormat:@"&offset=$eq(%@)",@(offset).stringValue];
 }
 - (NSString *)addTitle:(NSString *)title urlString:(NSString *)urlString
 {
@@ -112,17 +117,18 @@
 			{
 				// TODO: Update?
 				program = (Program *)existingLocalPrograms.firstObject;
+
+				DLog(@"Program already exists %@",program.title);
 			}
 			else
 			{
-				
-				
-				
 				// Create new program
 				program = [[DataHandler sharedInstance] newProgram];
 				program.drID = drID;
 				program.title = dict[kDRTitle];
 				program.slug = dict[kDRSlug];
+				
+				DLog(@"New program %@",program.title);
 			}
 			
 			
@@ -130,8 +136,7 @@
 				NSArray *imageAsset = [assets filteredArrayUsingPredicate:[NSPredicate predicateWithFormat:@"%K = %@",kDRKind,@"Image"]];
 				if (imageAsset.count && !program.image)
 				{
-					[[DataHandler sharedInstance] associateObject:program];
-					[[DataHandler sharedInstance] saveContext];
+					DLog(@"Image asset exists for program %@",program.title);
 					
 					NSDictionary *imageDict = imageAsset.firstObject;
 					NSString *imageUrlString = imageDict[kDRUri];
@@ -156,7 +161,7 @@
 - (void)download:(NSString *)urlString toFileName:(NSString *)filename forObject:(NSManagedObject *)object key:(NSString *)key
 {
 	[self download:urlString toFileName:filename forObject:object key:key block:^(NSUInteger bytesRead, long long totalBytesRead, long long totalBytesExpectedToRead) {
-		NSLog(@"Progess: %f", (float)totalBytesRead / (float)totalBytesExpectedToRead);
+		DLog(@"Progess: %f", (float)totalBytesRead / (float)totalBytesExpectedToRead);
 	}];
 }
 
@@ -170,17 +175,16 @@
 	NSString *path = [DataHandler pathForFileName:filename];
 	operation.outputStream = [NSOutputStream outputStreamToFileAtPath:path append:NO];
 	
-	__block NSManagedObjectID *__objectID = object.objectID;
-	[operation setCompletionBlockWithSuccess:^(AFHTTPRequestOperation *operation, id responseObject) {
-		NSLog(@"Successfully downloaded file to %@", path);
-		
-		NSManagedObject *object = [[DataHandler sharedInstance].managedObjectContext objectWithID:__objectID];
+	DLog(@"Begins download of %@ to %@",urlString,filename);
+	[operation setCompletionBlockWithSuccess:^(AFHTTPRequestOperation *operation, id responseObject)
+	{
+		DLog(@"Successfully downloaded file to %@", path);
 		[object setValue:filename forKey:key];
-		
 		[[DataHandler sharedInstance] saveContext];
-		
-	} failure:^(AFHTTPRequestOperation *operation, NSError *error) {
-		NSLog(@"Error: %@", error);
+	}
+									 failure:^(AFHTTPRequestOperation *operation, NSError *error)
+	{
+		DLog(@"Error: %@", error);
 	}];
 	
 	[operation start];
@@ -193,16 +197,17 @@
 {
 	NSString *query = [NSString stringWithFormat:@"http://www.dr.dk/mu/programcard?Relations.Slug=%@",program.slug];
 	query = [self addLimit:100 urlString:query];
-	NSLog(@"\n\n %@ \n\n",query);
-	__block NSManagedObjectID *__objectID = program.objectID;
+
+	DLog(@"Begin request for episode for program %@ with slug %@",program.title,program.slug);
 	[self.afHttpSessionManager GET:query parameters:nil success:^(NSURLSessionDataTask *task, id responseObject)
 	 {
-		 Program *program = (Program *)[[DataHandler sharedInstance].managedObjectContext objectWithID:__objectID];
+		 DLog(@"Received for episode for program %@",program.title);
 		 [self validateEpisodeData:responseObject forProgram:program];
-		 
-	 } failure:^(NSURLSessionDataTask *task, NSError *error) {
-		 NSLog(@"ERROR: %@",error);
-	 }];
+	 }
+						   failure:^(NSURLSessionDataTask *task, NSError *error)
+	{
+		 DLog(@"ERROR: %@",error);
+	}];
 }
 
 #define kDRSubtitle @"Subtitle"
@@ -220,9 +225,13 @@
 		season.program = program;
 	}
 	
+	DLog(@"Episodes count: %d for program %@",data.count,program.title);
+	
 	int i = 0;
 	for (NSDictionary *episodeData in data)
 	{
+		DLog(@"%d",i);
+		
 		NSString *drID = episodeData[kDRUrn];
 		NSArray *existingLocalEpisodes = [season.episodes.array filteredArrayUsingPredicate:[NSPredicate predicateWithFormat:@"drID = %@",drID]];
 		
@@ -231,13 +240,16 @@
 		{
 			// TODO: Update?
 			episode = (Episode *)existingLocalEpisodes.firstObject;
+			DLog(@"Episode already exists for episode %@ in program %@",episode.title,((Program *)episode.season.program).title);
 		}
 		else
 		{
-			Episode *episode = [[DataHandler sharedInstance] newEpisode];
+			episode = [[DataHandler sharedInstance] newEpisode];
 			episode.season = season;
 			episode.number = @(++i);
 			episode.drID = drID;
+			
+			DLog(@"New episode in program %@",((Program *)episode.season.program).title);
 		}
 		
 		episode.slug = episodeData[kDRSlug];
@@ -245,34 +257,49 @@
 		episode.subtitle = episodeData[kDRSubtitle];
 		episode.desc = episodeData[kDRDescription];
 		
-		NSArray *assets = episodeData[kDRAssets];
+		DLog(@"Updated episode %@ in program %@",episode.title,((Program *)episode.season.program).title);
 		
+		NSArray *assets = episodeData[kDRAssets];
 		if (assets.count) {
 			NSArray *imageAsset = [assets filteredArrayUsingPredicate:[NSPredicate predicateWithFormat:@"%K = %@",kDRKind,@"Image"]];
 			
-			NSDictionary *imageDict = imageAsset.firstObject;
-			NSString *imageUrlString = imageDict[kDRUri];
-			imageUrlString = [imageUrlString stringByAppendingString:@"?width=320&height=320"];
 			NSString *fileName = [NSString stringWithFormat:@"EpisodeImage__%@__%@.jpg",program.drID,episode.drID];
 			
 			BOOL noImageFileExists = ![UIImage imageWithContentsOfFile:[DataHandler pathForFileName:fileName]];
 			BOOL noImageLink = !episode.image;
 			if (imageAsset.count && (noImageFileExists || noImageLink))
 			{
+				if (noImageLink)
+					DLog(@"Image filepath (local) not available for episode %@ in program %@",episode.title,((Program *)episode.season.program).title);
+				else if (noImageFileExists)
+					DLog(@"Image not available (local) for episode %@ in program %@",episode.title,((Program *)episode.season.program).title);
+				
+				NSDictionary *imageDict = imageAsset.firstObject;
+				NSString *imageUrlString = imageDict[kDRUri];
+				imageUrlString = [imageUrlString stringByAppendingString:@"?width=320&height=320"];
 				[self download:imageUrlString toFileName:fileName forObject:episode key:@"image"];
 			}
+			else if (imageAsset.count)
+				DLog(@"Image exists (local) for episode %@ in program %@",episode.title,((Program *)episode.season.program).title);
+			else
+				DLog(@"Image link (remote) not available for episode %@ in program %@",episode.title,((Program *)episode.season.program).title);
 			
 			NSArray *videoAsset = [assets filteredArrayUsingPredicate:[NSPredicate predicateWithFormat:@"%K = %@",kDRKind,@"VideoResource"]];
 			if (videoAsset.count)
 			{
+				DLog(@"Video link (remote) available for episode %@ in program %@",episode.title,((Program *)episode.season.program).title);
+				
 				NSDictionary *videoDict = videoAsset.firstObject;
 				
 				episode.duration = @([videoDict[kDRDurationInMilliseconds] integerValue]);
 				episode.uri = videoDict[kDRUri];
 				episode.dkOnly = @([videoDict[kDRRestrictedToDenmark] boolValue]);
 			}
+			else
+				DLog(@"Video link (remote) not available for episode %@ in program %@",episode.title,((Program *)episode.season.program).title);
+			
+			[[DataHandler sharedInstance] saveContext];
 		}
-		[[DataHandler sharedInstance] saveContext];
 	}
 }
 
@@ -281,10 +308,9 @@
 #define kDRBitrate @"Bitrate"
 - (void)runVideo:(void (^)(NSString *))completion forEpisode:(Episode *)episode
 {
-	NSString *uri = episode.uri;
-	
-	NSString *query = uri;
-	NSLog(@"\nURI: \n %@ \n\n",query);
+	NSString *query = episode.uri;
+	DLog(@"\nURI: \n %@ \n\n",query);
+	DLog(@"runVideo w/ uri %@ for episode %@ in program %@",query,episode.title,((Program *)episode.season.program).title);
 	[self.afHttpSessionManager GET:query parameters:nil success:^(NSURLSessionDataTask *task, id responseObject)
 	 {
 		 NSDictionary *dict = responseObject;
@@ -299,23 +325,25 @@
 				 break;
 			 }
 		 }
-		 if (urlString) {
+		 if (urlString)
+		 {
 			 urlString = [urlString stringByReplacingOccurrencesOfString:@"rtmp://vod.dr.dk/cms/mp4:CMS" withString:@"http://vodfiles.dr.dk/CMS"];
+			 DLog(@"runVideo found video uri %@ for episode %@ in program %@",urlString,episode.title,((Program *)episode.season.program).title);
 			 completion(urlString);
 		 }
-
 	 } failure:^(NSURLSessionDataTask *task, NSError *error) {
-		 NSLog(@"ERROR: %@",error);
+		 DLog(@"ERROR: %@",error);
 	 }];
 }
 
 - (void)downloadVideoForEpisode:(Episode *)episode block:(void (^)(NSUInteger bytesRead, long long totalBytesRead, long long totalBytesExpectedToRead))progressBlock
 {
-	__block NSManagedObjectID *__objectID = episode.objectID;
+	DLog(@"Requested download of video for episode %@ in program %@",episode.title,((Program *)episode.season.program).title);
+	
 	[self runVideo:^(NSString *urlString) {
 		
+		DLog(@"Begin download of video for episode %@ in program %@",episode.title,((Program *)episode.season.program).title);
 		// Download
-		Episode *episode = (Episode *)[[DataHandler sharedInstance].managedObjectContext objectWithID:__objectID];
 		Program *program = (Program *)episode.season.program;
 		NSString *filename = [NSString stringWithFormat:@"EpisodeVideo__%@__%@.mp4",program.drID,episode.drID];
 		[self download:urlString toFileName:filename forObject:episode key:@"video" block:progressBlock];
