@@ -85,7 +85,18 @@
 {
 	if ([keyPath isEqualToString:@"zoom"])
 	{
-		[self toggleZoom];
+		if ([object isKindOfClass:[ZoomCollectionViewCell class]]) {
+			ZoomCollectionViewCell *zoomCell = (ZoomCollectionViewCell *)object;
+			self.zoom = zoomCell.zoom;
+		}
+	}
+	if ([keyPath isEqualToString:@"alive"])
+	{
+		if ([object isKindOfClass:[ZoomCollectionViewCell class]]) {
+			ZoomCollectionViewCell *zoomCell = (ZoomCollectionViewCell *)object;
+			[zoomCell removeObserver:self forKeyPath:@"zoom"];
+			[zoomCell removeObserver:self forKeyPath:@"alive"];
+		}
 	}
 }
 
@@ -119,6 +130,7 @@
 	cell.managedObject = [self.fetchedResultsController objectAtIndexPath:indexPath];
 	cell.zoom = self.isZoomed;
 	[cell addObserver:self forKeyPath:@"zoom" options:0 context:0];
+	[cell addObserver:self forKeyPath:@"alive" options:0 context:0];
     
     return cell;
 }
@@ -142,7 +154,7 @@
 
 - (void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath
 {
-	[self toggleZoom];
+	self.zoom = !_zoom;
 	
 	ZoomCollectionViewCell *zoomCell = (ZoomCollectionViewCell *)[collectionView cellForItemAtIndexPath:indexPath];
 	if (zoomCell) {
@@ -150,28 +162,32 @@
 	}
 }
 
-- (void)toggleZoom
+- (void)setZoom:(BOOL)zoom
 {
-	if (!isZooming) {
-		__block UICollectionView *__collectionView = self.collectionView;
-		isZooming = YES;
-		if (_zoom)
+	if (!isZooming)
+	{
+		if (zoom != _zoom)
 		{
-			_zoom = NO;
-			[self.collectionView setCollectionViewLayout:defaultLayout animated:YES completion:^(BOOL finished) {
-				isZooming = NO;
-				__collectionView.pagingEnabled = NO;
-				__collectionView.alwaysBounceVertical = YES;
-			}];
-		}
-		else
-		{
-			_zoom = YES;
-			[self.collectionView setCollectionViewLayout:[self zoomedCollectionViewLayout] animated:YES completion:^(BOOL finished) {
-				isZooming = NO;
-				__collectionView.alwaysBounceVertical = NO;
-				__collectionView.pagingEnabled = YES;
-			}];
+			_zoom = zoom;
+		
+			__block UICollectionView *__collectionView = self.collectionView;
+			isZooming = YES;
+			if (!_zoom)
+			{
+				[self.collectionView setCollectionViewLayout:defaultLayout animated:YES completion:^(BOOL finished) {
+					isZooming = NO;
+					__collectionView.pagingEnabled = NO;
+					__collectionView.alwaysBounceVertical = YES;
+				}];
+			}
+			else
+			{
+				[self.collectionView setCollectionViewLayout:[self zoomedCollectionViewLayout] animated:YES completion:^(BOOL finished) {
+					isZooming = NO;
+					__collectionView.alwaysBounceVertical = NO;
+					__collectionView.pagingEnabled = YES;
+				}];
+			}
 		}
 	}
 }

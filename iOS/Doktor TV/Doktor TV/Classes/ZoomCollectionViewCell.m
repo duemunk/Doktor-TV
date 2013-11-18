@@ -24,8 +24,14 @@
         // Initialization code
 		self.backgroundColor = [UIColor colorWithWhite:0.5f alpha:0.5f];
 		self.clipsToBounds = YES;
+		_alive = YES;
     }
     return self;
+}
+
+- (void)dealloc
+{
+	self.alive = NO;
 }
 
 

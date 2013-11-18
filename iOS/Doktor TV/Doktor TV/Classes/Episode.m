@@ -2,7 +2,7 @@
 //  Episode.m
 //  Doktor TV
 //
-//  Created by Tobias DM on 17/11/13.
+//  Created by Tobias DM on 18/11/13.
 //  Copyright (c) 2013 developmunk. All rights reserved.
 //
 
@@ -23,6 +23,7 @@
 @dynamic title;
 @dynamic uri;
 @dynamic video;
+@dynamic imageUrl;
 @dynamic season;
 
 @end

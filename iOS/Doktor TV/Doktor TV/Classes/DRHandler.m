@@ -133,15 +133,44 @@
 				
 				NSDictionary *imageDict = imageAsset.firstObject;
 				NSString *imageUrlString = imageDict[kDRUri];
-				imageUrlString = [imageUrlString stringByAppendingString:@"?width=320&height=320"];
-				NSString *fileName = [NSString stringWithFormat:@"ProgramImage__%@.jpg",program.drID];
-				[self download:imageUrlString toFileName:fileName forObject:program key:@"image"];
+				if (![imageUrlString isEqualToString:program.imageUrl])
+				{
+					DLog(@"New image url %@ for program %@",imageUrlString,program.title);
+					program.imageUrl = imageUrlString;
+				}
+				else
+					DLog(@"Non-changed image url %@ for program %@",imageUrlString,program.title);
 			}
 		}
 		
 		[[DataHandler sharedInstance] saveContext];
 	}
 	return;
+}
+
+
+- (void)validateImageForProgram:(Program *)program
+{
+	NSString *imageUrlString = program.imageUrl;
+	if (imageUrlString)
+	{
+		NSString *fileName = [NSString stringWithFormat:@"ProgramImage__%@.jpg",program.drID];
+		
+		BOOL noImageFileExists = ![UIImage imageWithContentsOfFile:[DataHandler pathForFileName:fileName]];
+		BOOL noLocalImageLink = !program.image;
+		if (noImageFileExists || noLocalImageLink)
+		{
+			if (noLocalImageLink)
+				DLog(@"Image filepath (local) not available for program %@",program.title);
+			else if (noImageFileExists)
+				DLog(@"Image not available (local) for program %@",program.title);
+			
+			imageUrlString = [imageUrlString stringByAppendingString:@"?width=320&height=320"];
+			[self download:imageUrlString toFileName:fileName forObject:program key:@"image"];
+		}
+		else
+			DLog(@"Image exists (local) for program %@",program.title);
+	}
 }
 
 
@@ -215,7 +244,7 @@
 		season.program = program;
 	}
 	
-	DLog(@"Episodes count: %d for program %@",data.count,program.title);
+	DLog(@"Episodes count: %lu for program %@",(unsigned long)data.count,program.title);
 	
 	int i = 0;
 	for (NSDictionary *episodeData in data)
@@ -251,26 +280,21 @@
 		if (assets.count) {
 			NSArray *imageAsset = [assets filteredArrayUsingPredicate:[NSPredicate predicateWithFormat:@"%K = %@",kDRKind,@"Image"]];
 			
-			NSString *fileName = [NSString stringWithFormat:@"EpisodeImage__%@__%@.jpg",program.drID,episode.drID];
-			
-			BOOL noImageFileExists = ![UIImage imageWithContentsOfFile:[DataHandler pathForFileName:fileName]];
-			BOOL noImageLink = !episode.image;
-			if (imageAsset.count && (noImageFileExists || noImageLink))
-			{
-				if (noImageLink)
-					DLog(@"Image filepath (local) not available for episode %@ in program %@",episode.title,((Program *)episode.season.program).title);
-				else if (noImageFileExists)
-					DLog(@"Image not available (local) for episode %@ in program %@",episode.title,((Program *)episode.season.program).title);
-				
+			if (imageAsset.count) {
 				NSDictionary *imageDict = imageAsset.firstObject;
 				NSString *imageUrlString = imageDict[kDRUri];
-				imageUrlString = [imageUrlString stringByAppendingString:@"?width=320&height=320"];
-				[self download:imageUrlString toFileName:fileName forObject:episode key:@"image"];
+				
+				if (![imageUrlString isEqualToString:episode.imageUrl])
+				{
+					episode.imageUrl = imageUrlString;
+					DLog(@"Image link (remote) updated for episode %@ in program %@",episode.title,((Program *)episode.season.program).title);
+				}
+				else
+					DLog(@"Image link (remote) not updated for episode %@ in program %@",episode.title,((Program *)episode.season.program).title);
 			}
-			else if (imageAsset.count)
-				DLog(@"Image exists (local) for episode %@ in program %@",episode.title,((Program *)episode.season.program).title);
 			else
 				DLog(@"Image link (remote) not available for episode %@ in program %@",episode.title,((Program *)episode.season.program).title);
+			
 			
 			NSArray *videoAsset = [assets filteredArrayUsingPredicate:[NSPredicate predicateWithFormat:@"%K = %@",kDRKind,@"VideoResource"]];
 			if (videoAsset.count) // && !episode.uri)
@@ -286,10 +310,40 @@
 			else
 				DLog(@"Video link (remote) not available for episode %@ in program %@",episode.title,((Program *)episode.season.program).title);
 		}
+		else
+			DLog(@"No assets available for episode %@ in program %@",episode.title,((Program *)episode.season.program).title);
+	}
+	[[DataHandler sharedInstance] saveContext];
+}
+
+
+
+- (void)validateImageForEpisode:(Episode *)episode
+{
+	NSString *imageUrlString = episode.imageUrl;
+	
+	if (imageUrlString)
+	{
+		NSString *fileName = [NSString stringWithFormat:@"EpisodeImage__%@__%@.jpg",((Program *)episode.season.program).drID,episode.drID];
 		
-		[[DataHandler sharedInstance] saveContext];
+		BOOL noImageFileExists = ![UIImage imageWithContentsOfFile:[DataHandler pathForFileName:fileName]];
+		BOOL noLocalImageLink = !episode.image;
+		if (noImageFileExists || noLocalImageLink)
+		{
+			if (noLocalImageLink)
+				DLog(@"Image filepath (local) not available for episode %@ in program %@",episode.title,((Program *)episode.season.program).title);
+			else if (noImageFileExists)
+				DLog(@"Image not available (local) for episode %@ in program %@",episode.title,((Program *)episode.season.program).title);
+			
+			imageUrlString = [imageUrlString stringByAppendingString:@"?width=320&height=320"];
+			[self download:imageUrlString toFileName:fileName forObject:episode key:@"image"];
+		}
+		else
+			DLog(@"Image exists (local) for episode %@ in program %@",episode.title,((Program *)episode.season.program).title);
 	}
 }
+
+
 
 #define kDRLinks @"Links"
 #define kDRTarget @"Target"

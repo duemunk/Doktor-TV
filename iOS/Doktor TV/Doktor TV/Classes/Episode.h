@@ -2,7 +2,7 @@
 //  Episode.h
 //  Doktor TV
 //
-//  Created by Tobias DM on 17/11/13.
+//  Created by Tobias DM on 18/11/13.
 //  Copyright (c) 2013 developmunk. All rights reserved.
 //
 
@@ -24,6 +24,7 @@
 @property (nonatomic, retain) NSString * title;
 @property (nonatomic, retain) NSString * uri;
 @property (nonatomic, retain) NSString * video;
+@property (nonatomic, retain) NSString * imageUrl;
 @property (nonatomic, retain) Season *season;
 
 @end

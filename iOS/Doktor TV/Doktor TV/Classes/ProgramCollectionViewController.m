@@ -41,7 +41,7 @@
 	// Do any additional setup after loading the view
 	
 	self.entity = @"Episode";
-	self.sortKey = @"season.number";
+	self.sortKey = @"number";
 	self.sortAscending = YES;
 	
 	self.managedObjectContext = [DataHandler sharedInstance].managedObjectContext;

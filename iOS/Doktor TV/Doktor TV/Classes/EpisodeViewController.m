@@ -171,8 +171,6 @@
 	
 		NSURL *url = [NSURL URLWithString:urlString];
 		MPMoviePlayerViewController *moviePlayerViewController = [[MPMoviePlayerViewController alloc] initWithContentURL:url];
-		moviePlayerViewController.moviePlayer.fullscreen = YES;
-		moviePlayerViewController.moviePlayer.controlStyle = MPMovieControlStyleFullscreen;
 		
 		UIViewController *rootViewController = [UIApplication sharedApplication].keyWindow.rootViewController;
 		[rootViewController presentMoviePlayerViewControllerAnimated:moviePlayerViewController];

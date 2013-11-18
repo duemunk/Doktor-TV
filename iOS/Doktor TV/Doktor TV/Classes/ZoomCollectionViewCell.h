@@ -16,6 +16,8 @@
 @property (nonatomic, assign) UIViewController *childViewController;
 @property (nonatomic, strong) NSManagedObject *managedObject;
 
+@property (nonatomic, assign) BOOL alive;
+
 - (void)applyDefaultLabelStyling:(UILabel *)label;
 
 - (void)setupChildViewController;

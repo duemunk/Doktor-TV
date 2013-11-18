@@ -10,6 +10,7 @@
 #import "EpisodeViewController.h"
 
 #import "DataHandler.h"
+#import "DRHandler.h"
 
 @implementation EpisodeCollectionViewCell
 {
@@ -62,6 +63,7 @@
 	}
 	else
 	{
+		[[DRHandler sharedInstance] validateImageForEpisode:_episode];
 		self.backgroundImage = nil;
 	}
 }
