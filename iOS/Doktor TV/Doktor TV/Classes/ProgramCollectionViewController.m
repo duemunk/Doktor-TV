@@ -22,7 +22,7 @@
 
 - (instancetype)init
 {
-	ZoomCollectionViewFlowLayout *layout = [ZoomCollectionViewFlowLayout new];
+	UICollectionViewFlowLayout *layout = [UICollectionViewFlowLayout new];
 	layout.itemSize = CGSizeMake(130.0f, 100.0f);
 	layout.minimumInteritemSpacing =
 	layout.minimumLineSpacing = 20.0f;

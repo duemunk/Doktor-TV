@@ -43,7 +43,7 @@
 	NSString *query =  @"http://www.dr.dk/mu/view/bundles-with-public-asset?BundleType=Series&ChannelType=TV";
 	query = [self addLimit:10 urlString:query];
 	
-	NSArray *titles = @[@"Broen II",@"Absurdistan",@"Rejseholdet"];
+	NSArray *titles = @[@"Broen II",@"Absurdistan",@"Rejseholdet",@"Hammerslag",@"Bonderøven",@"På skinner",@"Price*",@"Sporløs",@"Kontant"];
 	for (NSString *title in titles)
 	{
 		NSString *query1 = [self addTitle:title urlString:query];

@@ -16,11 +16,11 @@
 	
 	BOOL isZooming;
 	
-	ZoomCollectionViewFlowLayout *defaultLayout;
+	UICollectionViewLayout *defaultLayout;
 }
 
 
-- (instancetype)initWithCollectionViewLayoutDefaultLayout:(ZoomCollectionViewFlowLayout *)layout
+- (instancetype)initWithCollectionViewLayoutDefaultLayout:(UICollectionViewLayout *)layout
 {
 	self = [super initWithCollectionViewLayout:layout];
 	if (self) {
@@ -66,7 +66,7 @@
 
 - (UICollectionViewLayout *)zoomedCollectionViewLayout
 {
-	ZoomCollectionViewFlowLayout *layout = [ZoomCollectionViewFlowLayout new];
+	UICollectionViewFlowLayout *layout = [UICollectionViewFlowLayout new];
 	CGSize itemSize = self.collectionView.bounds.size;
 	UIEdgeInsets insets = self.collectionView.contentInset;
 	itemSize.height -= insets.top + insets.bottom;
@@ -96,7 +96,7 @@
 - (NSInteger)numberOfSectionsInCollectionView:(UICollectionView *)collectionView
 {
 	NSUInteger count = self.fetchedResultsController.sections.count;
-	DLog(@"%d",(int)count);
+	DLog(@"%lu",(unsigned long)count);
     return count;
 }
 
@@ -104,7 +104,7 @@
 {
     id <NSFetchedResultsSectionInfo> sectionInfo = self.fetchedResultsController.sections[section];
 	NSUInteger count = [sectionInfo numberOfObjects];
-	DLog(@"%d",count);
+	DLog(@"%lu",(unsigned long)count);
     return count;
 }
 
@@ -113,7 +113,7 @@
 // The cell that is returned must be retrieved from a call to -dequeueReusableCellWithReuseIdentifier:forIndexPath:
 - (UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath
 {
-	DLog(@"%d,%d",indexPath.section,indexPath.item);
+	DLog(@"%ld,%ld",(long)indexPath.section,(long)indexPath.item);
 	ZoomCollectionViewCell *cell = (ZoomCollectionViewCell *)[collectionView dequeueReusableCellWithReuseIdentifier:self.cellIdentifier forIndexPath:indexPath];
 	
 	cell.managedObject = [self.fetchedResultsController objectAtIndexPath:indexPath];

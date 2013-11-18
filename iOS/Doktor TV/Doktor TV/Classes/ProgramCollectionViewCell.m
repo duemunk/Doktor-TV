@@ -21,8 +21,6 @@
 {
     self = [super initWithFrame:frame];
     if (self) {
-        // Initialization code
-//		self.backgroundColor = [UIColor iOS7lightBlueColor];
     }
     return self;
 }

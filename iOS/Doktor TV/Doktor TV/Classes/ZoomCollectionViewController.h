@@ -9,7 +9,6 @@
 @import UIKit;
 
 #import "DataHandler.h"
-#import "ZoomCollectionViewFlowLayout.h"
 
 @interface ZoomCollectionViewController : UICollectionViewController <NSFetchedResultsControllerDelegate>
 
@@ -21,12 +20,11 @@
 @property (nonatomic, strong) NSString *sortKey;
 @property (nonatomic, assign) BOOL sortAscending;
 
-//@property (nonatomic, assign) ZoomCollectionViewFlowLayout *defaultCollectionViewLayout;
 @property (nonatomic, readonly, getter = isZoomed) BOOL zoom;
 
 @property (nonatomic, assign) NSString *cellIdentifier;
 
-- (instancetype)initWithCollectionViewLayoutDefaultLayout:(ZoomCollectionViewFlowLayout *)layout;
+- (instancetype)initWithCollectionViewLayoutDefaultLayout:(UICollectionViewLayout *)layout;
 - (void)resetFetchResultsController;
 
 @end
