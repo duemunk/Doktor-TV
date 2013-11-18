@@ -8,16 +8,16 @@ Med andre ord, ønsker vi at holde os ude af denne kommunikation så meget som m
 ## Funktionalitet i version 1
 Det skal være muligt at ...
 
-* Søge i udsendelser og serier.
-* Hente en komplet liste over alle udsendelser og serier.
+* Søge i programmer (udsendelser og serier).
+* Hente en komplet liste over alle programmer og serier.
 * Lagring af information omkring valgte udsendelser på en service (til brug ved PUSH).
 * Få PUSH beskeder omkring opdateringer af serier.
 
 ### Søgning på udsendelser og serier / Hentning af komplet liste
 Følgende informationer skal benyttes til visning i Appen:
 
-* Overskrift/Navn på udsendelsen
-* Beskrivende tekst omkring udsendelsen.
+* Overskrift/Navn på program
+* Beskrivende tekst omkring programmet.
 * Billede af serien.
 * Liste af de seneste 10 episoder (se Liste af episoder)
 
@@ -34,7 +34,7 @@ Det er muligt at få besked omkring opdateringer til information i appen ved bru
 Dette ønskes blot at være en ekstra service, som giver ekstra funktionalitet, men som i reglen ikke er nødendig for at Appen virker.
 
 ### Servicen skal virke således:
-Det skal være muligt at registerer udsendelser i en service og få besked om opdateringer, når disse sker.
+Det skal være muligt at registerer programmer i en service og få besked om opdateringer, når disse sker.
 I den forbindelse skal følgende information sendes med:
 
 * Et unikt ID der følger telefonen.
@@ -67,14 +67,5 @@ http://vodfiles.dr.dk/CMS/Resources/dr.dk/NETTV/DR3/2013/11/dd50a214-8aee-4c6a-8
 * DRown or DReam
 * Dr. TV
 
-
-
-## iOS
-
-### Submodules
-#### AFNetworking
-https://github.com/AFNetworking/AFNetworking
-#### KeepLayout
-https://github.com/iMartinKiss/KeepLayout
 
 
