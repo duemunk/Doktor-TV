@@ -212,7 +212,7 @@
 
 + (BOOL)fileExists:(NSString *)filename
 {
-	BOOL fileExists = [[NSFileManager defaultManager] fileExistsAtPath:[DataHandler pathForFileName:filename]];
+	BOOL fileExists = [[NSFileManager defaultManager] fileExistsAtPath:[DataHandler pathForFileName:filename] isDirectory:NO];
 	return fileExists;
 }
 

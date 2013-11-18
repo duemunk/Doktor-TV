@@ -165,7 +165,7 @@
 			else if (noImageFileExists)
 				DLog(@"Image not available (local) for program %@",program.title);
 			
-			imageUrlString = [imageUrlString stringByAppendingString:@"?width=320&height=320"];
+			imageUrlString = [imageUrlString stringByAppendingString:@"?width=200&height=200"];
 			[self download:imageUrlString toFileName:fileName forObject:program key:@"image"];
 		}
 		else

@@ -29,7 +29,6 @@
     [super viewDidLoad];
 	
 	// Do any additional setup after loading the view
-	[self layoutButtons];
 }
 
 
@@ -57,10 +56,14 @@
 			textView = [UITextView new];
 			[self.view addSubview:textView];
 			[textView keepInsets:UIEdgeInsetsMake(50.0f, 0, 0, 0)];
+			textView.contentInset = UIEdgeInsetsMake(0.0f, 0, 20.0f, 0);
 			
 			textView.font = [UIFont preferredCustomFontForTextStyle:UIFontTextStyleBody];
 			textView.backgroundColor = [UIColor clearColor];
 			textView.textColor = [UIColor whiteColor];
+			textView.indicatorStyle = UIScrollViewIndicatorStyleWhite;
+			textView.textContainerInset = UIEdgeInsetsMake(0, 20.f, 0, 20.0f);
+			textView.textContainer.lineFragmentPadding = 0.0f;
 		}
 		textView.text = [NSString stringWithFormat:@"%@ \n%@ \n%@",_episode.title,_episode.subtitle,_episode.desc];
 	}
@@ -91,7 +94,6 @@
 	downloadButton = [Button new];
 	[self.view addSubview:downloadButton];
 	[downloadButton addTarget:self action:@selector(download) forControlEvents:UIControlEventTouchUpInside];
-	
 
 	
 	BOOL hasVideoFile = self.episode.video && [DataHandler fileExists:self.episode.video];
@@ -141,19 +143,11 @@
 
 - (void)download
 {
-	BOOL noVideoFile = ![DataHandler fileExists:self.episode.video];
-	if (noVideoFile)
+	BOOL hasVideoFile = self.episode.video && [DataHandler fileExists:self.episode.video];
+	if (hasVideoFile)
 	{
-		[[DRHandler sharedInstance] downloadVideoForEpisode:self.episode block:^(NSUInteger bytesRead, long long totalBytesRead, long long totalBytesExpectedToRead) {
-			dispatch_async(dispatch_get_main_queue(), ^{
-				
-				CGFloat progress = (float)totalBytesRead / (float)totalBytesExpectedToRead;
-				downloadButton.title = [NSString stringWithFormat:@"Henter %.0f%%",ceilf(100.0f*progress)];
-			});
-		}];
-	}
-	else
-	{
+		DLog(@"Video available %@ for episode %@",self.episode.video,self.episode.title);
+		
 		NSString *urlString = [DataHandler pathForFileName:self.episode.video];
 		NSURL *url = [NSURL fileURLWithPath:urlString];
 		MPMoviePlayerViewController *moviePlayerViewController = [[MPMoviePlayerViewController alloc] initWithContentURL:url];
@@ -162,6 +156,19 @@
 		
 		UIViewController *rootViewController = [UIApplication sharedApplication].keyWindow.rootViewController;
 		[rootViewController presentMoviePlayerViewControllerAnimated:moviePlayerViewController];
+	}
+	else
+	{
+		DLog(@"No video %@ for episode %@",self.episode.video,self.episode.title);
+		
+		downloadButton.enabled = NO;
+		[[DRHandler sharedInstance] downloadVideoForEpisode:self.episode block:^(NSUInteger bytesRead, long long totalBytesRead, long long totalBytesExpectedToRead) {
+			dispatch_async(dispatch_get_main_queue(), ^{
+				
+				CGFloat progress = (float)totalBytesRead / (float)totalBytesExpectedToRead;
+				downloadButton.title = [NSString stringWithFormat:@"Henter %.0f%%",ceilf(100.0f*progress)];
+			});
+		}];
 	}
 }
 

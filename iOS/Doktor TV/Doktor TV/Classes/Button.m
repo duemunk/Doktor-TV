@@ -16,7 +16,10 @@
     if (self) {
         // Initialization code
 		self.backgroundColor = [UIColor colorWithWhite:0.5 alpha:0.5];
+		
 		[self setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
+		[self setTitleColor:[UIColor colorWithWhite:1.0f alpha:0.5] forState:UIControlStateDisabled];
+		
 		[self setTitleEdgeInsets:UIEdgeInsetsMake(40.0f, 20.0f, 40.0f, 20.0f)];
 		self.titleLabel.font = [UIFont preferredCustomFontForTextStyle:UIFontTextStyleSubheadline];
     }
