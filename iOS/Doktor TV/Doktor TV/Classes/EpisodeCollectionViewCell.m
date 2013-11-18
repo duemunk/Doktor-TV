@@ -66,21 +66,20 @@
 	}
 }
 
-- (void)setupChildViewController
+- (UIViewController *)childViewController
 {
-	if (self.isZoomed)
-	{
-		if (!episodeViewController) {
-			episodeViewController = [EpisodeViewController new];
-			episodeViewController.episode = self.episode;
-			
-			self.childViewController = episodeViewController;
-		}
-		else
-			episodeViewController.episode = self.episode;
-	}
+	if (!episodeViewController)
+		episodeViewController = [EpisodeViewController new];
 	
-	[super setupChildViewController];
+	episodeViewController.episode = self.episode;
+	return episodeViewController;
+}
+- (void)setChildViewController:(UIViewController *)childViewController
+{
+	if (childViewController)
+		NSAssert([childViewController isKindOfClass:[EpisodeViewController class]], @"Incorrect class");
+	
+	episodeViewController = (EpisodeViewController *)childViewController;
 }
 
 @end

@@ -19,6 +19,7 @@
 
 + (DRHandler *)sharedInstance;
 
+- (void)queryPrograms;
 - (void)validateEpisodesForProgram:(Program *)program;
 - (void)runVideo:(void (^)(NSString *urlString))completion forEpisode:(Episode *)episode;
 - (void)downloadVideoForEpisode:(Episode *)episode block:(void (^)(NSUInteger bytesRead, long long totalBytesRead, long long totalBytesExpectedToRead))progressBlock;

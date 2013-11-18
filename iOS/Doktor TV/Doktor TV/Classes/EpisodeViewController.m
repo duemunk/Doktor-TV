@@ -21,6 +21,7 @@
 @implementation EpisodeViewController
 {
 	Button *streamButton, *downloadButton;
+	UITextView *textView;
 }
 
 - (void)viewDidLoad
@@ -50,11 +51,18 @@
 		_episode = episode;
 		[_episode addObserver:self forKeyPath:@"video" options:0 context:0];
 		
-//		streamButton.enabled =
-//		downloadButton.enabled = (episode.uri.length > 0);
-		
 		[self layoutButtons];
 		
+		if (!textView) {
+			textView = [UITextView new];
+			[self.view addSubview:textView];
+			[textView keepInsets:UIEdgeInsetsMake(50.0f, 0, 0, 0)];
+			
+			textView.font = [UIFont preferredCustomFontForTextStyle:UIFontTextStyleBody];
+			textView.backgroundColor = [UIColor clearColor];
+			textView.textColor = [UIColor whiteColor];
+		}
+		textView.text = [NSString stringWithFormat:@"%@ \n%@ \n%@",_episode.title,_episode.subtitle,_episode.desc];
 	}
 }
 
@@ -86,16 +94,26 @@
 	
 
 	
-	BOOL noVideoFile = ![DataHandler fileExists:self.episode.video];
-	if (noVideoFile)
+	BOOL hasVideoFile = self.episode.video && [DataHandler fileExists:self.episode.video];
+	if (hasVideoFile)
 	{
+		DLog(@"Has videofile %@ for episode %@", self.episode.video,self.episode.title);
+		
+		downloadButton.title = @"Afspil";
+		
+		downloadButton.keepWidth.min = KeepRequired(maxWidth);
+		[downloadButton keepHorizontallyCentered];
+		downloadButton.keepTopInset.equal = KeepRequired(0.0f);
+	}
+	else // Has link, only show play
+	{
+		DLog(@"No videofile for episode %@", self.episode.title);
 		streamButton = [Button new];
 		[self.view addSubview:streamButton];
 		[streamButton addTarget:self action:@selector(stream) forControlEvents:UIControlEventTouchUpInside];
 		
 		downloadButton.title = @"Hent";
 		streamButton.title = @"Afspil (Stream)";
-		
 		
 		downloadButton.keepLeftInset.equal =
 		streamButton.keepRightInset.equal = KeepHigh(padding);
@@ -106,14 +124,7 @@
 		[buttons keepSizesEqualWithPriority:KeepPriorityHigh];
 		buttons.keepWidth.max = KeepRequired(maxWidth);
 		
-		[downloadButton keepVerticallyCentered];
-	}
-	else // Has link, only show play
-	{
-		downloadButton.title = @"Afspil";
-		
-		downloadButton.keepWidth.min = KeepRequired(maxWidth);
-		[downloadButton keepCentered];
+		downloadButton.keepTopInset.equal = KeepRequired(0.0f);
 	}
 }
 

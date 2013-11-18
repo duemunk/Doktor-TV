@@ -20,9 +20,16 @@
 @implementation ProgramCollectionViewController
 
 
-- (instancetype)initWithCollectionViewLayout:(UICollectionViewLayout *)layout
+- (instancetype)init
 {
-	self = [super init];
+	ZoomCollectionViewFlowLayout *layout = [ZoomCollectionViewFlowLayout new];
+	layout.itemSize = CGSizeMake(130.0f, 100.0f);
+	layout.minimumInteritemSpacing =
+	layout.minimumLineSpacing = 20.0f;
+	layout.sectionInset = UIEdgeInsetsMake(0.0f, 20.0f, 20.0f, 20.0f);
+	layout.headerReferenceSize = CGSizeMake(10.0f, 10.0f);
+	
+	self = [super initWithCollectionViewLayoutDefaultLayout:layout];
 	if (self) {
 	}
 	return self;
@@ -37,12 +44,12 @@
 	self.sortKey = @"season.number";
 	self.sortAscending = YES;
 	
-	[self updateToProgram];
-	
-	self.managedObjectContext = self.program.managedObjectContext;
+	self.managedObjectContext = [DataHandler sharedInstance].managedObjectContext;
 	
 	self.cellIdentifier = EPISODE_COLLECTION_CELL_ID;
 	[self.collectionView registerClass:[EpisodeCollectionViewCell class] forCellWithReuseIdentifier:self.cellIdentifier];
+	
+	[self updateToProgram];
 }
 
 - (void)didReceiveMemoryWarning
@@ -51,18 +58,20 @@
     // Dispose of any resources that can be recreated.
 }
 
-- (void)viewDidAppear:(BOOL)animated
-{
-	[[DRHandler sharedInstance] validateEpisodesForProgram:self.program];
-}
+//- (void)viewDidAppear:(BOOL)animated
+//{
+//	[self resetFetchResultsController];
+//	[[DRHandler sharedInstance] validateEpisodesForProgram:self.program];
+//}
 
 - (void)updateToProgram
 {
 	[self resetFetchResultsController];
 	self.predicate = [NSPredicate predicateWithFormat:@"season.program = %@", self.program];
 	[self.collectionView reloadData];
+	
+	[[DRHandler sharedInstance] validateEpisodesForProgram:self.program];
 }
-
 
 - (void)setProgram:(Program *)program
 {
@@ -71,20 +80,6 @@
 		[self updateToProgram];
 	}
 }
-
-
-- (UICollectionViewLayout *)defaultCollectionViewLayout
-{
-	UICollectionViewFlowLayout *layout = [UICollectionViewFlowLayout new];
-	layout.itemSize = CGSizeMake(130.0f, 100.0f);
-	layout.minimumInteritemSpacing =
-	layout.minimumLineSpacing = 20.0f;
-	layout.sectionInset = UIEdgeInsetsMake(0.0f, 20.0f, 0.0f, 20.0f);
-	layout.headerReferenceSize = CGSizeMake(10.0f, 10.0f);
-	return layout;
-}
-
-
 
 
 @end

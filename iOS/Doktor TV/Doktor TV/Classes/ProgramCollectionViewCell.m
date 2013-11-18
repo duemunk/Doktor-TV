@@ -22,7 +22,7 @@
     self = [super initWithFrame:frame];
     if (self) {
         // Initialization code
-		self.backgroundColor = [UIColor iOS7lightBlueColor];
+//		self.backgroundColor = [UIColor iOS7lightBlueColor];
     }
     return self;
 }
@@ -77,22 +77,21 @@
 	}
 }
 
-- (void)setupChildViewController
-{
-	if (self.isZoomed)
-	{
-		if (!programCollectionViewController) {
-			programCollectionViewController = [ProgramCollectionViewController new];
-			programCollectionViewController.program = self.program;
-			
-			self.childViewController = programCollectionViewController;
-		}
-		else
-			programCollectionViewController.program = self.program;
-	}
-	
-	[super setupChildViewController];
-}
 
+- (UIViewController *)childViewController
+{
+	if (!programCollectionViewController)
+		programCollectionViewController = [ProgramCollectionViewController new];
+	
+	programCollectionViewController.program = self.program;
+	return programCollectionViewController;
+}
+- (void)setChildViewController:(UIViewController *)childViewController
+{
+	if (childViewController)
+		NSAssert([childViewController isKindOfClass:[ProgramCollectionViewController class]], @"Incorrect class");
+	
+	programCollectionViewController = (ProgramCollectionViewController *)childViewController;
+}
 
 @end

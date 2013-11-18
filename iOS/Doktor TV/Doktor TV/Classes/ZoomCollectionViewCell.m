@@ -51,8 +51,8 @@
 		if (!backgroundImageView)
 		{
 			backgroundImageView = [UIImageView new];
-			[self insertSubview:backgroundImageView atIndex:0];
-			[backgroundImageView keepInsets:UIEdgeInsetsZero];
+			self.backgroundView = backgroundImageView;
+//			[backgroundImageView keepInsets:UIEdgeInsetsZero];
 			backgroundImageView.contentMode = UIViewContentModeScaleAspectFill;
 		}
 		backgroundImageView.image = _backgroundImage;
@@ -122,7 +122,7 @@
 		if (![self.contentView.subviews containsObject:self.childViewController.view]) {
 			[self.contentView insertSubview:self.childViewController.view belowSubview:self.titleLabel];
 			
-			UIEdgeInsets insets = UIEdgeInsetsMake(100.0f, 0, 200.0f, 0);
+			UIEdgeInsets insets = UIEdgeInsetsMake(100.0f, 0, 0, 0);
 			if ([self.childViewController.view isKindOfClass:[UIScrollView class]])
 			{
 				[self.childViewController.view keepInsets:UIEdgeInsetsZero];
@@ -139,10 +139,8 @@
 	}
 	else
 	{
-		if (_childViewController) {
-			[_childViewController.view removeFromSuperview];
-			_childViewController = nil;
-		}
+		[self.childViewController.view removeFromSuperview];
+		self.childViewController = nil;
 	}
 }
 

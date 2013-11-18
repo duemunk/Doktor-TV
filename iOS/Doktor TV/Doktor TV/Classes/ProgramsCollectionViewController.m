@@ -15,14 +15,18 @@
 
 @implementation ProgramsCollectionViewController
 
-- (instancetype)initWithCollectionViewLayout:(UICollectionViewLayout *)layout
+- (instancetype)init
 {
-	self = [super init];
+	ZoomCollectionViewFlowLayout *layout = [ZoomCollectionViewFlowLayout new];
+	layout.itemSize = CGSizeMake(160, 120);
+	layout.minimumInteritemSpacing =
+	layout.minimumLineSpacing = 0.0f;
+	
+	self = [super initWithCollectionViewLayoutDefaultLayout:layout];
 	if (self) {
 	}
 	return self;
 }
-
 
 - (void)viewDidLoad
 {
@@ -42,16 +46,5 @@
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
 }
-
-
-- (UICollectionViewLayout *)defaultCollectionViewLayout
-{
-	UICollectionViewFlowLayout *layout = [UICollectionViewFlowLayout new];
-	layout.itemSize = CGSizeMake(160, 120);
-	layout.minimumInteritemSpacing =
-	layout.minimumLineSpacing = 0.0f;
-	return layout;
-}
-
 
 @end

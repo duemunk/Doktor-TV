@@ -14,15 +14,18 @@
     NSMutableArray *_objectChanges;
     NSMutableArray *_sectionChanges;
 	
-	BOOL isZoomed, isZooming;
+	BOOL isZooming;
+	
+	ZoomCollectionViewFlowLayout *defaultLayout;
 }
 
 
-- (instancetype)init
+- (instancetype)initWithCollectionViewLayoutDefaultLayout:(ZoomCollectionViewFlowLayout *)layout
 {
-	self = [super initWithCollectionViewLayout:self.defaultCollectionViewLayout];
+	self = [super initWithCollectionViewLayout:layout];
 	if (self) {
-		
+		defaultLayout = layout;
+		_zoom = NO;
 	}
 	return self;
 }
@@ -34,17 +37,20 @@
     _sectionChanges = [NSMutableArray array];
 	
 	self.collectionView.backgroundColor = [UIColor clearColor];
+	self.collectionView.indicatorStyle = UIScrollViewIndicatorStyleWhite;
 	self.collectionView.alwaysBounceVertical = YES;
 	self.view.clipsToBounds =
-	self.collectionView.clipsToBounds = YES;
+	self.collectionView.clipsToBounds = NO;
 	
 	self.managedObjectContext = [DataHandler sharedInstance].managedObjectContext;
+	
+	[self.collectionView registerClass:[UICollectionReusableView class] forSupplementaryViewOfKind:UICollectionElementKindSectionHeader withReuseIdentifier:@"HeaderIdentifier"];
 }
 
 
 - (void)willRotateToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation duration:(NSTimeInterval)duration
 {
-	UICollectionViewLayout *layout = isZoomed ? [self zoomedCollectionViewLayout] : self.defaultCollectionViewLayout;
+	UICollectionViewLayout *layout = self.isZoomed ? [self zoomedCollectionViewLayout] : defaultLayout;
 	[self.collectionView setCollectionViewLayout:layout animated:YES];
 }
 
@@ -60,7 +66,7 @@
 
 - (UICollectionViewLayout *)zoomedCollectionViewLayout
 {
-	UICollectionViewFlowLayout *layout = [UICollectionViewFlowLayout new];
+	ZoomCollectionViewFlowLayout *layout = [ZoomCollectionViewFlowLayout new];
 	CGSize itemSize = self.collectionView.bounds.size;
 	UIEdgeInsets insets = self.collectionView.contentInset;
 	itemSize.height -= insets.top + insets.bottom;
@@ -89,36 +95,50 @@
 
 - (NSInteger)numberOfSectionsInCollectionView:(UICollectionView *)collectionView
 {
-    return self.fetchedResultsController.sections.count;
+	NSUInteger count = self.fetchedResultsController.sections.count;
+	DLog(@"%d",(int)count);
+    return count;
 }
 
 - (NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section
 {
     id <NSFetchedResultsSectionInfo> sectionInfo = self.fetchedResultsController.sections[section];
-	NSInteger count = [sectionInfo numberOfObjects];
+	NSUInteger count = [sectionInfo numberOfObjects];
 	DLog(@"%d",count);
     return count;
 }
 
 
 
+// The cell that is returned must be retrieved from a call to -dequeueReusableCellWithReuseIdentifier:forIndexPath:
+- (UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath
+{
+	DLog(@"%d,%d",indexPath.section,indexPath.item);
+	ZoomCollectionViewCell *cell = (ZoomCollectionViewCell *)[collectionView dequeueReusableCellWithReuseIdentifier:self.cellIdentifier forIndexPath:indexPath];
+	
+	cell.managedObject = [self.fetchedResultsController objectAtIndexPath:indexPath];
+	cell.zoom = self.isZoomed;
+	[cell addObserver:self forKeyPath:@"zoom" options:0 context:0];
+    
+    return cell;
+}
+
+- (UICollectionReusableView *)collectionView:(UICollectionView *)collectionView viewForSupplementaryElementOfKind:(NSString *)kind atIndexPath:(NSIndexPath *)indexPath
+{
+	if ([kind isEqualToString:UICollectionElementKindSectionHeader]) {
+		// FIX: Support changes from fetchcontroller
+		UICollectionReusableView *header = [collectionView dequeueReusableSupplementaryViewOfKind:kind withReuseIdentifier:@"HeaderIdentifier" forIndexPath:indexPath];
+		return header;
+	}
+	return nil;
+}
+
 
 
 
 #pragma mark - UICollectionViewDelegate
 
-// The cell that is returned must be retrieved from a call to -dequeueReusableCellWithReuseIdentifier:forIndexPath:
-- (UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath
-{
-	ZoomCollectionViewCell *cell = (ZoomCollectionViewCell *)[collectionView dequeueReusableCellWithReuseIdentifier:self.cellIdentifier forIndexPath:indexPath];
-    
-	cell.managedObject = [self.fetchedResultsController objectAtIndexPath:indexPath];
-	cell.zoom = isZoomed;
-//	[cell removeObserver:self forKeyPath:@"zoom"];
-	[cell addObserver:self forKeyPath:@"zoom" options:0 context:0];
-    
-    return cell;
-}
+
 
 - (void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath
 {
@@ -126,7 +146,7 @@
 	
 	ZoomCollectionViewCell *zoomCell = (ZoomCollectionViewCell *)[collectionView cellForItemAtIndexPath:indexPath];
 	if (zoomCell) {
-		zoomCell.zoom = isZoomed;
+		zoomCell.zoom = _zoom;
 	}
 }
 
@@ -135,10 +155,10 @@
 	if (!isZooming) {
 		__block UICollectionView *__collectionView = self.collectionView;
 		isZooming = YES;
-		if (isZoomed)
+		if (_zoom)
 		{
-			isZoomed = NO;
-			[self.collectionView setCollectionViewLayout:self.defaultCollectionViewLayout animated:YES completion:^(BOOL finished) {
+			_zoom = NO;
+			[self.collectionView setCollectionViewLayout:defaultLayout animated:YES completion:^(BOOL finished) {
 				isZooming = NO;
 				__collectionView.pagingEnabled = NO;
 				__collectionView.alwaysBounceVertical = YES;
@@ -146,7 +166,7 @@
 		}
 		else
 		{
-			isZoomed = YES;
+			_zoom = YES;
 			[self.collectionView setCollectionViewLayout:[self zoomedCollectionViewLayout] animated:YES completion:^(BOOL finished) {
 				isZooming = NO;
 				__collectionView.alwaysBounceVertical = NO;
@@ -155,6 +175,9 @@
 		}
 	}
 }
+
+
+
 
 
 
@@ -303,8 +326,13 @@
                                 [self.collectionView deleteItemsAtIndexPaths:@[obj]];
                                 break;
                             case NSFetchedResultsChangeUpdate:
-								if (!isZoomed)
+								if (self.isZoomed)
+									DLog(@"Didn't reload item at (%d,%d) since isZoomed",((NSIndexPath *)obj).section,((NSIndexPath *)obj).item);
+								else
+								{
+									DLog(@"Request reload item at (%d,%d)",((NSIndexPath *)obj).section,((NSIndexPath *)obj).item);
 									[self.collectionView reloadItemsAtIndexPaths:@[obj]];
+								}
                                 break;
                             case NSFetchedResultsChangeMove:
                                 [self.collectionView moveItemAtIndexPath:obj[0] toIndexPath:obj[1]];

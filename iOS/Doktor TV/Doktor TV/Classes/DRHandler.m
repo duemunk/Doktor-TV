@@ -92,8 +92,6 @@
 
 - (void)validateProgramsData:(NSDictionary *)programsDictionary
 {
-//	NSLog(@"Series: %@",programsDictionary);
-	
 	NSArray *data = programsDictionary[kDRData];
 	
 	NSArray *localPrograms = [[DataHandler sharedInstance] programs];
@@ -104,52 +102,44 @@
 		
 		NSArray *existingLocalPrograms = [localPrograms filteredArrayUsingPredicate:[NSPredicate predicateWithFormat:@"drID = %@",drID]];
 		
-		
 		NSDictionary *programCardDict = dict[kDRProgramCard];
 		NSArray *assets = programCardDict[kDRAssets];
 		
-		// Check if program isn't radio-TV
-//		NSString *site = programCardDict[@"Site"];
-//		if (![site isEqualToString:@"radio-tv"])
-//		{
-			Program *program;
-			if (existingLocalPrograms.count)
+		Program *program;
+		if (existingLocalPrograms.count)
+		{
+			// TODO: Update?
+			program = (Program *)existingLocalPrograms.firstObject;
+			
+			DLog(@"Program already exists %@",program.title);
+		}
+		else
+		{
+			// Create new program
+			program = [[DataHandler sharedInstance] newProgram];
+			program.drID = drID;
+			program.title = dict[kDRTitle];
+			program.slug = dict[kDRSlug];
+			
+			DLog(@"New program %@",program.title);
+		}
+		
+		
+		if (assets.count) {
+			NSArray *imageAsset = [assets filteredArrayUsingPredicate:[NSPredicate predicateWithFormat:@"%K = %@",kDRKind,@"Image"]];
+			if (imageAsset.count && !program.image)
 			{
-				// TODO: Update?
-				program = (Program *)existingLocalPrograms.firstObject;
-
-				DLog(@"Program already exists %@",program.title);
-			}
-			else
-			{
-				// Create new program
-				program = [[DataHandler sharedInstance] newProgram];
-				program.drID = drID;
-				program.title = dict[kDRTitle];
-				program.slug = dict[kDRSlug];
+				DLog(@"Image asset exists for program %@",program.title);
 				
-				DLog(@"New program %@",program.title);
+				NSDictionary *imageDict = imageAsset.firstObject;
+				NSString *imageUrlString = imageDict[kDRUri];
+				imageUrlString = [imageUrlString stringByAppendingString:@"?width=320&height=320"];
+				NSString *fileName = [NSString stringWithFormat:@"ProgramImage__%@.jpg",program.drID];
+				[self download:imageUrlString toFileName:fileName forObject:program key:@"image"];
 			}
-			
-			
-			if (assets.count) {
-				NSArray *imageAsset = [assets filteredArrayUsingPredicate:[NSPredicate predicateWithFormat:@"%K = %@",kDRKind,@"Image"]];
-				if (imageAsset.count && !program.image)
-				{
-					DLog(@"Image asset exists for program %@",program.title);
-					
-					NSDictionary *imageDict = imageAsset.firstObject;
-					NSString *imageUrlString = imageDict[kDRUri];
-					imageUrlString = [imageUrlString stringByAppendingString:@"?width=320&height=320"];
-					NSString *fileName = [NSString stringWithFormat:@"ProgramImage__%@.jpg",program.drID];
-					[self download:imageUrlString toFileName:fileName forObject:program key:@"image"];
-				}
-			}
-			
-			//			[self validateEpisodesForProgram:program];
-			
-			[[DataHandler sharedInstance] saveContext];
-//		}
+		}
+		
+		[[DataHandler sharedInstance] saveContext];
 	}
 	return;
 }
@@ -249,15 +239,13 @@
 			episode.number = @(++i);
 			episode.drID = drID;
 			
-			DLog(@"New episode in program %@",((Program *)episode.season.program).title);
+			episode.slug = episodeData[kDRSlug];
+			episode.title = episodeData[kDRTitle];
+			episode.subtitle = episodeData[kDRSubtitle];
+			episode.desc = episodeData[kDRDescription];
+			
+			DLog(@"New episode %@ in program %@",program.title,((Program *)episode.season.program).title);
 		}
-		
-		episode.slug = episodeData[kDRSlug];
-		episode.title = episodeData[kDRTitle];
-		episode.subtitle = episodeData[kDRSubtitle];
-		episode.desc = episodeData[kDRDescription];
-		
-		DLog(@"Updated episode %@ in program %@",episode.title,((Program *)episode.season.program).title);
 		
 		NSArray *assets = episodeData[kDRAssets];
 		if (assets.count) {
@@ -285,7 +273,7 @@
 				DLog(@"Image link (remote) not available for episode %@ in program %@",episode.title,((Program *)episode.season.program).title);
 			
 			NSArray *videoAsset = [assets filteredArrayUsingPredicate:[NSPredicate predicateWithFormat:@"%K = %@",kDRKind,@"VideoResource"]];
-			if (videoAsset.count)
+			if (videoAsset.count) // && !episode.uri)
 			{
 				DLog(@"Video link (remote) available for episode %@ in program %@",episode.title,((Program *)episode.season.program).title);
 				
@@ -297,9 +285,9 @@
 			}
 			else
 				DLog(@"Video link (remote) not available for episode %@ in program %@",episode.title,((Program *)episode.season.program).title);
-			
-			[[DataHandler sharedInstance] saveContext];
 		}
+		
+		[[DataHandler sharedInstance] saveContext];
 	}
 }
 

@@ -17,9 +17,7 @@
 @end
 
 @implementation MainViewController
-{
-	ProgramsCollectionViewController *collectionViewController;
-}
+
 
 - (void)viewDidLoad
 {
@@ -28,9 +26,11 @@
 	// Do any additional setup after loading the view.
 	self.view.backgroundColor = [UIColor blackColor];
 	
-	collectionViewController = [ProgramsCollectionViewController new];
+	ProgramsCollectionViewController *collectionViewController = [ProgramsCollectionViewController new];
 	[self addViewController:collectionViewController];
 	[collectionViewController.view keepInsets:UIEdgeInsetsZero];
+	
+//	collectionViewController.program = [[DataHandler sharedInstance] programs][1];
 }
 
 - (void)didReceiveMemoryWarning

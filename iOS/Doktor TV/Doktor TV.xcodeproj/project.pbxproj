@@ -45,6 +45,7 @@
 		4E9520FA18384E0800DCC2DF /* Button.m in Sources */ = {isa = PBXBuildFile; fileRef = 4E9520F918384E0800DCC2DF /* Button.m */; };
 		4E9520FD1838517500DCC2DF /* UIFont+CustomFont.m in Sources */ = {isa = PBXBuildFile; fileRef = 4E9520FB1838517500DCC2DF /* UIFont+CustomFont.m */; };
 		4E952101183863BA00DCC2DF /* Episode.m in Sources */ = {isa = PBXBuildFile; fileRef = 4E952100183863BA00DCC2DF /* Episode.m */; };
+		4E952104183946A200DCC2DF /* ZoomCollectionViewFlowLayout.m in Sources */ = {isa = PBXBuildFile; fileRef = 4E952103183946A200DCC2DF /* ZoomCollectionViewFlowLayout.m */; };
 		4ECF108E1836E79000D4C62C /* CoreData.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4ECF108D1836E79000D4C62C /* CoreData.framework */; };
 		4ECF10D21836E7F600D4C62C /* DataHandler.m in Sources */ = {isa = PBXBuildFile; fileRef = 4ECF10D11836E7F500D4C62C /* DataHandler.m */; };
 		4ECF10D51836E85800D4C62C /* Model.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 4ECF10D31836E85800D4C62C /* Model.xcdatamodeld */; };
@@ -145,6 +146,8 @@
 		4E9520FC1838517500DCC2DF /* UIFont+CustomFont.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "UIFont+CustomFont.h"; path = "Classes/UIFont+CustomFont.h"; sourceTree = "<group>"; };
 		4E9520FF183863BA00DCC2DF /* Episode.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Episode.h; path = Classes/Episode.h; sourceTree = "<group>"; };
 		4E952100183863BA00DCC2DF /* Episode.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = Episode.m; path = Classes/Episode.m; sourceTree = "<group>"; };
+		4E952102183946A200DCC2DF /* ZoomCollectionViewFlowLayout.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ZoomCollectionViewFlowLayout.h; path = Classes/ZoomCollectionViewFlowLayout.h; sourceTree = "<group>"; };
+		4E952103183946A200DCC2DF /* ZoomCollectionViewFlowLayout.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ZoomCollectionViewFlowLayout.m; path = Classes/ZoomCollectionViewFlowLayout.m; sourceTree = "<group>"; };
 		4ECF108D1836E79000D4C62C /* CoreData.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreData.framework; path = System/Library/Frameworks/CoreData.framework; sourceTree = SDKROOT; };
 		4ECF10D01836E7F500D4C62C /* DataHandler.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = DataHandler.h; path = Classes/DataHandler.h; sourceTree = "<group>"; };
 		4ECF10D11836E7F500D4C62C /* DataHandler.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = DataHandler.m; path = Classes/DataHandler.m; sourceTree = "<group>"; };
@@ -438,6 +441,8 @@
 				4ECF10E01836EDF300D4C62C /* MainViewController.h */,
 				4ECF10E11836EDF300D4C62C /* MainViewController.m */,
 				4ECF11241838246700D4C62C /* For subclassing */,
+				4E952102183946A200DCC2DF /* ZoomCollectionViewFlowLayout.h */,
+				4E952103183946A200DCC2DF /* ZoomCollectionViewFlowLayout.m */,
 				4ECF10E61836EEFF00D4C62C /* ProgramsCollectionViewController.h */,
 				4ECF10E71836EEFF00D4C62C /* ProgramsCollectionViewController.m */,
 				4ECF10E91836F0D200D4C62C /* ProgramCollectionViewCell.h */,
@@ -597,6 +602,7 @@
 				4ECF10D51836E85800D4C62C /* Model.xcdatamodeld in Sources */,
 				4ECF10E21836EDF300D4C62C /* MainViewController.m in Sources */,
 				4E1F16B2183440A30068E5BD /* AFHTTPSessionManager.m in Sources */,
+				4E952104183946A200DCC2DF /* ZoomCollectionViewFlowLayout.m in Sources */,
 				4E1F16CA183440AD0068E5BD /* UIActivityIndicatorView+AFNetworking.m in Sources */,
 				4E952101183863BA00DCC2DF /* Episode.m in Sources */,
 				4E1F16C9183440AD0068E5BD /* AFNetworkActivityIndicatorManager.m in Sources */,
@@ -741,6 +747,7 @@
 					/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include,
 				);
 				INFOPLIST_FILE = "Doktor TV/Doktor TV-Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 6.1;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				WRAPPER_EXTENSION = app;
 			};
@@ -759,6 +766,7 @@
 					/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include,
 				);
 				INFOPLIST_FILE = "Doktor TV/Doktor TV-Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 6.1;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				WRAPPER_EXTENSION = app;
 			};
