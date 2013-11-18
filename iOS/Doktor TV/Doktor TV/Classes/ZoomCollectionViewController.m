@@ -7,7 +7,6 @@
 //
 
 #import "ZoomCollectionViewController.h"
-#import "ZoomCollectionViewCell.h"
 
 @implementation ZoomCollectionViewController
 {
@@ -48,7 +47,7 @@
 }
 
 
-- (void)willRotateToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation duration:(NSTimeInterval)duration
+- (void)willAnimateRotationToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation duration:(NSTimeInterval)duration
 {
 	UICollectionViewLayout *layout = self.isZoomed ? [self zoomedCollectionViewLayout] : defaultLayout;
 	[self.collectionView setCollectionViewLayout:layout animated:YES];
@@ -81,25 +80,6 @@
 
 
 
-- (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context
-{
-	if ([keyPath isEqualToString:@"zoom"])
-	{
-		if ([object isKindOfClass:[ZoomCollectionViewCell class]]) {
-			ZoomCollectionViewCell *zoomCell = (ZoomCollectionViewCell *)object;
-			self.zoom = zoomCell.zoom;
-		}
-	}
-	if ([keyPath isEqualToString:@"alive"])
-	{
-		if ([object isKindOfClass:[ZoomCollectionViewCell class]]) {
-			ZoomCollectionViewCell *zoomCell = (ZoomCollectionViewCell *)object;
-			[zoomCell removeObserver:self forKeyPath:@"zoom"];
-			[zoomCell removeObserver:self forKeyPath:@"alive"];
-		}
-	}
-}
-
 
 
 #pragma mark - UICollectionViewDataSource
@@ -129,8 +109,7 @@
 	
 	cell.managedObject = [self.fetchedResultsController objectAtIndexPath:indexPath];
 	cell.zoom = self.isZoomed;
-	[cell addObserver:self forKeyPath:@"zoom" options:0 context:0];
-	[cell addObserver:self forKeyPath:@"alive" options:0 context:0];
+	cell.delegate = self;
     
     return cell;
 }
@@ -194,6 +173,14 @@
 
 
 
+
+
+#pragma mark - ZoomCollectionViewCellDelegate
+
+- (void)zoomCollectionViewCell:(ZoomCollectionViewCell *)cell changedZoom:(BOOL)zoom
+{
+	self.zoom = cell.zoom;
+}
 
 
 

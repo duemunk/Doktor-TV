@@ -9,8 +9,9 @@
 @import UIKit;
 
 #import "DataHandler.h"
+#import "ZoomCollectionViewCell.h"
 
-@interface ZoomCollectionViewController : UICollectionViewController <NSFetchedResultsControllerDelegate>
+@interface ZoomCollectionViewController : UICollectionViewController <NSFetchedResultsControllerDelegate, ZoomCollectionViewCellDelegate>
 
 @property (strong, nonatomic) NSFetchedResultsController *fetchedResultsController;
 @property (strong, nonatomic) NSManagedObjectContext *managedObjectContext;

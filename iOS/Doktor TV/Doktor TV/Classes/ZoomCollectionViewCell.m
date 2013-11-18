@@ -24,14 +24,8 @@
         // Initialization code
 		self.backgroundColor = [UIColor colorWithWhite:0.5f alpha:0.5f];
 		self.clipsToBounds = YES;
-		_alive = YES;
     }
     return self;
-}
-
-- (void)dealloc
-{
-	self.alive = NO;
 }
 
 
@@ -107,6 +101,10 @@
 - (void)close
 {
 	self.zoom = NO;
+	
+	if ([self.delegate respondsToSelector:@selector(zoomCollectionViewCell:changedZoom:)]) {
+		[self.delegate zoomCollectionViewCell:self changedZoom:NO];
+	}
 }
 
 
@@ -128,7 +126,7 @@
 		if (![self.contentView.subviews containsObject:self.childViewController.view]) {
 			[self.contentView insertSubview:self.childViewController.view belowSubview:self.titleLabel];
 			
-			UIEdgeInsets insets = UIEdgeInsetsMake(100.0f, 0, 0, 0);
+			UIEdgeInsets insets = UIEdgeInsetsMake(60.0f, 0, 0, 0);
 			if ([self.childViewController.view isKindOfClass:[UIScrollView class]])
 			{
 				[self.childViewController.view keepInsets:UIEdgeInsetsZero];

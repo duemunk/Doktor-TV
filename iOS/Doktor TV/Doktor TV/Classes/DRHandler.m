@@ -41,7 +41,27 @@
 - (void)queryPrograms
 {
 	NSString *query =  @"http://www.dr.dk/mu/view/bundles-with-public-asset?BundleType=Series&ChannelType=TV&DrChannel=True";
-	query = [self addLimit:1500 urlString:query];
+	query = [self addSort:@"Title" urlString:query];
+	
+//	NSUInteger batchSize = 20;
+//	NSUInteger totalSize = 1000;
+//	for (int i = 0; i<totalSize/batchSize; i++)
+//	{
+//		NSString *batchQuery = [self addLimit:batchSize urlString:query];
+//		batchQuery = [self addLimit:i*batchSize urlString:batchQuery];
+//		
+//		DLog(@"Reqest %@",batchQuery);
+//		[self.afHttpSessionManager GET:batchQuery parameters:nil success:^(NSURLSessionDataTask *task, id responseObject)
+//		 {
+//			 DLog(@"Received %@",query);
+//			 [self validateProgramsData:responseObject];
+//		 } failure:^(NSURLSessionDataTask *task, NSError *error) {
+//			 DLog(@"ERROR: %@",error);
+//		 }];
+//	}
+
+	
+	query = [self addLimit:40 urlString:query];
 	
 	DLog(@"Reqest %@",query);
 	[self.afHttpSessionManager GET:query parameters:nil success:^(NSURLSessionDataTask *task, id responseObject)
@@ -82,6 +102,14 @@
 	NSString *escapedUrlString =[_urlString stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
 	return escapedUrlString;
 }
+
+- (NSString *)addSort:(NSString *)key urlString:(NSString *)urlString
+{
+	NSString *_urlString = [urlString stringByAppendingFormat:@"&Title=$orderby(\"%@\")",key];
+	NSString *escapedUrlString =[_urlString stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
+	return escapedUrlString;
+}
+
 
 
 
