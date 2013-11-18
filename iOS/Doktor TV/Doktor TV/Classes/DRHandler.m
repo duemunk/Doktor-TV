@@ -61,7 +61,7 @@
 //	}
 
 	
-	query = [self addLimit:40 urlString:query];
+	query = [self addLimit:100 urlString:query];
 	
 	DLog(@"Reqest %@",query);
 	[self.afHttpSessionManager GET:query parameters:nil success:^(NSURLSessionDataTask *task, id responseObject)
@@ -398,7 +398,7 @@
 		 NSString *urlString;
 		 for (NSDictionary *link in links)
 		 {
-			 if ([link[kDRTarget] isEqualToString:@"Streaming"] && [link[kDRBitrate] integerValue] < 200)
+			 if ([link[kDRTarget] isEqualToString:@"Streaming"] && [link[kDRBitrate] integerValue] < 1200)
 			 {
 				 urlString = link[kDRUri];
 				 break;

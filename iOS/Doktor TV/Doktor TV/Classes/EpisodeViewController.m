@@ -37,6 +37,10 @@
     NSError *activationErr  = nil;
     [[AVAudioSession sharedInstance] setCategory: AVAudioSessionCategoryPlayback error:&setCategoryErr];
     [[AVAudioSession sharedInstance] setActive: YES error:&activationErr];
+	
+//	[[UIApplication sharedApplication] beginReceivingRemoteControlEvents];
+//	UIBackgroundTaskIdentifier newTaskId = UIBackgroundTaskInvalid;
+//	newTaskId = [[UIApplication sharedApplication] beginBackgroundTaskWithExpirationHandler:NULL];
 }
 
 
@@ -73,6 +77,7 @@
 			textView.textContainerInset = UIEdgeInsetsMake(0, 20.f, 0, 20.0f);
 			textView.textContainer.lineFragmentPadding = 0.0f;
 			textView.alwaysBounceVertical = YES;
+			textView.editable = NO; // Should allow user to change content
 		}
 		textView.text = [NSString stringWithFormat:@"%@ \n%@ \n%@",_episode.title,_episode.subtitle,_episode.desc];
 	}
@@ -159,12 +164,7 @@
 		
 		NSString *urlString = [DataHandler pathForFileName:self.episode.video];
 		NSURL *url = [NSURL fileURLWithPath:urlString];
-		MPMoviePlayerViewController *moviePlayerViewController = [[MPMoviePlayerViewController alloc] initWithContentURL:url];
-		moviePlayerViewController.moviePlayer.fullscreen = YES;
-		moviePlayerViewController.moviePlayer.controlStyle = MPMovieControlStyleFullscreen;
-		
-		UIViewController *rootViewController = [UIApplication sharedApplication].keyWindow.rootViewController;
-		[rootViewController presentMoviePlayerViewControllerAnimated:moviePlayerViewController];
+		[self playVideoWithURL:url movieSourceType:MPMovieSourceTypeFile];
 	}
 	else
 	{
@@ -186,16 +186,75 @@
 	[[DRHandler sharedInstance] runVideo:^(NSString *urlString) {
 	
 		NSURL *url = [NSURL URLWithString:urlString];
-		MPMoviePlayerViewController *moviePlayerViewController = [[MPMoviePlayerViewController alloc] initWithContentURL:url];
-		
-		UIViewController *rootViewController = [UIApplication sharedApplication].keyWindow.rootViewController;
-		[rootViewController presentMoviePlayerViewControllerAnimated:moviePlayerViewController];
+		[self playVideoWithURL:url movieSourceType:MPMovieSourceTypeStreaming];
 		
 	} forEpisode:self.episode];
 }
 
 
-#pragma mark - MPMoviePlayerDelegate
+
+- (void)playVideoWithURL:(NSURL *)url movieSourceType:(MPMovieSourceType)movieSourceType
+{
+	[[UIApplication sharedApplication] beginReceivingRemoteControlEvents];
+    [self becomeFirstResponder];
+	
+	MPMoviePlayerViewController *moviePlayerViewController = [MPMoviePlayerViewController new];
+	moviePlayerViewController.moviePlayer.movieSourceType = movieSourceType; // Source must be set before url
+	moviePlayerViewController.moviePlayer.contentURL = url;
+//	moviePlayerViewController.moviePlayer.controlStyle = MPMovieControlStyleEmbedded;
+	
+	UIViewController *rootViewController = [UIApplication sharedApplication].keyWindow.rootViewController;
+	[rootViewController presentMoviePlayerViewControllerAnimated:moviePlayerViewController];
+	
+	
+//	[[UIApplication sharedApplication] beginReceivingRemoteControlEvents];
+//	[self becomeFirstResponder];
+		
+	UIImage *image = [UIImage imageWithContentsOfFile:[DataHandler pathForFileName:self.episode.image]];
+	NSDictionary *songInfo = @{MPMediaItemPropertyTitle : self.episode.title,
+							   MPMediaItemPropertyArtist : @"Doktor TV",
+							   MPMediaItemPropertyPlaybackDuration : @(self.episode.duration.floatValue/1000.0f),
+							   MPNowPlayingInfoPropertyPlaybackRate : @(1), // Duration and Rate _must_ be set to show up on lock screen
+							   MPMediaItemPropertyArtwork : [[MPMediaItemArtwork alloc] initWithImage:image],
+							   };
+	[MPNowPlayingInfoCenter defaultCenter].nowPlayingInfo = songInfo;
+}
+
+
+
+// TODO: Move to subclass of MPMoviePlayerViewController ??
+//- (void)viewDidAppear:(BOOL)animated {
+//	[super viewDidAppear:animated];
+//	[[UIApplication sharedApplication] beginReceivingRemoteControlEvents];
+//	[self becomeFirstResponder];
+//}
+//- (void)viewWillDisappear:(BOOL)animated {
+//	[super viewWillDisappear:animated];
+//	[[UIApplication sharedApplication] endReceivingRemoteControlEvents];
+//	[self resignFirstResponder];
+//}
+//
+//
+////Make sure we can recieve remote control events
+//- (BOOL)canBecomeFirstResponder {
+//    return YES;
+//}
+//- (void)remoteControlReceivedWithEvent:(UIEvent *)event
+//{
+//    //if it is a remote control event handle it correctly
+//    if (event.type == UIEventTypeRemoteControl)
+//	{
+//        if (event.subtype == UIEventSubtypeRemoteControlPlay) {
+////            [self playAudio];
+//        } else if (event.subtype == UIEventSubtypeRemoteControlPause) {
+////            [self pauseAudio];
+//        } else if (event.subtype == UIEventSubtypeRemoteControlTogglePlayPause) {
+////            [self togglePlayPause];
+//        }
+//    }
+//}
+
+
 
 
 
