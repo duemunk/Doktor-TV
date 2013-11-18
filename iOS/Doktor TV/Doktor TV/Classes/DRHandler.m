@@ -40,23 +40,32 @@
 
 - (void)queryPrograms
 {
-	NSString *query =  @"http://www.dr.dk/mu/view/bundles-with-public-asset?BundleType=Series&ChannelType=TV";
-	query = [self addLimit:10 urlString:query];
+	NSString *query =  @"http://www.dr.dk/mu/view/bundles-with-public-asset?BundleType=Series&ChannelType=TV&DrChannel=True";
+	query = [self addLimit:1500 urlString:query];
 	
-	NSArray *titles = @[@"Broen II",@"Absurdistan",@"Rejseholdet",@"Hammerslag",@"Bonderøven",@"På skinner",@"Price*",@"Sporløs",@"Kontant"];
-	for (NSString *title in titles)
-	{
-		NSString *query1 = [self addTitle:title urlString:query];
-		
-		DLog(@"Reqest %@",query1);
-		[self.afHttpSessionManager GET:query1 parameters:nil success:^(NSURLSessionDataTask *task, id responseObject)
-		 {
-			 DLog(@"Received %@",query1);
-			 [self validateProgramsData:responseObject];
-		 } failure:^(NSURLSessionDataTask *task, NSError *error) {
-			 DLog(@"ERROR: %@",error);
-		 }];
-	}
+	DLog(@"Reqest %@",query);
+	[self.afHttpSessionManager GET:query parameters:nil success:^(NSURLSessionDataTask *task, id responseObject)
+	 {
+		 DLog(@"Received %@",query);
+		 [self validateProgramsData:responseObject];
+	 } failure:^(NSURLSessionDataTask *task, NSError *error) {
+		 DLog(@"ERROR: %@",error);
+	 }];
+	
+//	NSArray *titles = @[@"Broen II",@"Absurdistan",@"Rejseholdet",@"Hammerslag",@"Bonderøven",@"På skinner",@"Price*",@"Sporløs",@"Kontant"];
+//	for (NSString *title in titles)
+//	{
+//		NSString *query1 = [self addTitle:title urlString:query];
+//		
+//		DLog(@"Reqest %@",query1);
+//		[self.afHttpSessionManager GET:query1 parameters:nil success:^(NSURLSessionDataTask *task, id responseObject)
+//		 {
+//			 DLog(@"Received %@",query1);
+//			 [self validateProgramsData:responseObject];
+//		 } failure:^(NSURLSessionDataTask *task, NSError *error) {
+//			 DLog(@"ERROR: %@",error);
+//		 }];
+//	}
 }
 
 - (NSString *)addLimit:(NSUInteger)limit urlString:(NSString *)urlString
@@ -142,9 +151,9 @@
 					DLog(@"Non-changed image url %@ for program %@",imageUrlString,program.title);
 			}
 		}
-		
-		[[DataHandler sharedInstance] saveContext];
 	}
+	[[DataHandler sharedInstance] saveContext];
+	
 	return;
 }
 
