@@ -64,6 +64,7 @@
 			textView.indicatorStyle = UIScrollViewIndicatorStyleWhite;
 			textView.textContainerInset = UIEdgeInsetsMake(0, 20.f, 0, 20.0f);
 			textView.textContainer.lineFragmentPadding = 0.0f;
+			textView.alwaysBounceVertical = YES;
 		}
 		textView.text = [NSString stringWithFormat:@"%@ \n%@ \n%@",_episode.title,_episode.subtitle,_episode.desc];
 	}
