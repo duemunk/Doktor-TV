@@ -522,6 +522,13 @@
 				LastUpgradeCheck = 0500;
 				ORGANIZATIONNAME = developmunk;
 				TargetAttributes = {
+					4E1F164A183428460068E5BD = {
+						SystemCapabilities = {
+							com.apple.BackgroundModes = {
+								enabled = 1;
+							};
+						};
+					};
 					4E1F1665183428470068E5BD = {
 						TestTargetID = 4E1F164A183428460068E5BD;
 					};
