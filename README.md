@@ -33,7 +33,7 @@ Følgende informationer skal benyttes til visning i Appen:
 Det er muligt at få besked omkring opdateringer til information i appen ved brug af en PUSH-service.
 Dette ønskes blot at være en ekstra service, som giver ekstra funktionalitet, men som i reglen ikke er nødendig for at Appen virker.
 
-### Servicen skal virke således:
+#### Servicen skal virke således:
 Det skal være muligt at registerer programmer i en service og få besked om opdateringer, når disse sker.
 I den forbindelse skal følgende information sendes med:
 
