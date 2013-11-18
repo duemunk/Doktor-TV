@@ -22,7 +22,7 @@
     self = [super initWithFrame:frame];
     if (self) {
         // Initialization code
-		self.backgroundColor = [UIColor colorWithWhite:0.5f alpha:0.5f];
+		self.backgroundColor = [UIColor colorWithWhite:0.2f alpha:0.5f];
 		self.clipsToBounds = YES;
     }
     return self;
@@ -68,8 +68,8 @@
 		
 		if (blurBackgroundImage) {
 			UIImage *image = [_backgroundImage applyBlurWithRadius:10.0f
-														 tintColor:nil
-											 saturationDeltaFactor:0.5f
+														 tintColor:[UIColor colorWithWhite:0.0f alpha:0.2f]
+											 saturationDeltaFactor:1.5f
 														 maskImage:nil];
 			
 			backgroundImageView.image = image;

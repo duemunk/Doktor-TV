@@ -18,7 +18,7 @@
 - (instancetype)init
 {
 	UICollectionViewFlowLayout *layout = [UICollectionViewFlowLayout new];
-	layout.itemSize = CGSizeMake(160, 120);
+	layout.itemSize = isPhone ? CGSizeMake(160, 120) : CGSizeMake(256, 192);
 	layout.minimumInteritemSpacing =
 	layout.minimumLineSpacing = 0.0f;
 	

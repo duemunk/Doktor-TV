@@ -15,7 +15,7 @@
     self = [super initWithFrame:frame];
     if (self) {
         // Initialization code
-		self.backgroundColor = [UIColor colorWithWhite:0.5 alpha:0.5];
+		self.backgroundColor = [[UIColor iOS7darkBlueColor ] colorWithAlphaComponent:0.5];
 		
 		[self setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
 		[self setTitleColor:[UIColor colorWithWhite:1.0f alpha:0.5] forState:UIControlStateDisabled];
