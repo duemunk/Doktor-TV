@@ -44,4 +44,9 @@
 	[DRHandler sharedInstance];
 }
 
+- (NSUInteger)supportedInterfaceOrientations
+{
+	return isPhone ? UIInterfaceOrientationMaskPortrait : UIInterfaceOrientationMaskAll;
+}
+
 @end
