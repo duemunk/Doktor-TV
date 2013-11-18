@@ -52,7 +52,6 @@
 		{
 			backgroundImageView = [UIImageView new];
 			self.backgroundView = backgroundImageView;
-//			[backgroundImageView keepInsets:UIEdgeInsetsZero];
 			backgroundImageView.contentMode = UIViewContentModeScaleAspectFill;
 		}
 		backgroundImageView.image = _backgroundImage;
@@ -68,7 +67,7 @@
 		_blurBackgroundImage = blurBackgroundImage;
 		
 		if (blurBackgroundImage) {
-			UIImage *image = [_backgroundImage applyBlurWithRadius:4.0f
+			UIImage *image = [_backgroundImage applyBlurWithRadius:10.0f
 														 tintColor:nil
 											 saturationDeltaFactor:0.5f
 														 maskImage:nil];
@@ -85,8 +84,9 @@
 
 - (UILabel *)titleLabel
 {
-	if (!_titleLabel) {
-		_titleLabel = [UILabel new];
+	if (!_titleLabel)
+	{
+		_titleLabel = [HighlightedLabel new];
 		[self.contentView addSubview:_titleLabel];
 		_titleLabel.keepLeftInset.equal =
 		_titleLabel.keepTopInset.equal = KeepRequired(0.0f);
@@ -109,12 +109,12 @@
 
 
 
-- (void)applyDefaultLabelStyling:(UILabel *)label
+- (void)applyDefaultLabelStyling:(HighlightedLabel *)label
 {
 	label.keepInsets.min = KeepRequired(0.0f);
 	label.textColor = [UIColor whiteColor];
 	label.numberOfLines = 0;
-	label.backgroundColor = [self.backgroundColor colorWithAlphaComponent:0.5];
+	label.highlightBackgroundColor = [[UIColor iOS7darkBlueColor] colorWithAlphaComponent:0.5];
 }
 
 
@@ -172,6 +172,16 @@
 			closeButton = nil;
 		}
 	}
+}
+
+
+
+- (void)layoutSubviews
+{
+	[super layoutSubviews];
+	
+	if (_titleLabel) // Update max width for label. Autolayout doesn't do this.
+		_titleLabel.preferredMaxLayoutWidth = self.bounds.size.width;
 }
 
 

@@ -50,6 +50,8 @@
 		[_program addObserver:self forKeyPath:@"image" options:0 context:0];
 		
 		self.titleLabel.text = _program.title;
+		
+		
 		[self setupImage];
 		self.managedObject = _program;
 	}

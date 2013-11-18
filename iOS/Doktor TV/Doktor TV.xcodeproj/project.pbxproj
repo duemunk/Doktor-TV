@@ -45,6 +45,7 @@
 		4E9520FD1838517500DCC2DF /* UIFont+CustomFont.m in Sources */ = {isa = PBXBuildFile; fileRef = 4E9520FB1838517500DCC2DF /* UIFont+CustomFont.m */; };
 		4E952107183A3EE900DCC2DF /* Episode.m in Sources */ = {isa = PBXBuildFile; fileRef = 4E952106183A3EE900DCC2DF /* Episode.m */; };
 		4E95210A183A3EEA00DCC2DF /* Program.m in Sources */ = {isa = PBXBuildFile; fileRef = 4E952109183A3EEA00DCC2DF /* Program.m */; };
+		4E95210D183A7E0700DCC2DF /* HighlightedLabel.m in Sources */ = {isa = PBXBuildFile; fileRef = 4E95210C183A7E0600DCC2DF /* HighlightedLabel.m */; };
 		4ECF108E1836E79000D4C62C /* CoreData.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4ECF108D1836E79000D4C62C /* CoreData.framework */; };
 		4ECF10D21836E7F600D4C62C /* DataHandler.m in Sources */ = {isa = PBXBuildFile; fileRef = 4ECF10D11836E7F500D4C62C /* DataHandler.m */; };
 		4ECF10D51836E85800D4C62C /* Model.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 4ECF10D31836E85800D4C62C /* Model.xcdatamodeld */; };
@@ -144,6 +145,8 @@
 		4E952106183A3EE900DCC2DF /* Episode.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = Episode.m; path = Classes/Episode.m; sourceTree = "<group>"; };
 		4E952108183A3EEA00DCC2DF /* Program.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Program.h; path = Classes/Program.h; sourceTree = "<group>"; };
 		4E952109183A3EEA00DCC2DF /* Program.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = Program.m; path = Classes/Program.m; sourceTree = "<group>"; };
+		4E95210B183A7E0600DCC2DF /* HighlightedLabel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = HighlightedLabel.h; path = Classes/HighlightedLabel.h; sourceTree = "<group>"; };
+		4E95210C183A7E0600DCC2DF /* HighlightedLabel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = HighlightedLabel.m; path = Classes/HighlightedLabel.m; sourceTree = "<group>"; };
 		4ECF108D1836E79000D4C62C /* CoreData.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreData.framework; path = System/Library/Frameworks/CoreData.framework; sourceTree = SDKROOT; };
 		4ECF10D01836E7F500D4C62C /* DataHandler.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = DataHandler.h; path = Classes/DataHandler.h; sourceTree = "<group>"; };
 		4ECF10D11836E7F500D4C62C /* DataHandler.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = DataHandler.m; path = Classes/DataHandler.m; sourceTree = "<group>"; };
@@ -445,6 +448,8 @@
 				4ECF11261838252100D4C62C /* EpisodeViewController.m */,
 				4E9520F818384E0800DCC2DF /* Button.h */,
 				4E9520F918384E0800DCC2DF /* Button.m */,
+				4E95210B183A7E0600DCC2DF /* HighlightedLabel.h */,
+				4E95210C183A7E0600DCC2DF /* HighlightedLabel.m */,
 			);
 			name = Navigation;
 			sourceTree = "<group>";
@@ -597,6 +602,7 @@
 				4E1F16C9183440AD0068E5BD /* AFNetworkActivityIndicatorManager.m in Sources */,
 				4E1F165B183428470068E5BD /* main.m in Sources */,
 				4E1F169B1834407D0068E5BD /* UIView+KeepLayout.m in Sources */,
+				4E95210D183A7E0700DCC2DF /* HighlightedLabel.m in Sources */,
 				4E1F16B4183440A30068E5BD /* AFSecurityPolicy.m in Sources */,
 				4E1F169A1834407D0068E5BD /* NSArray+KeepLayout.m in Sources */,
 				4ECF11231837DA9400D4C62C /* ZoomCollectionViewCell.m in Sources */,
