@@ -19,7 +19,6 @@
 		4E1F166A183428470068E5BD /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4E1F1652183428460068E5BD /* UIKit.framework */; };
 		4E1F1672183428470068E5BD /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 4E1F1670183428470068E5BD /* InfoPlist.strings */; };
 		4E1F1674183428470068E5BD /* Doktor_TVTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 4E1F1673183428470068E5BD /* Doktor_TVTests.m */; };
-		4E1F167F1834287A0068E5BD /* VideoViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4E1F167E1834287A0068E5BD /* VideoViewController.m */; };
 		4E1F1681183428A10068E5BD /* MediaPlayer.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4E1F1680183428A10068E5BD /* MediaPlayer.framework */; };
 		4E1F16971834407D0068E5BD /* KeepAttribute.m in Sources */ = {isa = PBXBuildFile; fileRef = 4E1F168D1834407D0068E5BD /* KeepAttribute.m */; };
 		4E1F16981834407D0068E5BD /* KeepLayoutConstraint.m in Sources */ = {isa = PBXBuildFile; fileRef = 4E1F16901834407D0068E5BD /* KeepLayoutConstraint.m */; };
@@ -91,8 +90,6 @@
 		4E1F166F183428470068E5BD /* Doktor TVTests-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "Doktor TVTests-Info.plist"; sourceTree = "<group>"; };
 		4E1F1671183428470068E5BD /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		4E1F1673183428470068E5BD /* Doktor_TVTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = Doktor_TVTests.m; sourceTree = "<group>"; };
-		4E1F167D1834287A0068E5BD /* VideoViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = VideoViewController.h; path = Classes/VideoViewController.h; sourceTree = "<group>"; };
-		4E1F167E1834287A0068E5BD /* VideoViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = VideoViewController.m; path = Classes/VideoViewController.m; sourceTree = "<group>"; };
 		4E1F1680183428A10068E5BD /* MediaPlayer.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MediaPlayer.framework; path = System/Library/Frameworks/MediaPlayer.framework; sourceTree = SDKROOT; };
 		4E1F168C1834407D0068E5BD /* KeepAttribute.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KeepAttribute.h; sourceTree = "<group>"; };
 		4E1F168D1834407D0068E5BD /* KeepAttribute.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = KeepAttribute.m; sourceTree = "<group>"; };
@@ -248,8 +245,6 @@
 				4ECF10D11836E7F500D4C62C /* DataHandler.m */,
 				4ECF10FD1837752700D4C62C /* DR */,
 				4ECF10DF1836EB7700D4C62C /* Model */,
-				4E1F167D1834287A0068E5BD /* VideoViewController.h */,
-				4E1F167E1834287A0068E5BD /* VideoViewController.m */,
 				4E1F1660183428470068E5BD /* Images.xcassets */,
 				4ECF10EC1836F2FC00D4C62C /* Containment */,
 				4E1F1655183428470068E5BD /* Supporting Files */,
@@ -601,7 +596,6 @@
 				4E952107183A3EE900DCC2DF /* Episode.m in Sources */,
 				4E1F16C9183440AD0068E5BD /* AFNetworkActivityIndicatorManager.m in Sources */,
 				4E1F165B183428470068E5BD /* main.m in Sources */,
-				4E1F167F1834287A0068E5BD /* VideoViewController.m in Sources */,
 				4E1F169B1834407D0068E5BD /* UIView+KeepLayout.m in Sources */,
 				4E1F16B4183440A30068E5BD /* AFSecurityPolicy.m in Sources */,
 				4E1F169A1834407D0068E5BD /* NSArray+KeepLayout.m in Sources */,
