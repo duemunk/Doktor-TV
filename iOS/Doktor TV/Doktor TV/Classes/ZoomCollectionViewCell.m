@@ -22,7 +22,7 @@
     self = [super initWithFrame:frame];
     if (self) {
         // Initialization code
-		self.backgroundColor = [UIColor colorWithWhite:0.2f alpha:0.5f];
+		self.backgroundColor = [UIColor colorWithWhite:0.5f alpha:0.5f];
 		self.clipsToBounds = YES;
     }
     return self;
@@ -114,7 +114,7 @@
 	label.keepInsets.min = KeepRequired(0.0f);
 	label.textColor = [UIColor whiteColor];
 	label.numberOfLines = 0;
-	label.highlightBackgroundColor = [[UIColor iOS7darkBlueColor] colorWithAlphaComponent:0.5];
+	label.highlightBackgroundColor = [self.tintColor colorWithAlphaComponent:0.5];
 }
 
 

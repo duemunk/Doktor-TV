@@ -163,7 +163,7 @@
 			{
 				[self.collectionView setCollectionViewLayout:[self zoomedCollectionViewLayout] animated:YES completion:^(BOOL finished) {
 					isZooming = NO;
-					__collectionView.alwaysBounceVertical = NO;
+//					__collectionView.alwaysBounceVertical = NO;
 					__collectionView.pagingEnabled = YES;
 				}];
 			}
@@ -185,6 +185,8 @@
 
 
 
+
+
 #pragma mark - Fetched results controller
 
 - (NSFetchedResultsController *)fetchedResultsController
@@ -192,6 +194,9 @@
     if (_fetchedResultsController != nil) {
         return _fetchedResultsController;
     }
+	// Clear cache – might be left over from previous crash
+	[self resetFetchResultsController];
+	
     
     NSFetchRequest *fetchRequest = [[NSFetchRequest alloc] init];
     // Edit the entity name as appropriate.

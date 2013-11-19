@@ -10,7 +10,9 @@
 
 #import "ZoomCollectionViewController.h"
 
-@interface ProgramsCollectionViewController : ZoomCollectionViewController
+@interface ProgramsCollectionViewController : ZoomCollectionViewController <UISearchBarDelegate>
+
+@property (nonatomic, assign, getter = isSearchBarEnabled) BOOL searchBarEnabled;
 
 
 @end

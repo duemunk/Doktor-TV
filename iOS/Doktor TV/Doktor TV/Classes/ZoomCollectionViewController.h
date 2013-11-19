@@ -21,7 +21,7 @@
 @property (nonatomic, strong) NSString *sortKey;
 @property (nonatomic, assign) BOOL sortAscending;
 
-@property (nonatomic, readonly, getter = isZoomed) BOOL zoom;
+@property (nonatomic, assign, getter = isZoomed) BOOL zoom;
 
 @property (nonatomic, assign) NSString *cellIdentifier;
 
