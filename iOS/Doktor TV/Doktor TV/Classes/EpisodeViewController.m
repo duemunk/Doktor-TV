@@ -11,8 +11,9 @@
 #import "DRHandler.h"
 #import "DataHandler.h"
 #import "Button.h"
+#import "MoviePlayerViewController.h"
 
-@import AVFoundation.AVAudioSession;
+@import AVFoundation;
 
 @import MediaPlayer;
 
@@ -24,6 +25,8 @@
 {
 	Button *streamButton, *downloadButton;
 	UITextView *textView;
+	MoviePlayerViewController *moviePlayerViewController;
+	AVPlayer *avPlayer;
 }
 
 - (void)viewDidLoad
@@ -195,21 +198,34 @@
 
 - (void)playVideoWithURL:(NSURL *)url movieSourceType:(MPMovieSourceType)movieSourceType
 {
-	[[UIApplication sharedApplication] beginReceivingRemoteControlEvents];
-    [self becomeFirstResponder];
-	
-	MPMoviePlayerViewController *moviePlayerViewController = [MPMoviePlayerViewController new];
-	moviePlayerViewController.moviePlayer.movieSourceType = movieSourceType; // Source must be set before url
-	moviePlayerViewController.moviePlayer.contentURL = url;
-//	moviePlayerViewController.moviePlayer.controlStyle = MPMovieControlStyleEmbedded;
-	
-	UIViewController *rootViewController = [UIApplication sharedApplication].keyWindow.rootViewController;
-	[rootViewController presentMoviePlayerViewControllerAnimated:moviePlayerViewController];
-	
-	
-//	[[UIApplication sharedApplication] beginReceivingRemoteControlEvents];
-//	[self becomeFirstResponder];
+#define MPvsAV 0
+	if (MPvsAV == 0) {
+		moviePlayerViewController = [MoviePlayerViewController new];
+		moviePlayerViewController.moviePlayer.movieSourceType = movieSourceType; // Source must be set before url
+		moviePlayerViewController.moviePlayer.contentURL = url;
+		//	moviePlayerViewController.moviePlayer.controlStyle = MPMovieControlStyleEmbedded;
 		
+		UIViewController *rootViewController = [UIApplication sharedApplication].keyWindow.rootViewController;
+		[rootViewController presentMoviePlayerViewControllerAnimated:moviePlayerViewController];
+		
+		[[NSNotificationCenter defaultCenter] addObserver:self
+												 selector:@selector(moviePlaybackDidFinish:)
+													 name:MPMoviePlayerPlaybackDidFinishNotification
+												   object:nil];
+	}
+	else
+	{
+		avPlayer = [AVPlayer playerWithURL:url];
+		
+		AVPlayerLayer *layer = [AVPlayerLayer playerLayerWithPlayer:avPlayer];
+		avPlayer.actionAtItemEnd = AVPlayerActionAtItemEndNone;
+		layer.frame = CGRectMake(0, 0, 1024, 768);
+		[self.view.layer addSublayer: layer];
+		
+		[avPlayer play];
+	}
+	
+	
 	UIImage *image = [UIImage imageWithContentsOfFile:[DataHandler pathForFileName:self.episode.image]];
 	NSDictionary *songInfo = @{MPMediaItemPropertyTitle : self.episode.title,
 							   MPMediaItemPropertyArtist : @"Doktor TV",
@@ -222,38 +238,25 @@
 
 
 
-// TODO: Move to subclass of MPMoviePlayerViewController ??
-//- (void)viewDidAppear:(BOOL)animated {
-//	[super viewDidAppear:animated];
-//	[[UIApplication sharedApplication] beginReceivingRemoteControlEvents];
-//	[self becomeFirstResponder];
-//}
-//- (void)viewWillDisappear:(BOOL)animated {
-//	[super viewWillDisappear:animated];
-//	[[UIApplication sharedApplication] endReceivingRemoteControlEvents];
-//	[self resignFirstResponder];
-//}
-//
-//
-////Make sure we can recieve remote control events
-//- (BOOL)canBecomeFirstResponder {
-//    return YES;
-//}
-//- (void)remoteControlReceivedWithEvent:(UIEvent *)event
-//{
-//    //if it is a remote control event handle it correctly
-//    if (event.type == UIEventTypeRemoteControl)
-//	{
-//        if (event.subtype == UIEventSubtypeRemoteControlPlay) {
-////            [self playAudio];
-//        } else if (event.subtype == UIEventSubtypeRemoteControlPause) {
-////            [self pauseAudio];
-//        } else if (event.subtype == UIEventSubtypeRemoteControlTogglePlayPause) {
-////            [self togglePlayPause];
-//        }
-//    }
-//}
-
+- (void)moviePlaybackDidFinish:(NSNotification *)notification
+{
+	int reason = [[notification userInfo][MPMoviePlayerPlaybackDidFinishReasonUserInfoKey] intValue];
+	switch (reason) {
+		case MPMovieFinishReasonPlaybackEnded:
+			DLog(@"Playback ended");
+			break;
+		case MPMovieFinishReasonUserExited:
+			DLog(@"User exited");
+			break;
+		case MPMovieFinishReasonPlaybackError:
+			DLog(@"Playback error");
+			break;
+			
+		default:
+			break;
+	}
+	
+}
 
 
 
