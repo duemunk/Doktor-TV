@@ -193,13 +193,18 @@
 
 - (void)pannedFromTop:(UIScreenEdgePanGestureRecognizer *)edgePan
 {
-	CGPoint contentOffset = self.scrollView.contentOffset;
-	CGFloat change = [edgePan translationInView:edgePan.view].y;
-	contentOffset.y -= change;
+	static CGPoint contentOffset;
 	
-	if (contentOffset.y < 0) {
-		contentOffset.y /= 2;
+	if (edgePan.state == UIGestureRecognizerStateBegan)
+	{
+		contentOffset = self.scrollView.contentOffset;
 	}
+	
+	CGFloat change = [edgePan translationInView:edgePan.view].y;
+	if (contentOffset.y < 0) {
+		change = powf(1+change,0.3)-1;
+	}
+	contentOffset.y -= change;
 	self.scrollView.contentOffset = contentOffset;
 	[edgePan setTranslation:CGPointZero inView:edgePan.view];
 	
