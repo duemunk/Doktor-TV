@@ -115,7 +115,11 @@
 		_searchBar.placeholder = NSLocalizedString(@"Søg", @"Search");
 		_searchBar.barStyle = UIBarStyleBlack;
 		[self.scrollView addSubview:_searchBar];
-		_searchBar.frame = CGRectMake(0, 0, 320, SEARCH_BAR_HEIGHT);
+		[_searchBar keepHorizontallyCentered];
+		_searchBar.keepTopInset.equal = KeepRequired(0.0f);
+		_searchBar.keepHorizontalInsets.equal = KeepFitting(0.0f);
+		_searchBar.keepHeight.equal = KeepRequired(SEARCH_BAR_HEIGHT);
+		_searchBar.keepWidth.max = KeepRequired(320.0f);
 		
 		_searchBar.barTintColor = [UIColor clearColor];
 		_searchBar.tintColor = [UIColor whiteColor]; // Tints blinking "|" and "Cancel"
