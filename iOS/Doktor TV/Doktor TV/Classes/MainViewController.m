@@ -8,6 +8,7 @@
 
 #import "MainViewController.h"
 
+#import "SearchScrollViewController.h"
 #import "ProgramsCollectionViewController.h"
 
 #import "DRHandler.h"
@@ -27,8 +28,11 @@
 	self.view.backgroundColor = [UIColor blackColor];
 	
 	ProgramsCollectionViewController *collectionViewController = [ProgramsCollectionViewController new];
-	[self addViewController:collectionViewController];
-	[collectionViewController.view keepInsets:UIEdgeInsetsZero];
+	SearchScrollViewController *searchController = [SearchScrollViewController new];
+	[searchController addViewController:collectionViewController];
+	[self addViewController:searchController];
+	[searchController.view keepInsets:UIEdgeInsetsZero];
+	searchController.delegate = collectionViewController;
 	
 //	collectionViewController.program = [[DataHandler sharedInstance] programs][1];
 }

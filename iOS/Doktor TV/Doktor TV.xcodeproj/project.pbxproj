@@ -47,6 +47,7 @@
 		4E952107183A3EE900DCC2DF /* Episode.m in Sources */ = {isa = PBXBuildFile; fileRef = 4E952106183A3EE900DCC2DF /* Episode.m */; };
 		4E95210A183A3EEA00DCC2DF /* Program.m in Sources */ = {isa = PBXBuildFile; fileRef = 4E952109183A3EEA00DCC2DF /* Program.m */; };
 		4E95210D183A7E0700DCC2DF /* HighlightedLabel.m in Sources */ = {isa = PBXBuildFile; fileRef = 4E95210C183A7E0600DCC2DF /* HighlightedLabel.m */; };
+		4EA54769183E1E18006B13C9 /* TDMScreenEdgePanGestureRecognizer.m in Sources */ = {isa = PBXBuildFile; fileRef = 4EA54766183E1E18006B13C9 /* TDMScreenEdgePanGestureRecognizer.m */; };
 		4ECF108E1836E79000D4C62C /* CoreData.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4ECF108D1836E79000D4C62C /* CoreData.framework */; };
 		4ECF10D21836E7F600D4C62C /* DataHandler.m in Sources */ = {isa = PBXBuildFile; fileRef = 4ECF10D11836E7F500D4C62C /* DataHandler.m */; };
 		4ECF10D51836E85800D4C62C /* Model.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 4ECF10D31836E85800D4C62C /* Model.xcdatamodeld */; };
@@ -63,6 +64,7 @@
 		4ECF11141837A52600D4C62C /* UIImage+ImageEffects.m in Sources */ = {isa = PBXBuildFile; fileRef = 4ECF11131837A52600D4C62C /* UIImage+ImageEffects.m */; };
 		4ECF11231837DA9400D4C62C /* ZoomCollectionViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 4ECF11221837DA9400D4C62C /* ZoomCollectionViewCell.m */; };
 		4ECF11271838252100D4C62C /* EpisodeViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4ECF11261838252100D4C62C /* EpisodeViewController.m */; };
+		4EFD19BE183D1CEA00FC8DB2 /* SearchScrollViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4EFD19BD183D1CEA00FC8DB2 /* SearchScrollViewController.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -150,6 +152,8 @@
 		4E952109183A3EEA00DCC2DF /* Program.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = Program.m; path = Classes/Program.m; sourceTree = "<group>"; };
 		4E95210B183A7E0600DCC2DF /* HighlightedLabel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = HighlightedLabel.h; path = Classes/HighlightedLabel.h; sourceTree = "<group>"; };
 		4E95210C183A7E0600DCC2DF /* HighlightedLabel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = HighlightedLabel.m; path = Classes/HighlightedLabel.m; sourceTree = "<group>"; };
+		4EA54765183E1E18006B13C9 /* TDMScreenEdgePanGestureRecognizer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TDMScreenEdgePanGestureRecognizer.h; sourceTree = "<group>"; };
+		4EA54766183E1E18006B13C9 /* TDMScreenEdgePanGestureRecognizer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TDMScreenEdgePanGestureRecognizer.m; sourceTree = "<group>"; };
 		4ECF108D1836E79000D4C62C /* CoreData.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreData.framework; path = System/Library/Frameworks/CoreData.framework; sourceTree = SDKROOT; };
 		4ECF10D01836E7F500D4C62C /* DataHandler.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = DataHandler.h; path = Classes/DataHandler.h; sourceTree = "<group>"; };
 		4ECF10D11836E7F500D4C62C /* DataHandler.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = DataHandler.m; path = Classes/DataHandler.m; sourceTree = "<group>"; };
@@ -180,6 +184,8 @@
 		4ECF11221837DA9400D4C62C /* ZoomCollectionViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; indentWidth = 4; lastKnownFileType = sourcecode.c.objc; name = ZoomCollectionViewCell.m; path = Classes/ZoomCollectionViewCell.m; sourceTree = "<group>"; tabWidth = 4; usesTabs = 1; wrapsLines = 1; };
 		4ECF11251838252100D4C62C /* EpisodeViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = EpisodeViewController.h; path = Classes/EpisodeViewController.h; sourceTree = "<group>"; };
 		4ECF11261838252100D4C62C /* EpisodeViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = EpisodeViewController.m; path = Classes/EpisodeViewController.m; sourceTree = "<group>"; };
+		4EFD19BC183D1CEA00FC8DB2 /* SearchScrollViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SearchScrollViewController.h; path = Classes/SearchScrollViewController.h; sourceTree = "<group>"; };
+		4EFD19BD183D1CEA00FC8DB2 /* SearchScrollViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = SearchScrollViewController.m; path = Classes/SearchScrollViewController.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -261,6 +267,7 @@
 		4E1F1655183428470068E5BD /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
+				4EA54762183E1E18006B13C9 /* TDMScreenEdgePanGestureRecognizer */,
 				4E9520FE1838517B00DCC2DF /* CustomFont */,
 				4ECF11111837A52600D4C62C /* UIImageEffects */,
 				4E1F1656183428470068E5BD /* Doktor TV-Info.plist */,
@@ -392,6 +399,16 @@
 			name = CustomFont;
 			sourceTree = "<group>";
 		};
+		4EA54762183E1E18006B13C9 /* TDMScreenEdgePanGestureRecognizer */ = {
+			isa = PBXGroup;
+			children = (
+				4EA54765183E1E18006B13C9 /* TDMScreenEdgePanGestureRecognizer.h */,
+				4EA54766183E1E18006B13C9 /* TDMScreenEdgePanGestureRecognizer.m */,
+			);
+			name = TDMScreenEdgePanGestureRecognizer;
+			path = Submodules/TDMScreenEdgePanGestureRecognizer;
+			sourceTree = "<group>";
+		};
 		4ECF10DF1836EB7700D4C62C /* Model */ = {
 			isa = PBXGroup;
 			children = (
@@ -438,6 +455,8 @@
 			children = (
 				4ECF10E01836EDF300D4C62C /* MainViewController.h */,
 				4ECF10E11836EDF300D4C62C /* MainViewController.m */,
+				4EFD19BC183D1CEA00FC8DB2 /* SearchScrollViewController.h */,
+				4EFD19BD183D1CEA00FC8DB2 /* SearchScrollViewController.m */,
 				4ECF11241838246700D4C62C /* For subclassing */,
 				4ECF10E61836EEFF00D4C62C /* ProgramsCollectionViewController.h */,
 				4ECF10E71836EEFF00D4C62C /* ProgramsCollectionViewController.m */,
@@ -582,6 +601,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				4EFD19BE183D1CEA00FC8DB2 /* SearchScrollViewController.m in Sources */,
 				4ECF10E81836EEFF00D4C62C /* ProgramsCollectionViewController.m in Sources */,
 				4E1F16B8183440A30068E5BD /* AFURLSessionManager.m in Sources */,
 				4E1F16B5183440A30068E5BD /* AFURLConnectionOperation.m in Sources */,
@@ -595,6 +615,7 @@
 				4E1F16B0183440A30068E5BD /* AFHTTPRequestOperation.m in Sources */,
 				4E9520FD1838517500DCC2DF /* UIFont+CustomFont.m in Sources */,
 				4E1F16991834407D0068E5BD /* KeepTypes.m in Sources */,
+				4EA54769183E1E18006B13C9 /* TDMScreenEdgePanGestureRecognizer.m in Sources */,
 				4ECF10F31836F6B600D4C62C /* ZoomCollectionViewController.m in Sources */,
 				4ECF10D81836EB6D00D4C62C /* Season.m in Sources */,
 				4E1F16CB183440AD0068E5BD /* UIAlertView+AFNetworking.m in Sources */,

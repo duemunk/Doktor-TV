@@ -38,8 +38,8 @@
 	self.collectionView.backgroundColor = [UIColor clearColor];
 	self.collectionView.indicatorStyle = UIScrollViewIndicatorStyleWhite;
 	self.collectionView.alwaysBounceVertical = YES;
-	self.view.clipsToBounds =
-	self.collectionView.clipsToBounds = NO;
+	self.view.clipsToBounds = YES;
+	self.collectionView.clipsToBounds = YES;
 	
 	self.managedObjectContext = [DataHandler sharedInstance].managedObjectContext;
 	
@@ -163,7 +163,7 @@
 			{
 				[self.collectionView setCollectionViewLayout:[self zoomedCollectionViewLayout] animated:YES completion:^(BOOL finished) {
 					isZooming = NO;
-//					__collectionView.alwaysBounceVertical = NO;
+					__collectionView.alwaysBounceVertical = NO;
 					__collectionView.pagingEnabled = YES;
 				}];
 			}
