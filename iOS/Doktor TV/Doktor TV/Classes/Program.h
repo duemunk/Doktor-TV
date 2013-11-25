@@ -2,7 +2,7 @@
 //  Program.h
 //  Doktor TV
 //
-//  Created by Tobias DM on 18/11/13.
+//  Created by Tobias DM on 25/11/13.
 //  Copyright (c) 2013 developmunk. All rights reserved.
 //
 
@@ -15,9 +15,10 @@
 
 @property (nonatomic, retain) NSString * drID;
 @property (nonatomic, retain) NSString * image;
+@property (nonatomic, retain) NSString * imageUrl;
 @property (nonatomic, retain) NSString * slug;
 @property (nonatomic, retain) NSString * title;
-@property (nonatomic, retain) NSString * imageUrl;
+@property (nonatomic, retain) NSNumber * subscribe;
 @property (nonatomic, retain) NSOrderedSet *seasons;
 @end
 

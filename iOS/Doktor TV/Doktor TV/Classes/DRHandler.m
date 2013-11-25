@@ -60,7 +60,6 @@
 //		 }];
 //	}
 
-	
 	query = [self addLimit:100 urlString:query];
 	
 	DLog(@"Reqest %@",query);

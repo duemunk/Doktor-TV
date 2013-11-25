@@ -20,6 +20,7 @@
         <attribute name="image" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="imageUrl" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="slug" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="subscribe" optional="YES" attributeType="Boolean" syncable="YES"/>
         <attribute name="title" optional="YES" attributeType="String" syncable="YES"/>
         <relationship name="seasons" optional="YES" toMany="YES" deletionRule="Nullify" ordered="YES" destinationEntity="Season" inverseName="program" inverseEntity="Season" syncable="YES"/>
     </entity>

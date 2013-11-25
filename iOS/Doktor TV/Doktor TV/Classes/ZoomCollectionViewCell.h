@@ -19,6 +19,7 @@
 @property (nonatomic, assign) UIViewController *childViewController;
 @property (nonatomic, strong) NSManagedObject *managedObject;
 @property (nonatomic, strong) id<ZoomCollectionViewCellDelegate> delegate;
+@property (nonatomic, assign) UIEdgeInsets childViewControllerInsets;
 
 - (void)applyDefaultLabelStyling:(HighlightedLabel *)label;
 

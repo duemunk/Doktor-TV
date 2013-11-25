@@ -132,19 +132,20 @@
 		if (![self.contentView.subviews containsObject:self.childViewController.view]) {
 			[self.contentView insertSubview:self.childViewController.view belowSubview:self.titleLabel];
 			
-			UIEdgeInsets insets = UIEdgeInsetsMake(60.0f, 0, 0, 0);
 			if ([self.childViewController.view isKindOfClass:[UIScrollView class]])
 			{
 				[self.childViewController.view keepInsets:UIEdgeInsetsZero];
-				((UIScrollView *)self.childViewController.view).contentInset = insets;
+				((UIScrollView *)self.childViewController.view).contentInset = self.childViewControllerInsets;
+				((UIScrollView *)self.childViewController.view).scrollIndicatorInsets = self.childViewControllerInsets;
 			}
 			else if ([self.childViewController isKindOfClass:[UICollectionViewController class]])
 			{
 				[self.childViewController.view keepInsets:UIEdgeInsetsZero];
-				((UICollectionViewController *)self.childViewController).collectionView.contentInset = insets;
+				((UICollectionViewController *)self.childViewController).collectionView.contentInset = self.childViewControllerInsets;
+				((UICollectionViewController *)self.childViewController).collectionView.scrollIndicatorInsets = self.childViewControllerInsets;
 			}
 			else
-				[self.childViewController.view keepInsets:insets];
+				[self.childViewController.view keepInsets:self.childViewControllerInsets];
 		}
 	}
 	else

@@ -20,8 +20,10 @@
 		[self setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
 		[self setTitleColor:[UIColor colorWithWhite:1.0f alpha:0.5] forState:UIControlStateDisabled];
 		
-		[self setTitleEdgeInsets:UIEdgeInsetsMake(40.0f, 20.0f, 40.0f, 20.0f)];
+		self.titleEdgeInsets = UIEdgeInsetsMake(0.0f, 10.0f, 0.0f, 10.0f);
 		self.titleLabel.font = [UIFont preferredCustomFontForTextStyle:UIFontTextStyleSubheadline];
+		
+		self.layer.cornerRadius = 2.0f;
     }
     return self;
 }
@@ -39,6 +41,16 @@
 		[self setTitle:_title forState:UIControlStateNormal];
 		[self sizeToFit];
 	}
+}
+
+
+- (CGSize)intrinsicContentSize
+{
+    CGSize s = [super intrinsicContentSize];
+	
+    return CGSizeMake(s.width + self.titleEdgeInsets.left + self.titleEdgeInsets.right,
+                      s.height + self.titleEdgeInsets.top + self.titleEdgeInsets.bottom);
+	
 }
 
 /*

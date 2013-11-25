@@ -17,6 +17,15 @@
 	EpisodeViewController *episodeViewController;
 }
 
+- (instancetype)initWithFrame:(CGRect)frame
+{
+    self = [super initWithFrame:frame];
+    if (self) {
+		self.childViewControllerInsets = UIEdgeInsetsMake(60.0f, 0, 0, 0);
+    }
+    return self;
+}
+
 - (void)dealloc
 {
 	if (_episode) {

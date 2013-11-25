@@ -9,18 +9,29 @@
 #import "ProgramCollectionViewCell.h"
 #import "ProgramCollectionViewController.h"
 
+#import "Button.h"
+
 #import "DataHandler.h"
 #import "DRHandler.h"
+
+
+@interface ProgramCollectionViewCell ()
+
+@property (nonatomic, strong) Button *subscribeButton;
+
+@end
 
 @implementation ProgramCollectionViewCell
 {
 	ProgramCollectionViewController *programCollectionViewController;
+	
 }
 
 - (instancetype)initWithFrame:(CGRect)frame
 {
     self = [super initWithFrame:frame];
     if (self) {
+		self.childViewControllerInsets = UIEdgeInsetsMake(70.0f, 0, 0, 0);
     }
     return self;
 }
@@ -54,6 +65,9 @@
 		
 		[self setupImage];
 		self.managedObject = _program;
+		
+	
+		self.tintColor = _program.subscribe.boolValue ? [UIColor iOS7orangeColor] : self.superview.tintColor;
 	}
 }
 
@@ -93,6 +107,54 @@
 		NSAssert([childViewController isKindOfClass:[ProgramCollectionViewController class]], @"Incorrect class");
 	
 	programCollectionViewController = (ProgramCollectionViewController *)childViewController;
+}
+
+
+
+
+- (void)setZoom:(BOOL)zoom
+{
+	[super setZoom:zoom];
+	
+	if (zoom)
+	{
+		[self setupSubscribeButton];
+	}
+	else
+	{
+		[_subscribeButton removeFromSuperview];
+		_subscribeButton = nil;
+	}
+}
+
+- (Button *)subscribeButton
+{
+	if (!_subscribeButton)
+	{
+		[self setupSubscribeButton];
+	}
+	return _subscribeButton;
+}
+
+- (void)setupSubscribeButton
+{
+	_subscribeButton = [Button new];
+	[self.contentView addSubview:_subscribeButton];
+	
+	_subscribeButton.title = @"Abonnér";
+	
+	_subscribeButton.keepTopInset.equal = KeepRequired(30.0f);
+	_subscribeButton.keepWidth.max = KeepRequired(250.0f);
+	_subscribeButton.keepHorizontalInsets.min = KeepRequired(20.0f);
+	[_subscribeButton keepHorizontallyCentered];
+	
+	[_subscribeButton addTarget:self action:@selector(subscribeButtonTapped) forControlEvents:UIControlEventTouchUpInside];
+}
+
+- (void)subscribeButtonTapped
+{
+	self.program.subscribe = @(!self.program.subscribe);
+	[[DataHandler sharedInstance] saveContext];
 }
 
 @end
