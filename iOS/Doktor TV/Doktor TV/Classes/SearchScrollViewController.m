@@ -124,7 +124,7 @@
 		_searchBar.barTintColor = [UIColor clearColor];
 		_searchBar.tintColor = [UIColor whiteColor]; // Tints blinking "|" and "Cancel"
 		
-		[self setSearchBackgroundColor:[self.view.tintColor colorWithAlphaComponent:0.5f]];
+		[self setSearchBackgroundColor:[self.view.tintColor colorWithAlphaComponent:alphaOverlay]];
 		
 		_searchBar.delegate = self;
 		

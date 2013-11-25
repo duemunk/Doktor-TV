@@ -15,7 +15,7 @@
     self = [super initWithFrame:frame];
     if (self) {
         // Initialization code
-		self.backgroundColor = [[UIColor iOS7darkBlueColor ] colorWithAlphaComponent:0.5];
+		self.backgroundColor = [self.tintColor colorWithAlphaComponent:alphaOverlay];
 		
 		[self setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
 		[self setTitleColor:[UIColor colorWithWhite:1.0f alpha:0.5] forState:UIControlStateDisabled];
@@ -26,6 +26,10 @@
     return self;
 }
 
+- (void)tintColorDidChange
+{
+	self.backgroundColor = [self.tintColor colorWithAlphaComponent:alphaOverlay];
+}
 
 - (void)setTitle:(NSString *)title
 {

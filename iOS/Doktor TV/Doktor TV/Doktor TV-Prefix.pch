@@ -19,6 +19,7 @@
 	#import "UIColor+iOS7Colors.h"
 	#import "UIImage+ImageEffects.h"
 	#import "UIFont+CustomFont.h"
+	#import "Appearance.h"
 	#define isPhone UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPhone
 
 	#ifdef DEBUG

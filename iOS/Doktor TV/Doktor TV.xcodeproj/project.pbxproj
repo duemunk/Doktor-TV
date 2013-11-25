@@ -154,6 +154,7 @@
 		4E95210C183A7E0600DCC2DF /* HighlightedLabel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = HighlightedLabel.m; path = Classes/HighlightedLabel.m; sourceTree = "<group>"; };
 		4EA54765183E1E18006B13C9 /* TDMScreenEdgePanGestureRecognizer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TDMScreenEdgePanGestureRecognizer.h; sourceTree = "<group>"; };
 		4EA54766183E1E18006B13C9 /* TDMScreenEdgePanGestureRecognizer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TDMScreenEdgePanGestureRecognizer.m; sourceTree = "<group>"; };
+		4EC77ABB183F5AFD004D8E20 /* Appearance.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Appearance.h; path = Classes/Appearance.h; sourceTree = "<group>"; };
 		4ECF108D1836E79000D4C62C /* CoreData.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreData.framework; path = System/Library/Frameworks/CoreData.framework; sourceTree = SDKROOT; };
 		4ECF10D01836E7F500D4C62C /* DataHandler.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = DataHandler.h; path = Classes/DataHandler.h; sourceTree = "<group>"; };
 		4ECF10D11836E7F500D4C62C /* DataHandler.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = DataHandler.m; path = Classes/DataHandler.m; sourceTree = "<group>"; };
@@ -252,6 +253,7 @@
 			children = (
 				4E1F165D183428470068E5BD /* AppDelegate.h */,
 				4E1F165E183428470068E5BD /* AppDelegate.m */,
+				4EC77ABB183F5AFD004D8E20 /* Appearance.h */,
 				4ECF10FE1837753200D4C62C /* Navigation */,
 				4ECF10D01836E7F500D4C62C /* DataHandler.h */,
 				4ECF10D11836E7F500D4C62C /* DataHandler.m */,
@@ -409,6 +411,15 @@
 			path = Submodules/TDMScreenEdgePanGestureRecognizer;
 			sourceTree = "<group>";
 		};
+		4EC77ABC183F5DBA004D8E20 /* Search */ = {
+			isa = PBXGroup;
+			children = (
+				4EFD19BC183D1CEA00FC8DB2 /* SearchScrollViewController.h */,
+				4EFD19BD183D1CEA00FC8DB2 /* SearchScrollViewController.m */,
+			);
+			name = Search;
+			sourceTree = "<group>";
+		};
 		4ECF10DF1836EB7700D4C62C /* Model */ = {
 			isa = PBXGroup;
 			children = (
@@ -455,8 +466,7 @@
 			children = (
 				4ECF10E01836EDF300D4C62C /* MainViewController.h */,
 				4ECF10E11836EDF300D4C62C /* MainViewController.m */,
-				4EFD19BC183D1CEA00FC8DB2 /* SearchScrollViewController.h */,
-				4EFD19BD183D1CEA00FC8DB2 /* SearchScrollViewController.m */,
+				4EC77ABC183F5DBA004D8E20 /* Search */,
 				4ECF11241838246700D4C62C /* For subclassing */,
 				4ECF10E61836EEFF00D4C62C /* ProgramsCollectionViewController.h */,
 				4ECF10E71836EEFF00D4C62C /* ProgramsCollectionViewController.m */,

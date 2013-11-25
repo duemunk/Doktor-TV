@@ -22,10 +22,16 @@
     self = [super initWithFrame:frame];
     if (self) {
         // Initialization code
-		self.backgroundColor = [UIColor colorWithWhite:0.5f alpha:0.5f];
+		self.backgroundColor = [self.tintColor colorWithAlphaComponent:alphaBackground];
 		self.clipsToBounds = YES;
     }
     return self;
+}
+
+- (void)tintColorDidChange
+{
+	self.backgroundColor = [self.tintColor colorWithAlphaComponent:alphaBackground];
+	self.titleLabel.highlightBackgroundColor = [self.tintColor colorWithAlphaComponent:alphaOverlay];
 }
 
 
@@ -69,7 +75,7 @@
 		if (blurBackgroundImage) {
 			UIImage *image = [_backgroundImage applyBlurWithRadius:10.0f
 														 tintColor:[UIColor colorWithWhite:0.0f alpha:0.2f]
-											 saturationDeltaFactor:1.5f
+											 saturationDeltaFactor:1.9f
 														 maskImage:nil];
 			
 			backgroundImageView.image = image;
@@ -114,7 +120,7 @@
 	label.keepInsets.min = KeepRequired(0.0f);
 	label.textColor = [UIColor whiteColor];
 	label.numberOfLines = 0;
-	label.highlightBackgroundColor = [self.tintColor colorWithAlphaComponent:0.5];
+	label.highlightBackgroundColor = [self.tintColor colorWithAlphaComponent:alphaOverlay];
 }
 
 

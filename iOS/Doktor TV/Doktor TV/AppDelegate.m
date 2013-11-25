@@ -18,7 +18,7 @@
     self.window.backgroundColor = [UIColor whiteColor];
 	
 	self.window.rootViewController = [MainViewController new];
-	self.window.tintColor = [UIColor iOS7darkBlueColor];
+	self.window.tintColor = mainColor;
 	
     [self.window makeKeyAndVisible];
     return YES;
