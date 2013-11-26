@@ -96,7 +96,7 @@
 
 - (CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout*)collectionViewLayout referenceSizeForHeaderInSection:(NSInteger)section
 {
-	if (self.fetchedResultsController.sections.count > 1) {
+	if (self.fetchedResultsController.sections.count > 1 && !self.isZoomed) {
 		CGSize size = collectionView.bounds.size;
 		size.height = 60;
 		return size;
