@@ -11,6 +11,8 @@
 #define mainColor [UIColor colorWithRed:0.0f green:0.49f blue:0.96f alpha:1.0f]
 #define alphaOverlay 0.5f
 #define alphaBackground 0.1f
+#define subscribedColor [UIColor iOS7yellowColor]
+#define newContentColor [UIColor iOS7greenColor]
 
 @interface Appearance : NSObject
 
