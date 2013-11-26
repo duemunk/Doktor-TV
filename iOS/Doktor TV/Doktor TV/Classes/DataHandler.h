@@ -35,5 +35,6 @@
 
 + (NSString *)pathForFileName:(NSString *)filename;
 + (BOOL)fileExists:(NSString *)filename;
+- (void)cleanUpCachedLocalFiles;
 
 @end

@@ -94,9 +94,9 @@
 	}
 	else
 	{
-		[[DRHandler sharedInstance] validateImageForProgram:_program];
 		self.backgroundImage = nil;
 	}
+	[[DRHandler sharedInstance] validateImageForProgram:_program];
 }
 
 

@@ -216,4 +216,47 @@
 	return fileExists;
 }
 
+
+
+- (void)cleanUpCachedLocalFiles
+{
+	NSString *mainPath = [DataHandler pathForFileName:nil];
+	NSError *error;
+	NSArray *allFiles = [[NSFileManager defaultManager] contentsOfDirectoryAtURL:[NSURL fileURLWithPath:mainPath]
+																 includingPropertiesForKeys:nil
+																					options:NSDirectoryEnumerationSkipsHiddenFiles
+																					  error:&error];
+	
+	NSMutableArray *invalidFiles = [allFiles pathsMatchingExtensions:@[@"jpg",@"mov"]].mutableCopy;
+	
+	// TODO: on iOS file:///private/var/ vs. file:///var/
+	for (Program *program in self.programs)
+	{
+		NSString *filePath = [DataHandler pathForFileName:program.image];
+		NSURL *fileURL = [NSURL fileURLWithPath:filePath];
+		NSUInteger index = [invalidFiles indexOfObject:fileURL];
+		if (index != NSNotFound) {
+			[invalidFiles removeObjectAtIndex:index];
+		}
+		
+		for (Season *season in program.seasons) {
+			for (Episode *episode in season.episodes) {
+				NSString *filePath = [DataHandler pathForFileName:episode.image];
+				NSURL *fileURL = [NSURL fileURLWithPath:filePath];
+				NSUInteger index = [invalidFiles indexOfObject:fileURL];
+				if (index != NSNotFound) {
+					[invalidFiles removeObjectAtIndex:index];
+				}
+			}
+		}
+	}
+	
+	for (NSURL *invalidFileURL in invalidFiles)
+	{
+		NSError *error;
+		DLog(@"Delete file %@",invalidFileURL);
+		[[NSFileManager defaultManager] removeItemAtURL:invalidFileURL error:&error];
+	}
+}
+
 @end

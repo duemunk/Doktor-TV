@@ -72,9 +72,9 @@
 	}
 	else
 	{
-		[[DRHandler sharedInstance] validateImageForEpisode:_episode];
 		self.backgroundImage = nil;
 	}
+	[[DRHandler sharedInstance] validateImageForEpisode:_episode];
 }
 
 - (UIViewController *)childViewController

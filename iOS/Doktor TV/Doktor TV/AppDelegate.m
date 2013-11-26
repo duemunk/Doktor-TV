@@ -9,6 +9,8 @@
 #import "AppDelegate.h"
 #import "MainViewController.h"
 
+#import "DataHandler.h"
+
 @implementation AppDelegate
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
@@ -21,6 +23,9 @@
 	self.window.tintColor = mainColor;
 	
     [self.window makeKeyAndVisible];
+	
+	[[DataHandler sharedInstance] cleanUpCachedLocalFiles];
+	
     return YES;
 }
 
