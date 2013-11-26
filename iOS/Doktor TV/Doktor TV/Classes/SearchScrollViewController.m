@@ -41,6 +41,7 @@
 	
 	self.scrollView.delegate = self;
 	self.scrollView.decelerationRate = UIScrollViewDecelerationRateFast;
+	self.scrollView.showsVerticalScrollIndicator = NO;
 	[self setupSearchBar];
 }
 
