@@ -53,7 +53,6 @@
 	_searchBarVisible = YES;
 	self.searchBarVisible = NO;
 	
-	
 	TDMScreenEdgePanGestureRecognizer *edgePan = [[TDMScreenEdgePanGestureRecognizer alloc] initWithTarget:self action:@selector(pannedFromTop:)];
 	[self.scrollView addGestureRecognizer:edgePan];
 	edgePan.edges = UIRectEdgeTop;
