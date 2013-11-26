@@ -39,7 +39,6 @@
     [super viewDidLoad];
 	// Do any additional setup after loading the view.
 	
-	self.scrollView.alwaysBounceVertical = YES;
 	self.scrollView.delegate = self;
 	self.scrollView.decelerationRate = UIScrollViewDecelerationRateFast;
 	[self setupSearchBar];
