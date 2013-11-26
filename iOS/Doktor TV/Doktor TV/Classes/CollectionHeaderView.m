@@ -41,7 +41,7 @@
 		[_titleLabel keepCentered];
 		_titleLabel.keepInsets.min = KeepRequired(0.0f);
 		self.titleLabel.font = [[UIFont preferredCustomFontForTextStyle:UIFontTextStyleHeadline] fontWithSize:30.0f];
-		self.titleLabel.textColor = [UIColor whiteColor];
+		self.titleLabel.textColor = [[UIColor whiteColor] colorWithAlphaComponent:alphaOverlay];
 	}
 	return _titleLabel;
 }

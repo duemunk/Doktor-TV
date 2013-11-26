@@ -199,9 +199,13 @@
 		contentOffset = self.scrollView.contentOffset;
 	}
 	
-	CGFloat change = [edgePan translationInView:edgePan.view].y;
-	if (contentOffset.y < 0) {
-		change = powf(1+change,0.3)-1;
+	CGPoint p = [edgePan translationInView:edgePan.view];
+	CGFloat change = p.y;
+	if (contentOffset.y < 0)
+	{
+		BOOL changeSign = (change < 0);
+		change = powf(1+fabsf(change),0.3)-1;
+		change *= changeSign ? -1 : 1;
 	}
 	contentOffset.y -= change;
 	self.scrollView.contentOffset = contentOffset;
@@ -214,7 +218,6 @@
 		else
 			contentOffset.y = SEARCH_BAR_HEIGHT;
 		[self.scrollView setContentOffset:contentOffset animated:YES];
-		[self updateToContentOffset:contentOffset];
 	}
 }
 
@@ -247,16 +250,18 @@
 	
 	CGPoint contentOffset = self.scrollView.contentOffset;
 	contentOffset.y = targetContentOffset->y;
-	[self updateToContentOffset:contentOffset];
 }
 
 - (void)scrollViewDidEndDragging:(UIScrollView *)scrollView willDecelerate:(BOOL)decelerate
 {
-	if (!decelerate) {
+	if (!decelerate)
 		[self updateToContentOffset:scrollView.contentOffset];
-	}
 }
 - (void)scrollViewDidEndDecelerating:(UIScrollView *)scrollView
+{
+	[self updateToContentOffset:scrollView.contentOffset];
+}
+- (void)scrollViewDidEndScrollingAnimation:(UIScrollView *)scrollView
 {
 	[self updateToContentOffset:scrollView.contentOffset];
 }
