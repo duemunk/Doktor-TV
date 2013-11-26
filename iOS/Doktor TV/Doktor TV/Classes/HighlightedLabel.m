@@ -37,10 +37,11 @@
 
 - (void)updateHighlight
 {
-	if (self.attributedText)
+	if (self.attributedText.length && _highlightBackgroundColor)
 	{
-		NSMutableAttributedString *attrText = [self.attributedText mutableCopy];
-		[attrText addAttribute:NSBackgroundColorAttributeName value:self.highlightBackgroundColor range:NSMakeRange(0, attrText.length)];
+		NSMutableAttributedString *attrText = self.attributedText.mutableCopy;
+		NSRange range = NSMakeRange(0, attrText.length);
+		[attrText addAttribute:NSBackgroundColorAttributeName value:self.highlightBackgroundColor range:range];
 		self.attributedText = attrText;
 	}	
 }

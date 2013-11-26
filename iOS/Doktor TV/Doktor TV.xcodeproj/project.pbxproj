@@ -47,6 +47,7 @@
 		4E952107183A3EE900DCC2DF /* Episode.m in Sources */ = {isa = PBXBuildFile; fileRef = 4E952106183A3EE900DCC2DF /* Episode.m */; };
 		4E95210D183A7E0700DCC2DF /* HighlightedLabel.m in Sources */ = {isa = PBXBuildFile; fileRef = 4E95210C183A7E0600DCC2DF /* HighlightedLabel.m */; };
 		4EA54769183E1E18006B13C9 /* TDMScreenEdgePanGestureRecognizer.m in Sources */ = {isa = PBXBuildFile; fileRef = 4EA54766183E1E18006B13C9 /* TDMScreenEdgePanGestureRecognizer.m */; };
+		4EC07CEA1844A428005CB25F /* CollectionHeaderView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4EC07CE91844A428005CB25F /* CollectionHeaderView.m */; };
 		4EC77AC71843916E004D8E20 /* Model.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 4EC77AC51843916E004D8E20 /* Model.xcdatamodeld */; };
 		4EC77ACA18439183004D8E20 /* Program.m in Sources */ = {isa = PBXBuildFile; fileRef = 4EC77AC918439183004D8E20 /* Program.m */; };
 		4ECF108E1836E79000D4C62C /* CoreData.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4ECF108D1836E79000D4C62C /* CoreData.framework */; };
@@ -152,6 +153,8 @@
 		4E95210C183A7E0600DCC2DF /* HighlightedLabel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = HighlightedLabel.m; path = Classes/HighlightedLabel.m; sourceTree = "<group>"; };
 		4EA54765183E1E18006B13C9 /* TDMScreenEdgePanGestureRecognizer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TDMScreenEdgePanGestureRecognizer.h; sourceTree = "<group>"; };
 		4EA54766183E1E18006B13C9 /* TDMScreenEdgePanGestureRecognizer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TDMScreenEdgePanGestureRecognizer.m; sourceTree = "<group>"; };
+		4EC07CE81844A428005CB25F /* CollectionHeaderView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CollectionHeaderView.h; path = Classes/CollectionHeaderView.h; sourceTree = "<group>"; };
+		4EC07CE91844A428005CB25F /* CollectionHeaderView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CollectionHeaderView.m; path = Classes/CollectionHeaderView.m; sourceTree = "<group>"; };
 		4EC77ABB183F5AFD004D8E20 /* Appearance.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Appearance.h; path = Classes/Appearance.h; sourceTree = "<group>"; };
 		4EC77AC61843916E004D8E20 /* Model.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = Model.xcdatamodel; sourceTree = "<group>"; };
 		4EC77AC818439183004D8E20 /* Program.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Program.h; path = Classes/Program.h; sourceTree = "<group>"; };
@@ -411,6 +414,19 @@
 			path = Submodules/TDMScreenEdgePanGestureRecognizer;
 			sourceTree = "<group>";
 		};
+		4EC07CE71844A3DE005CB25F /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				4E9520F818384E0800DCC2DF /* Button.h */,
+				4E9520F918384E0800DCC2DF /* Button.m */,
+				4E95210B183A7E0600DCC2DF /* HighlightedLabel.h */,
+				4E95210C183A7E0600DCC2DF /* HighlightedLabel.m */,
+				4EC07CE81844A428005CB25F /* CollectionHeaderView.h */,
+				4EC07CE91844A428005CB25F /* CollectionHeaderView.m */,
+			);
+			name = Views;
+			sourceTree = "<group>";
+		};
 		4EC77ABC183F5DBA004D8E20 /* Search */ = {
 			isa = PBXGroup;
 			children = (
@@ -480,10 +496,7 @@
 				4ECF11261838252100D4C62C /* EpisodeViewController.m */,
 				4E83CC3A183B70B300D45A79 /* MoviePlayerViewController.h */,
 				4E83CC3B183B70B300D45A79 /* MoviePlayerViewController.m */,
-				4E9520F818384E0800DCC2DF /* Button.h */,
-				4E9520F918384E0800DCC2DF /* Button.m */,
-				4E95210B183A7E0600DCC2DF /* HighlightedLabel.h */,
-				4E95210C183A7E0600DCC2DF /* HighlightedLabel.m */,
+				4EC07CE71844A3DE005CB25F /* Views */,
 			);
 			name = Navigation;
 			sourceTree = "<group>";
@@ -616,6 +629,7 @@
 				4ECF10E81836EEFF00D4C62C /* ProgramsCollectionViewController.m in Sources */,
 				4E1F16B8183440A30068E5BD /* AFURLSessionManager.m in Sources */,
 				4E1F16B5183440A30068E5BD /* AFURLConnectionOperation.m in Sources */,
+				4EC07CEA1844A428005CB25F /* CollectionHeaderView.m in Sources */,
 				4ECF1101183777ED00D4C62C /* UIColor+iOS7Colors.m in Sources */,
 				4ECF10EB1836F0D200D4C62C /* ProgramCollectionViewCell.m in Sources */,
 				4ECF10FC1837752300D4C62C /* DRHandler.m in Sources */,
