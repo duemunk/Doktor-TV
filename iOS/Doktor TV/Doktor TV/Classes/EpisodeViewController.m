@@ -34,16 +34,6 @@
     [super viewDidLoad];
 	
 	// Do any additional setup after loading the view
-	
-	// Allow audio playback with muteswitch in mute
-	NSError *setCategoryErr = nil;
-    NSError *activationErr  = nil;
-    [[AVAudioSession sharedInstance] setCategory: AVAudioSessionCategoryPlayback error:&setCategoryErr];
-    [[AVAudioSession sharedInstance] setActive: YES error:&activationErr];
-	
-//	[[UIApplication sharedApplication] beginReceivingRemoteControlEvents];
-//	UIBackgroundTaskIdentifier newTaskId = UIBackgroundTaskInvalid;
-//	newTaskId = [[UIApplication sharedApplication] beginBackgroundTaskWithExpirationHandler:NULL];
 }
 
 
@@ -198,6 +188,12 @@
 
 - (void)playVideoWithURL:(NSURL *)url movieSourceType:(MPMovieSourceType)movieSourceType
 {
+	// Allow audio playback with muteswitch in mute
+	NSError *setCategoryErr = nil;
+    NSError *activationErr  = nil;
+    [[AVAudioSession sharedInstance] setCategory: AVAudioSessionCategoryPlayback error:&setCategoryErr];
+    [[AVAudioSession sharedInstance] setActive: YES error:&activationErr];
+	
 #define MPvsAV 0
 	if (MPvsAV == 0) {
 		moviePlayerViewController = [MoviePlayerViewController new];
