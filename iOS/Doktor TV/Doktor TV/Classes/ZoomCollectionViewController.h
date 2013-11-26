@@ -20,6 +20,8 @@
 @property (nonatomic, strong) NSPredicate *predicate;
 @property (nonatomic, strong) NSString *sortKey;
 @property (nonatomic, assign) BOOL sortAscending;
+@property (nonatomic, strong) NSString *sectionKey;
+@property (nonatomic, assign) BOOL sectionAscending;
 
 @property (nonatomic, assign, getter = isZoomed) BOOL zoom;
 

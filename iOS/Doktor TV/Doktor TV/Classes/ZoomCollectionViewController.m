@@ -211,18 +211,22 @@
 		fetchRequest.predicate = self.predicate;
     
     // Edit the sort key as appropriate.
-	NSArray *sortDescriptors;
+	NSMutableArray *sortDescriptors = [@[] mutableCopy];
+	if (_sectionKey) {
+		NSSortDescriptor *sortDescriptor = [[NSSortDescriptor alloc] initWithKey:self.sectionKey ascending:self.sectionAscending];
+		[sortDescriptors addObject:sortDescriptor];
+	}
 	if (_sortKey)
 	{
 		NSSortDescriptor *sortDescriptor = [[NSSortDescriptor alloc] initWithKey:self.sortKey ascending:self.sortAscending];
-		sortDescriptors = @[sortDescriptor];
+		[sortDescriptors addObject:sortDescriptor];
 	}
     
     fetchRequest.sortDescriptors = sortDescriptors;
     
     // Edit the section name key path and cache name if appropriate.
     // nil for section name key path means "no sections".
-    NSFetchedResultsController *aFetchedResultsController = [[NSFetchedResultsController alloc] initWithFetchRequest:fetchRequest managedObjectContext:self.managedObjectContext sectionNameKeyPath:nil cacheName:kCache];
+    NSFetchedResultsController *aFetchedResultsController = [[NSFetchedResultsController alloc] initWithFetchRequest:fetchRequest managedObjectContext:self.managedObjectContext sectionNameKeyPath:self.sectionKey cacheName:kCache];
     aFetchedResultsController.delegate = self;
     self.fetchedResultsController = aFetchedResultsController;
     
@@ -244,10 +248,10 @@
     
     switch(type) {
         case NSFetchedResultsChangeInsert:
-            change[@(type)] = @(sectionIndex);
+            change[@(type)] = @(sectionIndex); DLog(@"Insert section %d",sectionIndex);
             break;
         case NSFetchedResultsChangeDelete:
-            change[@(type)] = @(sectionIndex);
+            change[@(type)] = @(sectionIndex); DLog(@"Delete section %d",sectionIndex);
             break;
     }
     
@@ -262,16 +266,16 @@
     switch(type)
     {
         case NSFetchedResultsChangeInsert:
-            change[@(type)] = newIndexPath;
+            change[@(type)] = newIndexPath; DLog(@"Insert section %d item %d",indexPath.section,indexPath.item);
             break;
         case NSFetchedResultsChangeDelete:
-            change[@(type)] = indexPath;
+            change[@(type)] = indexPath; DLog(@"Delete section %d item %d",indexPath.section,indexPath.item);
             break;
         case NSFetchedResultsChangeUpdate:
-            change[@(type)] = indexPath;
+            change[@(type)] = indexPath; DLog(@"Update section %d item %d",indexPath.section,indexPath.item);
             break;
         case NSFetchedResultsChangeMove:
-            change[@(type)] = @[indexPath, newIndexPath];
+            change[@(type)] = @[indexPath, newIndexPath]; DLog(@"Move section %d item %d to section %d item %d",indexPath.section,indexPath.item,newIndexPath.section,newIndexPath.item);
             break;
     }
     [_objectChanges addObject:change];

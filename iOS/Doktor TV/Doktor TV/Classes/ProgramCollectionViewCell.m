@@ -31,7 +31,7 @@
 {
     self = [super initWithFrame:frame];
     if (self) {
-		self.childViewControllerInsets = UIEdgeInsetsMake(70.0f, 0, 0, 0);
+		self.childViewControllerInsets = UIEdgeInsetsMake(100.0f, 0, 0, 0);
     }
     return self;
 }
@@ -60,14 +60,11 @@
 		_program = program;
 		[_program addObserver:self forKeyPath:@"image" options:0 context:0];
 		
-		self.titleLabel.text = _program.title;
-		
-		
-		[self setupImage];
 		self.managedObject = _program;
 		
-	
-		self.tintColor = _program.subscribe.boolValue ? [UIColor iOS7orangeColor] : self.superview.tintColor;
+		[self setupTitle];
+		[self setupImage];
+		[self setupSubscribeButton];
 	}
 }
 
@@ -75,6 +72,16 @@
 {
 	if ([keyPath isEqualToString:@"image"])
 		[self setupImage];
+}
+
+
+
+- (void)tintColorDidChange
+{
+	[super tintColorDidChange];
+	
+	[self setupTitle];
+	[self setupSubscribeButton];
 }
 
 - (void)setupImage 
@@ -118,6 +125,7 @@
 	
 	if (zoom)
 	{
+		[self setupTitle];
 		[self setupSubscribeButton];
 	}
 	else
@@ -126,6 +134,19 @@
 		_subscribeButton = nil;
 	}
 }
+
+
+
+- (void)setupTitle
+{
+	if (_program) {
+		self.titleLabel.text = _program.title;
+		UIColor *color = _program.subscribe.boolValue ? subscribedColor : self.tintColor;
+		self.titleLabel.highlightBackgroundColor = [color colorWithAlphaComponent:alphaOverlay];
+	}
+}
+
+
 
 - (Button *)subscribeButton
 {
@@ -138,22 +159,33 @@
 
 - (void)setupSubscribeButton
 {
-	_subscribeButton = [Button new];
-	[self.contentView addSubview:_subscribeButton];
+	if (!_subscribeButton && self.isZoomed)
+	{
+		_subscribeButton = [Button new];
+		[self.contentView addSubview:_subscribeButton];
+		
+		[_subscribeButton setTitle:@"Abonnér" forState:UIControlStateNormal];
+		[_subscribeButton setTitle:@"Abonnérer" forState:UIControlStateSelected];
+		
+		_subscribeButton.keepTopInset.equal = KeepRequired(50.0f);
+		_subscribeButton.keepWidth.max = KeepRequired(250.0f);
+		_subscribeButton.keepHorizontalInsets.min = KeepRequired(20.0f);
+		[_subscribeButton keepHorizontallyCentered];
+		
+		[_subscribeButton addTarget:self action:@selector(subscribeButtonTapped) forControlEvents:UIControlEventTouchUpInside];
+	}
 	
-	_subscribeButton.title = @"Abonnér";
-	
-	_subscribeButton.keepTopInset.equal = KeepRequired(30.0f);
-	_subscribeButton.keepWidth.max = KeepRequired(250.0f);
-	_subscribeButton.keepHorizontalInsets.min = KeepRequired(20.0f);
-	[_subscribeButton keepHorizontallyCentered];
-	
-	[_subscribeButton addTarget:self action:@selector(subscribeButtonTapped) forControlEvents:UIControlEventTouchUpInside];
+	if (_subscribeButton)
+	{
+		_subscribeButton.tintColor = _program.subscribe.boolValue ? subscribedColor : self.superview.tintColor;
+		_subscribeButton.selected = _program.subscribe.boolValue;
+	}
 }
 
 - (void)subscribeButtonTapped
 {
-	self.program.subscribe = @(!self.program.subscribe);
+	self.program.subscribe = @(!self.program.subscribe.boolValue);
+	DLog(@"Program %@subscribed",self.program.subscribe.boolValue ? @"" : @"un-");
 	[[DataHandler sharedInstance] saveContext];
 }
 
