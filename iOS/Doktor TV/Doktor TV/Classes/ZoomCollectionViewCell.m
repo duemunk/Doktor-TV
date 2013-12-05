@@ -61,7 +61,7 @@
 			backgroundImageView.contentMode = UIViewContentModeScaleAspectFill;
 		}
 		backgroundImageView.image = _backgroundImage;
-		[self blurBackgroundImage:self.isZoomed];
+		[self forceBlurBackgroundImage:self.isZoomed];
 		
 		backgroundImageView.hidden = !_backgroundImage;
 	}
@@ -69,24 +69,29 @@
 
 - (void)blurBackgroundImage:(BOOL)blurBackgroundImage
 {
-	if (blurBackgroundImage != _blurBackgroundImage) {
-		_blurBackgroundImage = blurBackgroundImage;
-		
-		if (blurBackgroundImage) {
-			UIImage *image = [_backgroundImage applyBlurWithRadius:10.0f
-														 tintColor:[UIColor colorWithWhite:0.0f alpha:0.2f]
-											 saturationDeltaFactor:1.9f
-														 maskImage:nil];
-			
-			backgroundImageView.image = image;
-		}
-		else
-		{
-			backgroundImageView.image = _backgroundImage;
-		}
+	if (blurBackgroundImage != _blurBackgroundImage)
+	{
+		[self forceBlurBackgroundImage:blurBackgroundImage];
 	}
 }
 
+- (void)forceBlurBackgroundImage:(BOOL)blurBackgroundImage
+{
+	_blurBackgroundImage = blurBackgroundImage;
+	
+	if (blurBackgroundImage) {
+		UIImage *image = [_backgroundImage applyBlurWithRadius:10.0f
+													 tintColor:[UIColor colorWithWhite:0.0f alpha:0.2f]
+										 saturationDeltaFactor:1.9f
+													 maskImage:nil];
+		
+		backgroundImageView.image = image;
+	}
+	else
+	{
+		backgroundImageView.image = _backgroundImage;
+	}
+}
 
 - (UILabel *)titleLabel
 {
