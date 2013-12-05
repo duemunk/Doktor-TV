@@ -66,7 +66,7 @@
 {
 	if (_episode.image)
 	{
-		NSString *imagePath = [DataHandler pathForFileName:_episode.image];
+		NSString *imagePath = [DataHandler pathForCachedFile:_episode.image];
 		UIImage *image = [[UIImage alloc] initWithContentsOfFile:imagePath];
 		self.backgroundImage = image;
 	}

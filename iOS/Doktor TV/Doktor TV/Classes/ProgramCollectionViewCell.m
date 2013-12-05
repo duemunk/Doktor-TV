@@ -88,7 +88,7 @@
 {
 	if (_program.image)
 	{
-		NSString *imagePath = [DataHandler pathForFileName:_program.image];
+		NSString *imagePath = [DataHandler pathForCachedFile:_program.image];
 		UIImage *image = [[UIImage alloc] initWithContentsOfFile:imagePath];
 		self.backgroundImage = image;
 	}

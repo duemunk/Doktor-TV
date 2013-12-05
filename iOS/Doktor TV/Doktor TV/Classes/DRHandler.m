@@ -192,7 +192,7 @@
 	{
 		NSString *fileName = [NSString stringWithFormat:@"ProgramImage__%@.jpg",program.drID];
 		
-		BOOL noImageFileExists = ![UIImage imageWithContentsOfFile:[DataHandler pathForFileName:fileName]];
+		BOOL noImageFileExists = ![UIImage imageWithContentsOfFile:[DataHandler pathForCachedFile:fileName]];
 		BOOL noLocalImageLink = !program.image;
 		if (noImageFileExists || noLocalImageLink)
 		{
@@ -227,7 +227,7 @@
 	
 	[operation setDownloadProgressBlock:progressBlock];
 	
-	NSString *path = [DataHandler pathForFileName:filename];
+	NSString *path = [DataHandler pathForCachedFile:filename];
 	operation.outputStream = [NSOutputStream outputStreamToFileAtPath:path append:NO];
 	
 	DLog(@"Begins download of %@ to %@",urlString,filename);
@@ -362,7 +362,7 @@
 	{
 		NSString *fileName = [NSString stringWithFormat:@"EpisodeImage__%@__%@.jpg",((Program *)episode.season.program).drID,episode.drID];
 		
-		BOOL noImageFileExists = ![UIImage imageWithContentsOfFile:[DataHandler pathForFileName:fileName]];
+		BOOL noImageFileExists = ![UIImage imageWithContentsOfFile:[DataHandler pathForCachedFile:fileName]];
 		BOOL noLocalImageLink = !episode.image;
 		if (noImageFileExists || noLocalImageLink)
 		{
