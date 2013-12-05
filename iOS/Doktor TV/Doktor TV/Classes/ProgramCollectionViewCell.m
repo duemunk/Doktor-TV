@@ -20,6 +20,7 @@
 @interface ProgramCollectionViewCell ()
 
 @property (nonatomic, strong) Button *subscribeButton;
+@property (nonatomic, weak) NSURLSessionDownloadTask *downloadTask;
 
 @end
 
@@ -57,6 +58,13 @@
 {
 	if (program != _program)
 	{
+		if (_downloadTask) {
+			if (self.downloadTask.state == NSURLSessionTaskStateRunning)
+			{
+				DLog(@"Cell had running downloadtask %@",_downloadTask.taskDescription);
+				[[FileDownloadHandler sharedInstance] cancelDownloadTask:_downloadTask];
+			}
+		}
 		if (_program)
 			[_program removeObserver:self forKeyPath:@"image"];
 		_program = program;
@@ -99,10 +107,7 @@
 		}
 		else
 		{
-//			[[FileDownloadHandler sharedInstance] download:_program.imageUrl toFileName:_program.imageUrl progressBlock:0 priority:NSOperationQueuePriorityNormal completionBlock:^{
-//				[self setupImage];
-//			}];
-			[[FileDownloadHandler sharedInstance] download:_program.imageUrl toFileName:_program.image completionBlock:^(BOOL succeeded) {
+			self.downloadTask = [[FileDownloadHandler sharedInstance] download:_program.imageUrl toFileName:_program.image completionBlock:^(BOOL succeeded) {
 				if (succeeded) {
 					[self setupImage];
 				}
@@ -203,6 +208,21 @@
 	self.program.subscribe = @(!self.program.subscribe.boolValue);
 	DLog(@"Program %@subscribed",self.program.subscribe.boolValue ? @"" : @"un-");
 	[[DataHandler sharedInstance] saveContext];
+}
+
+
+
+- (void)didDisappear
+{
+	[super didDisappear];
+	
+	if (_downloadTask) {
+		if (self.downloadTask.state == NSURLSessionTaskStateRunning)
+		{
+			DLog(@"Cell had running downloadtask %@",_downloadTask.taskDescription);
+			[[FileDownloadHandler sharedInstance] cancelDownloadTask:_downloadTask];
+		}
+	}
 }
 
 @end

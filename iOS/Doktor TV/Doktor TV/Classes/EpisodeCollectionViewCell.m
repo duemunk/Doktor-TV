@@ -12,6 +12,14 @@
 #import "DataHandler.h"
 #import "DRHandler.h"
 
+#import "FileDownloadHandler.h"
+
+@interface EpisodeCollectionViewCell ()
+
+@property (nonatomic, weak) NSURLSessionDownloadTask *downloadTask;
+
+@end
+
 @implementation EpisodeCollectionViewCell
 {
 	EpisodeViewController *episodeViewController;
@@ -45,6 +53,14 @@
 {
 	if (episode != _episode)
 	{
+		if (_downloadTask) {
+			if (self.downloadTask.state == NSURLSessionTaskStateRunning)
+			{
+				DLog(@"Cell had running downloadtask %@",_downloadTask.taskDescription);
+				[[FileDownloadHandler sharedInstance] cancelDownloadTask:_downloadTask];
+			}
+		}
+		
 		if (_episode)
 			[_episode removeObserver:self forKeyPath:@"image"];
 		_episode = episode;
@@ -64,17 +80,28 @@
 
 - (void)setupImage
 {
-//	if (_episode.image)
-//	{
-//		NSString *imagePath = [DataHandler pathForCachedFile:_episode.image];
-//		UIImage *image = [[UIImage alloc] initWithContentsOfFile:imagePath];
-//		self.backgroundImage = image;
-//	}
-//	else
-//	{
-//		self.backgroundImage = nil;
-//	}
-//	[[DRHandler sharedInstance] validateImageForEpisode:_episode];
+	if (_episode.image)
+	{
+		NSString *imagePath = [DataHandler pathForCachedFile:_episode.image];
+		
+		if ([[NSFileManager defaultManager] fileExistsAtPath:imagePath])
+		{
+			UIImage *image = [[UIImage alloc] initWithContentsOfFile:imagePath];
+			self.backgroundImage = image;
+		}
+		else
+		{
+			self.downloadTask = [[FileDownloadHandler sharedInstance] download:_episode.imageUrl toFileName:_episode.image completionBlock:^(BOOL succeeded) {
+				if (succeeded) {
+					[self setupImage];
+				}
+			}];
+		}
+	}
+	else
+	{
+		self.backgroundImage = nil;
+	}
 }
 
 - (UIViewController *)childViewController
@@ -91,6 +118,19 @@
 		NSAssert([childViewController isKindOfClass:[EpisodeViewController class]], @"Incorrect class");
 	
 	episodeViewController = (EpisodeViewController *)childViewController;
+}
+
+- (void)didDisappear
+{
+	[super didDisappear];
+	
+	if (_downloadTask) {
+		if (self.downloadTask.state == NSURLSessionTaskStateRunning)
+		{
+			DLog(@"Cell had running downloadtask %@",_downloadTask.taskDescription);
+			[[FileDownloadHandler sharedInstance] cancelDownloadTask:_downloadTask];
+		}
+	}
 }
 
 @end

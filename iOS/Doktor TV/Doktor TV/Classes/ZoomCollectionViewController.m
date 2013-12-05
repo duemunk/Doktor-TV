@@ -140,6 +140,18 @@
 	}
 }
 
+
+- (void)collectionView:(UICollectionView *)collectionView didEndDisplayingCell:(UICollectionViewCell *)cell forItemAtIndexPath:(NSIndexPath *)indexPath
+{
+	ZoomCollectionViewCell *zoomCell = (ZoomCollectionViewCell *)cell;
+	if (zoomCell) {
+		[zoomCell didDisappear];
+	}
+}
+
+
+
+
 - (void)setZoom:(BOOL)zoom
 {
 	if (!isZooming)

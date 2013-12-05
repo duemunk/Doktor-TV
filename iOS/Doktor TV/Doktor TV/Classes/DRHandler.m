@@ -50,7 +50,7 @@
 //		NSString *batchQuery = [self addLimit:batchSize urlString:query];
 //		batchQuery = [self addLimit:i*batchSize urlString:batchQuery];
 //		
-//		DLog(@"Reqest %@",batchQuery);
+//		DLog(@"Request %@",batchQuery);
 //		[self.afHttpSessionManager GET:batchQuery parameters:nil success:^(NSURLSessionDataTask *task, id responseObject)
 //		 {
 //			 DLog(@"Received %@",query);
@@ -62,7 +62,7 @@
 
 	query = [self addLimit:100 urlString:query];
 	
-	DLog(@"Reqest %@",query);
+	DLog(@"Request %@",query);
 	[self.afHttpSessionManager GET:query parameters:nil success:^(NSURLSessionDataTask *task, id responseObject)
 	 {
 		 DLog(@"Received %@",query);
@@ -169,6 +169,8 @@
 				
 				NSDictionary *imageDict = imageAsset.firstObject;
 				NSString *imageUrlString = imageDict[kDRUri];
+				// Set max size
+				imageUrlString = [imageUrlString stringByAppendingString:@"?width=200&height=200"];
 				if (![imageUrlString isEqualToString:program.imageUrl])
 				{
 					DLog(@"New image url %@ for program %@",imageUrlString,program.title);
@@ -318,10 +320,14 @@
 			if (imageAsset.count) {
 				NSDictionary *imageDict = imageAsset.firstObject;
 				NSString *imageUrlString = imageDict[kDRUri];
-				
+				// Set max size
+				imageUrlString = [imageUrlString stringByAppendingString:@"?width=200&height=200"];
 				if (![imageUrlString isEqualToString:episode.imageUrl])
 				{
 					episode.imageUrl = imageUrlString;
+					NSString *fileName = imageUrlString.lastPathComponent;
+					fileName = [fileName stringByAppendingPathExtension:@"jpg"];
+					episode.image = fileName;
 					DLog(@"Image link (remote) updated for episode %@ in program %@",episode.title,((Program *)episode.season.program).title);
 				}
 				else

@@ -25,6 +25,8 @@
 
 - (void)setupChildViewController;
 
+- (void)didDisappear;
+
 @end
 
 
