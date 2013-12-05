@@ -104,7 +104,6 @@
 // The cell that is returned must be retrieved from a call to -dequeueReusableCellWithReuseIdentifier:forIndexPath:
 - (UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath
 {
-	DLog(@"%ld,%ld",(long)indexPath.section,(long)indexPath.item);
 	ZoomCollectionViewCell *cell = (ZoomCollectionViewCell *)[collectionView dequeueReusableCellWithReuseIdentifier:self.cellIdentifier forIndexPath:indexPath];
 	
 	cell.managedObject = [self.fetchedResultsController objectAtIndexPath:indexPath];

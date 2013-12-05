@@ -64,17 +64,17 @@
 
 - (void)setupImage
 {
-	if (_episode.image)
-	{
-		NSString *imagePath = [DataHandler pathForCachedFile:_episode.image];
-		UIImage *image = [[UIImage alloc] initWithContentsOfFile:imagePath];
-		self.backgroundImage = image;
-	}
-	else
-	{
-		self.backgroundImage = nil;
-	}
-	[[DRHandler sharedInstance] validateImageForEpisode:_episode];
+//	if (_episode.image)
+//	{
+//		NSString *imagePath = [DataHandler pathForCachedFile:_episode.image];
+//		UIImage *image = [[UIImage alloc] initWithContentsOfFile:imagePath];
+//		self.backgroundImage = image;
+//	}
+//	else
+//	{
+//		self.backgroundImage = nil;
+//	}
+//	[[DRHandler sharedInstance] validateImageForEpisode:_episode];
 }
 
 - (UIViewController *)childViewController

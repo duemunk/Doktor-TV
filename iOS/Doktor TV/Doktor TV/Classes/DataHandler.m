@@ -234,6 +234,10 @@
 	return tempPath;
 }
 
++ (NSString *)pathForTempFile:(NSString *)filename
+{
+	return [[DataHandler tempPath] stringByAppendingPathComponent:filename];
+}
 + (NSString *)pathForCachedFile:(NSString *)filename
 {
 	return [[DataHandler cachePath] stringByAppendingPathComponent:filename];
@@ -282,14 +286,14 @@
 	}
 	
 	// Clear temp folder
-	allFiles = [[NSFileManager defaultManager] contentsOfDirectoryAtPath:[DataHandler tempPath]
-																			error:&error];
-	for (NSURL *invalidFileURL in allFiles)
-	{
-		NSError *error;
-		DLog(@"Delete temp file %@",invalidFileURL);
-		[[NSFileManager defaultManager] removeItemAtURL:invalidFileURL error:&error];
-	}
+//	allFiles = [[NSFileManager defaultManager] contentsOfDirectoryAtPath:[DataHandler tempPath]
+//																			error:&error];
+//	for (NSURL *invalidFileURL in allFiles)
+//	{
+//		NSError *error;
+//		DLog(@"Delete temp file %@",invalidFileURL);
+//		[[NSFileManager defaultManager] removeItemAtURL:invalidFileURL error:&error];
+//	}
 }
 
 @end

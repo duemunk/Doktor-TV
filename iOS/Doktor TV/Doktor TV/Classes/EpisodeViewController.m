@@ -222,7 +222,7 @@
 	}
 	
 	
-	UIImage *image = [UIImage imageWithContentsOfFile:[DataHandler pathForCachedFile:self.episode.image]];
+	UIImage *image = [UIImage imageWithContentsOfFile:[DataHandler pathForCachedFile:self.episode.imageUrl]];
 	NSDictionary *songInfo = @{MPMediaItemPropertyTitle : self.episode.title,
 							   MPMediaItemPropertyArtist : @"Doktor TV",
 							   MPMediaItemPropertyPlaybackDuration : @(self.episode.duration.floatValue/1000.0f),

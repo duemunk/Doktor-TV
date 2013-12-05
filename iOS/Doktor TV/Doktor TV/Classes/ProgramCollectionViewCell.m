@@ -1,3 +1,4 @@
+
 //
 //  ProgramCollectionCell.m
 //  Doktor TV
@@ -13,6 +14,7 @@
 
 #import "DataHandler.h"
 #import "DRHandler.h"
+#import "FileDownloadHandler.h"
 
 
 @interface ProgramCollectionViewCell ()
@@ -89,14 +91,28 @@
 	if (_program.image)
 	{
 		NSString *imagePath = [DataHandler pathForCachedFile:_program.image];
-		UIImage *image = [[UIImage alloc] initWithContentsOfFile:imagePath];
-		self.backgroundImage = image;
+		
+		if ([[NSFileManager defaultManager] fileExistsAtPath:imagePath])
+		{
+			UIImage *image = [[UIImage alloc] initWithContentsOfFile:imagePath];
+			self.backgroundImage = image;
+		}
+		else
+		{
+//			[[FileDownloadHandler sharedInstance] download:_program.imageUrl toFileName:_program.imageUrl progressBlock:0 priority:NSOperationQueuePriorityNormal completionBlock:^{
+//				[self setupImage];
+//			}];
+			[[FileDownloadHandler sharedInstance] download:_program.imageUrl toFileName:_program.image completionBlock:^(BOOL succeeded) {
+				if (succeeded) {
+					[self setupImage];
+				}
+			}];
+		}
 	}
 	else
 	{
 		self.backgroundImage = nil;
 	}
-	[[DRHandler sharedInstance] validateImageForProgram:_program];
 }
 
 

@@ -34,6 +34,7 @@
 - (void)associateObject:(NSManagedObject *)managedObject;
 
 + (BOOL)fileExists:(NSString *)filename;
++ (NSString *)pathForTempFile:(NSString *)filename;
 + (NSString *)pathForCachedFile:(NSString *)filename;
 
 - (void)cleanUpCachedLocalFiles;

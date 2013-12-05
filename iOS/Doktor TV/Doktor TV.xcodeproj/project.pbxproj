@@ -41,6 +41,7 @@
 		4E1F16CD183440AD0068E5BD /* UIImageView+AFNetworking.m in Sources */ = {isa = PBXBuildFile; fileRef = 4E1F16C3183440AD0068E5BD /* UIImageView+AFNetworking.m */; };
 		4E1F16CE183440AD0068E5BD /* UIProgressView+AFNetworking.m in Sources */ = {isa = PBXBuildFile; fileRef = 4E1F16C6183440AD0068E5BD /* UIProgressView+AFNetworking.m */; };
 		4E1F16CF183440AD0068E5BD /* UIWebView+AFNetworking.m in Sources */ = {isa = PBXBuildFile; fileRef = 4E1F16C8183440AD0068E5BD /* UIWebView+AFNetworking.m */; };
+		4E2631091850AA57006F336B /* FileDownloadHandler.m in Sources */ = {isa = PBXBuildFile; fileRef = 4E2631081850AA57006F336B /* FileDownloadHandler.m */; };
 		4E83CC3C183B70B300D45A79 /* MoviePlayerViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4E83CC3B183B70B300D45A79 /* MoviePlayerViewController.m */; };
 		4E9520FA18384E0800DCC2DF /* Button.m in Sources */ = {isa = PBXBuildFile; fileRef = 4E9520F918384E0800DCC2DF /* Button.m */; };
 		4E9520FD1838517500DCC2DF /* UIFont+CustomFont.m in Sources */ = {isa = PBXBuildFile; fileRef = 4E9520FB1838517500DCC2DF /* UIFont+CustomFont.m */; };
@@ -141,6 +142,8 @@
 		4E1F16C6183440AD0068E5BD /* UIProgressView+AFNetworking.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIProgressView+AFNetworking.m"; sourceTree = "<group>"; };
 		4E1F16C7183440AD0068E5BD /* UIWebView+AFNetworking.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIWebView+AFNetworking.h"; sourceTree = "<group>"; };
 		4E1F16C8183440AD0068E5BD /* UIWebView+AFNetworking.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIWebView+AFNetworking.m"; sourceTree = "<group>"; };
+		4E2631071850AA57006F336B /* FileDownloadHandler.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = FileDownloadHandler.h; path = Classes/FileDownloadHandler.h; sourceTree = "<group>"; };
+		4E2631081850AA57006F336B /* FileDownloadHandler.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = FileDownloadHandler.m; path = Classes/FileDownloadHandler.m; sourceTree = "<group>"; };
 		4E83CC3A183B70B300D45A79 /* MoviePlayerViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MoviePlayerViewController.h; path = Classes/MoviePlayerViewController.h; sourceTree = "<group>"; };
 		4E83CC3B183B70B300D45A79 /* MoviePlayerViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MoviePlayerViewController.m; path = Classes/MoviePlayerViewController.m; sourceTree = "<group>"; };
 		4E9520F818384E0800DCC2DF /* Button.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Button.h; path = Classes/Button.h; sourceTree = "<group>"; };
@@ -260,6 +263,8 @@
 				4ECF10FE1837753200D4C62C /* Navigation */,
 				4ECF10D01836E7F500D4C62C /* DataHandler.h */,
 				4ECF10D11836E7F500D4C62C /* DataHandler.m */,
+				4E2631071850AA57006F336B /* FileDownloadHandler.h */,
+				4E2631081850AA57006F336B /* FileDownloadHandler.m */,
 				4ECF10FD1837752700D4C62C /* DR */,
 				4ECF10DF1836EB7700D4C62C /* Model */,
 				4E1F1660183428470068E5BD /* Images.xcassets */,
@@ -647,6 +652,7 @@
 				4E1F16CB183440AD0068E5BD /* UIAlertView+AFNetworking.m in Sources */,
 				4E9520FA18384E0800DCC2DF /* Button.m in Sources */,
 				4ECF11141837A52600D4C62C /* UIImage+ImageEffects.m in Sources */,
+				4E2631091850AA57006F336B /* FileDownloadHandler.m in Sources */,
 				4ECF10E51836EE4400D4C62C /* UIViewController+Containment.m in Sources */,
 				4E1F16B1183440A30068E5BD /* AFHTTPRequestOperationManager.m in Sources */,
 				4ECF10F61836FA3500D4C62C /* ProgramCollectionViewController.m in Sources */,
