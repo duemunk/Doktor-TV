@@ -114,7 +114,10 @@
 {
 	if (!_sessionManager)
 	{
-		NSURLSessionConfiguration *configuration = [NSURLSessionConfiguration defaultSessionConfiguration]; // backgroundSessionConfiguration:@"AppIdentifier: Doktor_TV"];
+		NSString *bundleIDString = [NSBundle mainBundle].infoDictionary[@"CFBundleIdentifier"];
+		NSString *sessionName = [NSString stringWithFormat:@"%@.bgsession", bundleIDString];
+		
+		NSURLSessionConfiguration *configuration = [NSURLSessionConfiguration backgroundSessionConfiguration:sessionName];
 		_sessionManager = [[AFURLSessionManager alloc] initWithSessionConfiguration:configuration];
 	}
 	return _sessionManager;
@@ -143,17 +146,6 @@
 	NSURL *url = [NSURL URLWithString:urlString];
 	NSURL *tempPath = [NSURL fileURLWithPath:[DataHandler pathForTempFile:fileName] isDirectory:NO];
 	
-	
-	// Check if already downloading
-	for (NSURLSessionDownloadTask *_downloadTask in self.sessionManager.downloadTasks)
-	{
-		NSURL *_url = _downloadTask.currentRequest.URL;
-		if ([_url isEqual:url])
-		{
-			// Cancel running task, and allow new to be created in order to use new completionBlock
-			[self cancelDownloadTask:_downloadTask];
-		}
-	}
 	
 	// Destination
 	NSURL *(^destination)(NSURL *targetPath, NSURLResponse *response) = ^NSURL *(NSURL *targetPath, NSURLResponse *response) {
@@ -190,22 +182,43 @@
 	};
 	
 	
-	// Check if resumable data is available
-	NSString *resumeDataFileName = [self resumeDataPathForUrl:url];
-	if ([[NSFileManager defaultManager] fileExistsAtPath:resumeDataFileName])
+	
+	// Check if already downloading
+	for (NSURLSessionDownloadTask *_downloadTask in self.sessionManager.downloadTasks)
 	{
-		NSData *resumeData = [NSData dataWithContentsOfFile:resumeDataFileName];
-		NSError *error;
-		if (![[NSFileManager defaultManager] removeItemAtPath:resumeDataFileName error:&error]) {
-			DLog(@"Couldn't remove resumeData file: %@, %@",resumeDataFileName,error);
-			return nil;
+		NSURL *_url = _downloadTask.currentRequest.URL;
+		if ([_url isEqual:url])
+		{
+			downloadTask = _downloadTask;
+			
 		}
-		downloadTask = [self.sessionManager downloadTaskWithResumeData:resumeData
-															  progress:progress
-														   destination:destination
-													 completionHandler:completionHandler];
+	}
+	
+	
+	if (downloadTask)
+	{
+		[self.sessionManager downloadTaskWithRequest:downloadTask.currentRequest
+											progress:progress
+										 destination:destination
+								   completionHandler:completionHandler];
 		DLog(@"Resuming download \nurl: \n%@ \nto: \n%@",urlString,tempPath);
 	}
+//	// Check if resumable data is available
+//	NSString *resumeDataFileName = [self resumeDataPathForUrl:url];
+//	else if ([[NSFileManager defaultManager] fileExistsAtPath:resumeDataFileName])
+//	{
+//		NSData *resumeData = [NSData dataWithContentsOfFile:resumeDataFileName];
+//		NSError *error;
+//		if (![[NSFileManager defaultManager] removeItemAtPath:resumeDataFileName error:&error]) {
+//			DLog(@"Couldn't remove resumeData file: %@, %@",resumeDataFileName,error);
+//			return nil;
+//		}
+//		downloadTask = [self.sessionManager downloadTaskWithResumeData:resumeData
+//															  progress:progress
+//														   destination:destination
+//													 completionHandler:completionHandler];
+//		DLog(@"Resuming download \nurl: \n%@ \nto: \n%@",urlString,tempPath);
+//	}
 	else
 	{
 		// Regular download
@@ -292,15 +305,17 @@
 {
 	if (downloadTask)
 	{
-		[downloadTask cancelByProducingResumeData:^(NSData *resumeData) {
-			// Save resumable data to disc
-			if (resumeData.length)
-			{
-				NSString *fileName = [self resumeDataPathForUrl:downloadTask.originalRequest.URL];
-				[resumeData writeToFile:fileName atomically:YES];
-				DLog(@"Saved resume data: %@ size: %lu", fileName,(unsigned long)resumeData.length);
-			}
-		}];
+		[downloadTask suspend];
+				
+//		[downloadTask cancelByProducingResumeData:^(NSData *resumeData) {
+//			// Save resumable data to disc
+//			if (resumeData.length)
+//			{
+//				NSString *fileName = [self resumeDataPathForUrl:downloadTask.originalRequest.URL];
+//				[resumeData writeToFile:fileName atomically:YES];
+//				DLog(@"Saved resume data: %@ size: %lu", fileName,(unsigned long)resumeData.length);
+//			}
+//		}];
 	}
 }
 
