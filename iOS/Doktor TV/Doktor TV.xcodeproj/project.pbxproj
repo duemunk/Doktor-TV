@@ -42,12 +42,12 @@
 		4E1F16CE183440AD0068E5BD /* UIProgressView+AFNetworking.m in Sources */ = {isa = PBXBuildFile; fileRef = 4E1F16C6183440AD0068E5BD /* UIProgressView+AFNetworking.m */; };
 		4E1F16CF183440AD0068E5BD /* UIWebView+AFNetworking.m in Sources */ = {isa = PBXBuildFile; fileRef = 4E1F16C8183440AD0068E5BD /* UIWebView+AFNetworking.m */; };
 		4E2631091850AA57006F336B /* FileDownloadHandler.m in Sources */ = {isa = PBXBuildFile; fileRef = 4E2631081850AA57006F336B /* FileDownloadHandler.m */; };
+		4E26311118521F63006F336B /* TDMScreenEdgePanGestureRecognizer.m in Sources */ = {isa = PBXBuildFile; fileRef = 4E26310E18521F63006F336B /* TDMScreenEdgePanGestureRecognizer.m */; };
 		4E83CC3C183B70B300D45A79 /* MoviePlayerViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4E83CC3B183B70B300D45A79 /* MoviePlayerViewController.m */; };
 		4E9520FA18384E0800DCC2DF /* Button.m in Sources */ = {isa = PBXBuildFile; fileRef = 4E9520F918384E0800DCC2DF /* Button.m */; };
 		4E9520FD1838517500DCC2DF /* UIFont+CustomFont.m in Sources */ = {isa = PBXBuildFile; fileRef = 4E9520FB1838517500DCC2DF /* UIFont+CustomFont.m */; };
 		4E952107183A3EE900DCC2DF /* Episode.m in Sources */ = {isa = PBXBuildFile; fileRef = 4E952106183A3EE900DCC2DF /* Episode.m */; };
 		4E95210D183A7E0700DCC2DF /* HighlightedLabel.m in Sources */ = {isa = PBXBuildFile; fileRef = 4E95210C183A7E0600DCC2DF /* HighlightedLabel.m */; };
-		4EA54769183E1E18006B13C9 /* TDMScreenEdgePanGestureRecognizer.m in Sources */ = {isa = PBXBuildFile; fileRef = 4EA54766183E1E18006B13C9 /* TDMScreenEdgePanGestureRecognizer.m */; };
 		4EC07CEA1844A428005CB25F /* CollectionHeaderView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4EC07CE91844A428005CB25F /* CollectionHeaderView.m */; };
 		4EC77AC71843916E004D8E20 /* Model.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 4EC77AC51843916E004D8E20 /* Model.xcdatamodeld */; };
 		4EC77ACA18439183004D8E20 /* Program.m in Sources */ = {isa = PBXBuildFile; fileRef = 4EC77AC918439183004D8E20 /* Program.m */; };
@@ -144,6 +144,8 @@
 		4E1F16C8183440AD0068E5BD /* UIWebView+AFNetworking.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIWebView+AFNetworking.m"; sourceTree = "<group>"; };
 		4E2631071850AA57006F336B /* FileDownloadHandler.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = FileDownloadHandler.h; path = Classes/FileDownloadHandler.h; sourceTree = "<group>"; };
 		4E2631081850AA57006F336B /* FileDownloadHandler.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = FileDownloadHandler.m; path = Classes/FileDownloadHandler.m; sourceTree = "<group>"; };
+		4E26310D18521F63006F336B /* TDMScreenEdgePanGestureRecognizer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TDMScreenEdgePanGestureRecognizer.h; sourceTree = "<group>"; };
+		4E26310E18521F63006F336B /* TDMScreenEdgePanGestureRecognizer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TDMScreenEdgePanGestureRecognizer.m; sourceTree = "<group>"; };
 		4E83CC3A183B70B300D45A79 /* MoviePlayerViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MoviePlayerViewController.h; path = Classes/MoviePlayerViewController.h; sourceTree = "<group>"; };
 		4E83CC3B183B70B300D45A79 /* MoviePlayerViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MoviePlayerViewController.m; path = Classes/MoviePlayerViewController.m; sourceTree = "<group>"; };
 		4E9520F818384E0800DCC2DF /* Button.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Button.h; path = Classes/Button.h; sourceTree = "<group>"; };
@@ -309,6 +311,7 @@
 		4E1F168618343D9B0068E5BD /* Submodules */ = {
 			isa = PBXGroup;
 			children = (
+				4E26310A18521F63006F336B /* TDMScreenEdgePanGestureRecognizer */,
 				4ECF10F01836F4E600D4C62C /* iOS7Colors */,
 				4E1F168A18343DC80068E5BD /* KeepLayout */,
 				4E1F168718343DA40068E5BD /* AFNetworking */,
@@ -399,6 +402,16 @@
 			);
 			path = "UIKit+AFNetworking";
 			sourceTree = "<group>";
+		};
+		4E26310A18521F63006F336B /* TDMScreenEdgePanGestureRecognizer */ = {
+			isa = PBXGroup;
+			children = (
+				4E26310D18521F63006F336B /* TDMScreenEdgePanGestureRecognizer.h */,
+				4E26310E18521F63006F336B /* TDMScreenEdgePanGestureRecognizer.m */,
+			);
+			path = TDMScreenEdgePanGestureRecognizer;
+			sourceTree = "<group>";
+			wrapsLines = 1;
 		};
 		4E9520FE1838517B00DCC2DF /* CustomFont */ = {
 			isa = PBXGroup;
@@ -646,7 +659,6 @@
 				4EC77ACA18439183004D8E20 /* Program.m in Sources */,
 				4E9520FD1838517500DCC2DF /* UIFont+CustomFont.m in Sources */,
 				4E1F16991834407D0068E5BD /* KeepTypes.m in Sources */,
-				4EA54769183E1E18006B13C9 /* TDMScreenEdgePanGestureRecognizer.m in Sources */,
 				4ECF10F31836F6B600D4C62C /* ZoomCollectionViewController.m in Sources */,
 				4ECF10D81836EB6D00D4C62C /* Season.m in Sources */,
 				4E1F16CB183440AD0068E5BD /* UIAlertView+AFNetworking.m in Sources */,
@@ -658,6 +670,7 @@
 				4ECF10F61836FA3500D4C62C /* ProgramCollectionViewController.m in Sources */,
 				4E1F16981834407D0068E5BD /* KeepLayoutConstraint.m in Sources */,
 				4E1F165F183428470068E5BD /* AppDelegate.m in Sources */,
+				4E26311118521F63006F336B /* TDMScreenEdgePanGestureRecognizer.m in Sources */,
 				4E1F16CD183440AD0068E5BD /* UIImageView+AFNetworking.m in Sources */,
 				4ECF10E21836EDF300D4C62C /* MainViewController.m in Sources */,
 				4E83CC3C183B70B300D45A79 /* MoviePlayerViewController.m in Sources */,
