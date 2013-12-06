@@ -121,13 +121,27 @@
 }
 
 
-
 - (NSURLSessionDownloadTask *)download:(NSString *)urlString toFileName:(NSString *)fileName completionBlock:(void (^)(BOOL succeeded))completionBlock
+{
+	// Progress
+	NSProgress *progress;
+	NSURLSessionDownloadTask *downloadTask = [self download:urlString toFileName:fileName progress:&progress completionBlock:completionBlock];
+	if (downloadTask)
+	{
+		[progress addObserver:self
+				   forKeyPath:@"fractionCompleted"
+					  options:NSKeyValueObservingOptionNew
+					  context:NULL];
+	}
+	return downloadTask;
+}
+
+- (NSURLSessionDownloadTask *)download:(NSString *)urlString toFileName:(NSString *)fileName progress:(NSProgress * __autoreleasing *)progress completionBlock:(void (^)(BOOL succeeded))completionBlock
 {
 	NSURLSessionDownloadTask *downloadTask;
 	
 	NSURL *url = [NSURL URLWithString:urlString];
-	NSURL *tempPath = [NSURL fileURLWithPath:[DataHandler pathForTempFile:fileName]];
+	NSURL *tempPath = [NSURL fileURLWithPath:[DataHandler pathForTempFile:fileName] isDirectory:NO];
 	
 	
 	// Check if already downloading
@@ -147,8 +161,6 @@
 		return tempPath;
 	};
 	
-	// Progress
-	NSProgress *progress;
 	
 	// Completion handler
 	void (^completionHandler)(NSURLResponse *response, NSURL *filePath, NSError *error) = ^(NSURLResponse *response, NSURL *filePath, NSError *error) {
@@ -189,11 +201,10 @@
 			return nil;
 		}
 		downloadTask = [self.sessionManager downloadTaskWithResumeData:resumeData
-															  progress:&progress
+															  progress:progress
 														   destination:destination
 													 completionHandler:completionHandler];
 		DLog(@"Resuming download \nurl: \n%@ \nto: \n%@",urlString,tempPath);
-		return downloadTask;
 	}
 	else
 	{
@@ -201,25 +212,19 @@
 		NSURLRequest *request = [NSURLRequest requestWithURL:url];
 		
 		downloadTask = [self.sessionManager downloadTaskWithRequest:request
-														   progress:&progress
+														   progress:progress
 														destination:destination
 												  completionHandler:completionHandler];
 		
 		DLog(@"Starting download \nurl: \n%@ \nto: \n%@",urlString,tempPath);
-		[downloadTask resume];
 	}
 	
 	if (downloadTask) {
-		[progress addObserver:self
-				   forKeyPath:@"fractionCompleted"
-					  options:NSKeyValueObservingOptionNew
-					  context:NULL];
+		[downloadTask resume];
 		downloadTask.taskDescription = fileName;
 	}
 	
 	return downloadTask;
-	
-	return nil;
 }
 
 
@@ -293,7 +298,7 @@
 			{
 				NSString *fileName = [self resumeDataPathForUrl:downloadTask.originalRequest.URL];
 				[resumeData writeToFile:fileName atomically:YES];
-				DLog(@"Saved resume data: %@ size: %lu", fileName,resumeData.length);
+				DLog(@"Saved resume data: %@ size: %lu", fileName,(unsigned long)resumeData.length);
 			}
 		}];
 	}

@@ -359,37 +359,10 @@
 
 
 
-- (void)validateImageForEpisode:(Episode *)episode
-{
-//	NSString *imageUrlString = episode.imageUrl;
-//	
-//	if (imageUrlString)
-//	{
-//		NSString *fileName = [NSString stringWithFormat:@"EpisodeImage__%@__%@.jpg",((Program *)episode.season.program).drID,episode.drID];
-//		
-//		BOOL noImageFileExists = ![UIImage imageWithContentsOfFile:[DataHandler pathForCachedFile:fileName]];
-//		BOOL noLocalImageLink = !episode.image;
-//		if (noImageFileExists || noLocalImageLink)
-//		{
-//			if (noLocalImageLink)
-//				DLog(@"Image filepath (local) not available for episode %@ in program %@",episode.title,((Program *)episode.season.program).title);
-//			else if (noImageFileExists)
-//				DLog(@"Image not available (local) for episode %@ in program %@",episode.title,((Program *)episode.season.program).title);
-//			
-//			imageUrlString = [imageUrlString stringByAppendingString:@"?width=320&height=320"];
-//			[self download:imageUrlString toFileName:fileName forObject:episode key:@"image"];
-//		}
-//		else
-//			DLog(@"Image exists (local) for episode %@ in program %@",episode.title,((Program *)episode.season.program).title);
-//	}
-}
-
-
-
 #define kDRLinks @"Links"
 #define kDRTarget @"Target"
 #define kDRBitrate @"Bitrate"
-- (void)runVideo:(void (^)(NSString *))completion forEpisode:(Episode *)episode
+- (void)getVideoLinkForEpisode:(Episode *)episode completion:(void (^)(NSString *))completion
 {
 	NSString *query = episode.uri;
 	DLog(@"\nURI: \n %@ \n\n",query);
@@ -418,22 +391,6 @@
 		 DLog(@"ERROR: %@",error);
 	 }];
 }
-
-- (void)downloadVideoForEpisode:(Episode *)episode block:(void (^)(NSUInteger bytesRead, long long totalBytesRead, long long totalBytesExpectedToRead))progressBlock
-{
-	DLog(@"Requested download of video for episode %@ in program %@",episode.title,((Program *)episode.season.program).title);
-	
-	[self runVideo:^(NSString *urlString) {
-		
-		DLog(@"Begin download of video for episode %@ in program %@",episode.title,((Program *)episode.season.program).title);
-		// Download
-		Program *program = (Program *)episode.season.program;
-		NSString *filename = [NSString stringWithFormat:@"EpisodeVideo__%@__%@.mp4",program.drID,episode.drID];
-		[self download:urlString toFileName:filename forObject:episode key:@"video" block:progressBlock];
-		
-	} forEpisode:episode];
-}
-
 
 
 

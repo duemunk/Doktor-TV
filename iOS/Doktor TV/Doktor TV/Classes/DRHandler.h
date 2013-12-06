@@ -23,7 +23,6 @@
 - (void)validateImageForProgram:(Program *)program;
 - (void)validateImageForEpisode:(Episode *)episode;
 - (void)validateEpisodesForProgram:(Program *)program;
-- (void)runVideo:(void (^)(NSString *urlString))completion forEpisode:(Episode *)episode;
-- (void)downloadVideoForEpisode:(Episode *)episode block:(void (^)(NSUInteger bytesRead, long long totalBytesRead, long long totalBytesExpectedToRead))progressBlock;
+- (void)getVideoLinkForEpisode:(Episode *)episode completion:(void (^)(NSString *))completion;
 
 @end

@@ -13,11 +13,16 @@
 #import "Button.h"
 #import "MoviePlayerViewController.h"
 
+#import "FileDownloadHandler.h"
+
 @import AVFoundation;
 
 @import MediaPlayer;
 
 @interface EpisodeViewController ()
+
+@property (nonatomic, weak) NSURLSessionDownloadTask *downloadTask;
+@property (nonatomic, weak) NSProgress *progress;
 
 @end
 
@@ -41,6 +46,14 @@
 {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
+}
+
+- (void)viewWillDisappear:(BOOL)animated
+{
+	if (_progress)
+	{
+		[_progress removeObserver:self forKeyPath:@"fractionCompleted"];
+	}
 }
 
 
@@ -145,6 +158,12 @@
 	{
 		[self layoutButtons];
 	}
+	if ([keyPath isEqualToString:@"fractionCompleted"] && object == self.progress) {
+		dispatch_async(dispatch_get_main_queue(), ^{
+			DLog(@"%@",self.progress.localizedAdditionalDescription);
+			downloadButton.title = [NSString stringWithFormat:@"Henter %.0f%%",ceilf(100.0f*self.progress.fractionCompleted)];
+		});
+	}
 }
 
 
@@ -163,25 +182,49 @@
 	{
 		DLog(@"No video %@ for episode %@",self.episode.video,self.episode.title);
 		
-		downloadButton.enabled = NO;
-		[[DRHandler sharedInstance] downloadVideoForEpisode:self.episode block:^(NSUInteger bytesRead, long long totalBytesRead, long long totalBytesExpectedToRead) {
-			dispatch_async(dispatch_get_main_queue(), ^{
-				
-				CGFloat progress = (float)totalBytesRead / (float)totalBytesExpectedToRead;
-				downloadButton.title = [NSString stringWithFormat:@"Henter %.0f%%",ceilf(100.0f*progress)];
-			});
+		if (_downloadTask)
+		{
+			// Already downloading – pause
+			[[FileDownloadHandler sharedInstance] cancelDownloadTask:self.downloadTask];
+			[self layoutButtons];
+			return;
+		}
+		
+		[[DRHandler sharedInstance] getVideoLinkForEpisode:self.episode completion:^(NSString *urlString) {
+			
+			DLog(@"Begin download of video for episode %@ in program %@",self.episode.title,((Program *)self.episode.season.program).title);
+			// Download
+			Program *program = (Program *)self.episode.season.program;
+			NSString *fileName = [NSString stringWithFormat:@"EpisodeVideo__%@__%@.mp4",program.drID,self.episode.drID];
+			
+			NSProgress *progress;
+			self.downloadTask = [[FileDownloadHandler sharedInstance] download:urlString
+																	toFileName:fileName
+																	  progress:&progress
+															   completionBlock:^(BOOL succeeded) {
+																   if (succeeded)
+																   {
+																	   self.episode.video = fileName;
+																   }
+																   [progress removeObserver:self forKeyPath:@"fractionCompleted"];
+															   }];
+			self.progress = progress;
+			if (_progress) {
+				[_progress addObserver:self
+						   forKeyPath:@"fractionCompleted"
+							  options:NSKeyValueObservingOptionNew
+							  context:NULL];
+			}
 		}];
 	}
 }
 
 - (void)stream
 {
-	[[DRHandler sharedInstance] runVideo:^(NSString *urlString) {
-	
+	[[DRHandler sharedInstance] getVideoLinkForEpisode:self.episode completion:^(NSString *urlString) {
 		NSURL *url = [NSURL URLWithString:urlString];
 		[self playVideoWithURL:url movieSourceType:MPMovieSourceTypeStreaming];
-		
-	} forEpisode:self.episode];
+	}];
 }
 
 
