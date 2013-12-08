@@ -84,6 +84,8 @@
 		}
 		else
 		{
+			self.backgroundImage = nil; // Clear up when waiting for download
+			
 			[[FileDownloadHandler sharedInstance] download:_episode.imageUrl
 													toFile:_episode.image
 										backgroundTransfer:NO

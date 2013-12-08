@@ -99,6 +99,8 @@
 		}
 		else
 		{
+			self.backgroundImage = nil; // Clear up when waiting for download
+			
 			[[FileDownloadHandler sharedInstance] download:_program.imageUrl
 													toFile:_program.image
 										backgroundTransfer:NO
