@@ -36,9 +36,7 @@
 
 - (void)dealloc
 {
-	if (_episode) {
-		[_episode removeObserver:self forKeyPath:@"image"];
-	}
+	[[NSNotificationCenter defaultCenter] removeObserver:self];
 }
 
 - (void)setManagedObject:(NSManagedObject *)managedObject
@@ -57,14 +55,11 @@
 			if (self.downloadTask.state == NSURLSessionTaskStateRunning)
 			{
 				DLog(@"Cell had running downloadtask %@",_downloadTask.taskDescription);
-				[[FileDownloadHandler sharedInstance] cancelDownloadTask:_downloadTask];
+				[self.downloadTask suspend];
 			}
 		}
 		
-		if (_episode)
-			[_episode removeObserver:self forKeyPath:@"image"];
 		_episode = episode;
-		[_episode addObserver:self forKeyPath:@"image" options:0 context:0];
 		
 		self.titleLabel.text = _episode.title;
 		[self setupImage];
@@ -75,11 +70,6 @@
 	}
 }
 
-- (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context
-{
-	if ([keyPath isEqualToString:@"image"])
-		[self setupImage];
-}
 
 - (void)setupImage
 {
@@ -94,11 +84,14 @@
 		}
 		else
 		{
-			self.downloadTask = [[FileDownloadHandler sharedInstance] download:_episode.imageUrl toFileName:_episode.image completionBlock:^(BOOL succeeded) {
-				if (succeeded) {
-					[self setupImage];
-				}
-			}];
+			[[FileDownloadHandler sharedInstance] download:_episode.imageUrl
+													toFile:_episode.image
+										backgroundTransfer:NO
+												  observer:self
+												  selector:@selector(downloadNotification:)
+												completion:^(NSURLSessionDownloadTask *downloadTask) {
+													self.downloadTask = downloadTask;
+												}];
 		}
 	}
 	else
@@ -106,6 +99,21 @@
 		self.backgroundImage = nil;
 	}
 }
+
+
+- (void)downloadNotification:(NSNotification *) notification
+{
+	if ([notification.name isEqualToString:NOTIFICATION_DOWNLOAD_COMPLETE])
+	{
+		[self setupImage];
+	}
+	if ([notification.name isEqualToString:NOTIFICATION_DOWNLOAD_PROGRESS])
+	{
+		float progress = [notification.userInfo[kPROGRESS] floatValue];
+		DLog(@"Progess: %f", progress);
+	}
+}
+
 
 - (UIViewController *)childViewController
 {
@@ -131,7 +139,7 @@
 		if (self.downloadTask.state == NSURLSessionTaskStateRunning)
 		{
 			DLog(@"Cell had running downloadtask %@",_downloadTask.taskDescription);
-			[[FileDownloadHandler sharedInstance] cancelDownloadTask:_downloadTask];
+			[self.downloadTask suspend];
 		}
 	}
 }

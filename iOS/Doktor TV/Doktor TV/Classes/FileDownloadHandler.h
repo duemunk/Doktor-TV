@@ -8,14 +8,31 @@
 
 #import <Foundation/Foundation.h>
 
-@interface FileDownloadHandler : NSObject <NSURLSessionDelegate>
+typedef void (^DRCompletionBlock)(BOOL succeeded);
+
+
+#define NOTIFICATION_DOWNLOAD_PROGRESS @"NOTIFICATION_DOWNLOAD_PROGRESS"
+#define kPROGRESS @"kPROGRESS"
+#define NOTIFICATION_DOWNLOAD_COMPLETE @"NOTIFICATION_DOWNLOAD_COMPLETE"
+
+@interface FileDownloadHandler : NSObject <NSURLSessionDelegate, NSURLSessionDownloadDelegate>
 
 + (FileDownloadHandler *)sharedInstance;
 
+- (void)download:(NSString *)urlString toFile:(NSString *)fileName backgroundTransfer:(BOOL)backgroundTransfer completion:(void (^)(NSURLSessionDownloadTask *downloadTask))completion;
+- (void)download:(NSString *)urlString toFile:(NSString *)fileName backgroundTransfer:(BOOL)backgroundTransfer observer:(id)observer selector:(SEL)selector completion:(void (^)(NSURLSessionDownloadTask *downloadTask))completion;
+/** Find download task, and if available, add observer
+ @param urlString The URL of the source file.
+ @param backgroundTransfer Look for download task in background transfers
+ @param observer (Optional)
+ @param selector (Optional)
+ @param completion Completion handler with found download task
+ */
+- (void)findExistingDownload:(NSString *)urlString backgroundTransfer:(BOOL)backgroundTransfer observer:(id)observer selector:(SEL)selector completion:(void (^)(NSURLSessionDownloadTask *downloadTask))completion;
+
 //- (void)download:(NSString *)urlString toFileName:(NSString *)filename progressBlock:(void (^)(NSUInteger bytesRead, long long totalBytesRead, long long totalBytesExpectedToRead))progressBlock priority:(NSOperationQueuePriority)priority completionBlock:(void (^)(BOOL succeeced))completionBlock;
 
-- (NSURLSessionDownloadTask *)download:(NSString *)urlString toFileName:(NSString *)fileName completionBlock:(void (^)(BOOL succeeded))completionBlock;
-- (NSURLSessionDownloadTask *)download:(NSString *)urlString toFileName:(NSString *)fileName progress:(NSProgress * __autoreleasing *)progress completionBlock:(void (^)(BOOL succeeded))completionBlock;
-- (void)cancelDownloadTask:(NSURLSessionDownloadTask *)downloadTask;
+//- (NSURLSessionDownloadTask *)download:(NSString *)urlString toFileName:(NSString *)fileName completionBlock:(void (^)(BOOL succeeded))completionBlock;
+//- (NSURLSessionDownloadTask *)download:(NSString *)urlString toFileName:(NSString *)fileName progress:(NSProgress * __autoreleasing *)progress completionBlock:(void (^)(BOOL succeeded))completionBlock;
 
 @end

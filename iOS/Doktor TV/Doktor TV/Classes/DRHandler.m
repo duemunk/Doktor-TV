@@ -36,6 +36,12 @@
 
 
 
+- (void)refreshMainData:(RefreshCompletionHandler)refreshCompletionHandler
+{
+	// TODO: Implement refresh of main data (all programs)
+	refreshCompletionHandler(YES);
+}
+
 
 
 - (void)queryPrograms
@@ -347,6 +353,9 @@
 				episode.duration = @([videoDict[kDRDurationInMilliseconds] integerValue]);
 				episode.uri = videoDict[kDRUri];
 				episode.dkOnly = @([videoDict[kDRRestrictedToDenmark] boolValue]);
+				
+				NSString *fileName = [NSString stringWithFormat:@"EpisodeVideo__%@__%@.mp4",program.drID,episode.drID];
+				episode.video = fileName;
 			}
 			else
 				DLog(@"Video link (remote) not available for episode %@ in program %@",episode.title,((Program *)episode.season.program).title);

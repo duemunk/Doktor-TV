@@ -12,12 +12,15 @@
 
 @class Program, Episode;
 
+typedef void (^RefreshCompletionHandler)(BOOL didReceiveNewData);
 
 @interface DRHandler : NSObject
 
 @property (nonatomic, strong) AFHTTPSessionManager *afHttpSessionManager;
 
 + (DRHandler *)sharedInstance;
+
+- (void)refreshMainData:(RefreshCompletionHandler)refreshCompletionHandler;
 
 - (void)queryPrograms;
 - (void)validateImageForProgram:(Program *)program;

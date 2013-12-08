@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		4E03B5FC1852B23A00DA35B7 /* libobjc.A.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 4E03B5FB1852B23A00DA35B7 /* libobjc.A.dylib */; };
 		4E1F164F183428460068E5BD /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4E1F164E183428460068E5BD /* Foundation.framework */; };
 		4E1F1651183428460068E5BD /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4E1F1650183428460068E5BD /* CoreGraphics.framework */; };
 		4E1F1653183428460068E5BD /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4E1F1652183428460068E5BD /* UIKit.framework */; };
@@ -80,6 +81,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		4E03B5FB1852B23A00DA35B7 /* libobjc.A.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libobjc.A.dylib; path = usr/lib/libobjc.A.dylib; sourceTree = SDKROOT; };
 		4E1F164B183428460068E5BD /* Doktor TV.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Doktor TV.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		4E1F164E183428460068E5BD /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		4E1F1650183428460068E5BD /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
@@ -202,6 +204,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				4E03B5FC1852B23A00DA35B7 /* libobjc.A.dylib in Frameworks */,
 				4ECF108E1836E79000D4C62C /* CoreData.framework in Frameworks */,
 				4E1F1681183428A10068E5BD /* MediaPlayer.framework in Frameworks */,
 				4E1F1651183428460068E5BD /* CoreGraphics.framework in Frameworks */,
@@ -246,6 +249,7 @@
 		4E1F164D183428460068E5BD /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				4E03B5FB1852B23A00DA35B7 /* libobjc.A.dylib */,
 				4ECF108D1836E79000D4C62C /* CoreData.framework */,
 				4E1F1680183428A10068E5BD /* MediaPlayer.framework */,
 				4E1F164E183428460068E5BD /* Foundation.framework */,
@@ -822,6 +826,7 @@
 				);
 				INFOPLIST_FILE = "Doktor TV/Doktor TV-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
+				OTHER_LDFLAGS = "";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "";
 				WRAPPER_EXTENSION = app;
@@ -844,6 +849,7 @@
 				);
 				INFOPLIST_FILE = "Doktor TV/Doktor TV-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
+				OTHER_LDFLAGS = "";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "";
 				WRAPPER_EXTENSION = app;

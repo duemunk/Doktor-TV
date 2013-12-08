@@ -11,11 +11,16 @@
 #import "AFNetworking.h"
 #import "DataHandler.h"
 
+
+
 @interface FileDownloadHandler ()
 
 //@property (nonatomic, strong) NSOperationQueue *operationQueue;
 @property (nonatomic, strong) AFURLSessionManager *sessionManager;
 @property (nonatomic, strong) NSMutableArray *downloadArray;
+
+@property (nonatomic, strong) NSURLSession *defaultSession;
+@property (nonatomic, strong) NSURLSession *backgroundTransferSession;
 
 @end
 
@@ -39,10 +44,177 @@
 {
 	self = [super init];
 	if (self) {
+		
+		NSString *bundleIDString = [NSBundle mainBundle].infoDictionary[@"CFBundleIdentifier"];
+		NSString *sessionName = [NSString stringWithFormat:@"%@.bgSession", bundleIDString];
+		
+		// TODO: Add new not-background session for small downloads (as program and episode images)
+		NSURLSessionConfiguration *configuration = [NSURLSessionConfiguration backgroundSessionConfiguration:sessionName];
+//		configuration.allowsCellularAccess = NO;
+		_backgroundTransferSession = [NSURLSession sessionWithConfiguration:configuration
+																   delegate:self
+															  delegateQueue:nil];
+		
+		_defaultSession = [NSURLSession sessionWithConfiguration:[NSURLSessionConfiguration defaultSessionConfiguration]
+														delegate:self
+												   delegateQueue:nil];
+		
+		
+//		NSURLSessionDownloadTask *downloadTask = [self download:@"http://vodfiles.dr.dk/CMS/Resources/dr.dk/NETTV/DR3/2013/11/dd50a214-8aee-4c6a-8631-70a0c671a1b1/BoesseStudier---Stereotyper--2_9a4fb08b27d24c46992e81bd967a52b4_122.mp4?ID=1629336"
+//														 toFile:@"testFile.mp4"];
+		
+//		[downloadTask performSelector:@selector(suspend) withObject:nil afterDelay:10.0f];
+//		[self performSelector:@selector(cancelDownloadTask:) withObject:downloadTask afterDelay:5.0f];
 	}
 	return self;
 }
 
+
+
+
+
+#define kFILE_NAME @"FILE_NAME"
+- (void)download:(NSString *)urlString toFile:(NSString *)fileName backgroundTransfer:(BOOL)backgroundTransfer completion:(void (^)(NSURLSessionDownloadTask *downloadTask))completion
+{
+	[self download:urlString toFile:fileName backgroundTransfer:backgroundTransfer observer:nil selector:0 completion:completion];
+}
+- (void)download:(NSString *)urlString toFile:(NSString *)fileName backgroundTransfer:(BOOL)backgroundTransfer observer:(id)observer selector:(SEL)selector completion:(void (^)(NSURLSessionDownloadTask *downloadTask))completion
+{
+	NSParameterAssert(urlString);
+	NSParameterAssert(fileName);
+	
+	NSURLSession *session = backgroundTransfer ? self.backgroundTransferSession : self.defaultSession;
+	
+	// Check if already downloading
+	[self findExistingDownload:^(NSURLSessionDownloadTask *downloadTask)
+	{
+		if (!downloadTask)
+		{
+			NSURL *url = [NSURL URLWithString:urlString];
+			
+			NSData *resumeData = [self resumeDataForUrl:url];
+			downloadTask = resumeData ? [session downloadTaskWithResumeData:resumeData] : [session downloadTaskWithURL:url];
+		}
+		
+		[[NSUserDefaults standardUserDefaults] setObject:@{kFILE_NAME:fileName}
+												  forKey:@(downloadTask.taskIdentifier).stringValue];
+		
+		[downloadTask resume];
+		
+		if (observer)
+		{
+			[[NSNotificationCenter defaultCenter] addObserver:observer selector:selector name:NOTIFICATION_DOWNLOAD_PROGRESS object:downloadTask];
+			[[NSNotificationCenter defaultCenter] addObserver:observer selector:selector name:NOTIFICATION_DOWNLOAD_COMPLETE object:downloadTask];
+		}
+		completion(downloadTask);
+		
+	} urlString:urlString session:session];
+}
+
+- (void)findExistingDownload:(NSString *)urlString backgroundTransfer:(BOOL)backgroundTransfer observer:(id)observer selector:(SEL)selector completion:(void (^)(NSURLSessionDownloadTask *downloadTask))completion
+{
+	NSParameterAssert(urlString);
+	NSParameterAssert(completion);
+	
+	NSURLSession *session = backgroundTransfer ? self.backgroundTransferSession : self.defaultSession;
+	[self findExistingDownload:^(NSURLSessionDownloadTask *downloadTask)
+	{
+		if (downloadTask)
+		{
+			if (observer)
+			{
+				[[NSNotificationCenter defaultCenter] addObserver:observer selector:selector name:NOTIFICATION_DOWNLOAD_PROGRESS object:downloadTask];
+				[[NSNotificationCenter defaultCenter] addObserver:observer selector:selector name:NOTIFICATION_DOWNLOAD_COMPLETE object:downloadTask];
+			}
+		}
+		completion(downloadTask);
+	} urlString:urlString session:session];
+}
+
+- (void)findExistingDownload:(void (^)(NSURLSessionDownloadTask *downloadTask))completion urlString:(NSString *)urlString session:(NSURLSession *)session
+{
+	__block NSURL *url = [NSURL URLWithString:urlString];
+	
+	[session getTasksWithCompletionHandler:^(NSArray *dataTasks, NSArray *uploadTasks, NSArray *downloadTasks)
+	{
+		NSURLSessionDownloadTask *downloadTask;
+		DLog(@"%lu",(unsigned long)downloadTasks.count);
+		for (NSURLSessionDownloadTask *_downloadTask in downloadTasks)
+		{
+			DLog(@"\n\n%@\n\n%@\n\n",url,_downloadTask.originalRequest.URL);
+			if ([url isEqual:_downloadTask.originalRequest.URL])
+				downloadTask = _downloadTask;
+		}
+		completion(downloadTask);
+	}];
+}
+
+
+
+#pragma mark - NSURLSessionTaskDelegate
+
+- (void)URLSession:(NSURLSession *)session task:(NSURLSessionTask *)task didCompleteWithError:(NSError *)error
+{
+	if (error)
+	{
+		NSData *resumeData = error.userInfo[NSURLSessionDownloadTaskResumeData];
+		[self saveResumeData:resumeData forURL:task.originalRequest.URL];
+	}
+}
+
+#pragma mark - NSURLSessionDownloadTaskDelegate
+
+- (void)URLSession:(NSURLSession *)session downloadTask:(NSURLSessionDownloadTask *)downloadTask didWriteData:(int64_t)bytesWritten totalBytesWritten:(int64_t)totalBytesWritten totalBytesExpectedToWrite:(int64_t)totalBytesExpectedToWrite
+{
+	float progress = (float)totalBytesWritten / (float)totalBytesExpectedToWrite;
+	DLog(@"Progess: %f", progress);
+	dispatch_async(dispatch_get_main_queue(), ^{
+		[[NSNotificationCenter defaultCenter] postNotificationName:NOTIFICATION_DOWNLOAD_PROGRESS object:downloadTask userInfo:@{kPROGRESS:@(progress)}];
+	});
+}
+- (void)URLSession:(NSURLSession *)session downloadTask:(NSURLSessionDownloadTask *)downloadTask didFinishDownloadingToURL:(NSURL *)location
+{
+	DLog(@"%@",downloadTask);
+	DLog(@"%@",location);
+	
+	NSDictionary *info = [[NSUserDefaults standardUserDefaults] objectForKey:@(downloadTask.taskIdentifier).stringValue];
+	NSString *fileName = info[kFILE_NAME];
+	if (!fileName) {
+		DLog(@"No filename for task %lu",(unsigned long)downloadTask.taskIdentifier);
+		return;
+	}
+	
+	NSURL *cachePath = [NSURL fileURLWithPath:[DataHandler pathForCachedFile:fileName]];
+	NSLog(@"File downloaded \nto: \n%@, \nmoving to: \n%@", location, cachePath);
+	
+	NSFileManager *fileManager = [NSFileManager defaultManager];
+	if ([fileManager fileExistsAtPath:location.path isDirectory:NO])
+	{
+		if ([fileManager fileExistsAtPath:cachePath.path isDirectory:NO])
+		{
+			DLog(@"Already exists %@",cachePath);
+			[fileManager removeItemAtURL:location error:nil];
+			return;
+		}
+		else
+		{
+			NSError *fileMoveError;
+			if (![fileManager moveItemAtURL:location toURL:cachePath error:&fileMoveError]) {
+				DLog(@"%@",fileMoveError);
+				return;
+			}
+		}
+	}
+	
+	dispatch_async(dispatch_get_main_queue(), ^{
+		[[NSNotificationCenter defaultCenter] postNotificationName:NOTIFICATION_DOWNLOAD_COMPLETE object:downloadTask userInfo:nil];
+	});
+}
+
+- (void)URLSession:(NSURLSession *)session downloadTask:(NSURLSessionDownloadTask *)downloadTask didResumeAtOffset:(int64_t)fileOffset expectedTotalBytes:(int64_t)expectedTotalBytes
+{
+	DLog(@"Resuming %@, offset %lld, expectedTotal %lld",downloadTask.originalRequest.URL.path,fileOffset,expectedTotalBytes);
+}
 
 
 
@@ -114,10 +286,7 @@
 {
 	if (!_sessionManager)
 	{
-		NSString *bundleIDString = [NSBundle mainBundle].infoDictionary[@"CFBundleIdentifier"];
-		NSString *sessionName = [NSString stringWithFormat:@"%@.bgsession", bundleIDString];
-		
-		NSURLSessionConfiguration *configuration = [NSURLSessionConfiguration backgroundSessionConfiguration:sessionName];
+		NSURLSessionConfiguration *configuration = [NSURLSessionConfiguration defaultSessionConfiguration];
 		_sessionManager = [[AFURLSessionManager alloc] initWithSessionConfiguration:configuration];
 	}
 	return _sessionManager;
@@ -141,6 +310,9 @@
 
 - (NSURLSessionDownloadTask *)download:(NSString *)urlString toFileName:(NSString *)fileName progress:(NSProgress * __autoreleasing *)progress completionBlock:(void (^)(BOOL succeeded))completionBlock
 {
+	return nil;
+	
+	
 	NSURLSessionDownloadTask *downloadTask;
 	
 	NSURL *url = [NSURL URLWithString:urlString];
@@ -186,21 +358,20 @@
 	// Check if already downloading
 	for (NSURLSessionDownloadTask *_downloadTask in self.sessionManager.downloadTasks)
 	{
-		NSURL *_url = _downloadTask.currentRequest.URL;
+		NSURL *_url = _downloadTask.originalRequest.URL;
 		if ([_url isEqual:url])
 		{
 			downloadTask = _downloadTask;
-			
 		}
 	}
 	
 	
 	if (downloadTask)
 	{
-		[self.sessionManager downloadTaskWithRequest:downloadTask.currentRequest
-											progress:progress
-										 destination:destination
-								   completionHandler:completionHandler];
+		downloadTask = [self.sessionManager downloadTaskWithRequest:downloadTask.currentRequest
+														   progress:progress
+														destination:destination
+												  completionHandler:completionHandler];
 		DLog(@"Resuming download \nurl: \n%@ \nto: \n%@",urlString,tempPath);
 	}
 //	// Check if resumable data is available
@@ -301,30 +472,39 @@
 //}
 
 
-- (void)cancelDownloadTask:(NSURLSessionDownloadTask *)downloadTask
+- (void)saveResumeData:(NSData *)resumeData forURL:(NSURL *)url
 {
-	if (downloadTask)
+	if (resumeData.length)
 	{
-		[downloadTask suspend];
-				
-//		[downloadTask cancelByProducingResumeData:^(NSData *resumeData) {
-//			// Save resumable data to disc
-//			if (resumeData.length)
-//			{
-//				NSString *fileName = [self resumeDataPathForUrl:downloadTask.originalRequest.URL];
-//				[resumeData writeToFile:fileName atomically:YES];
-//				DLog(@"Saved resume data: %@ size: %lu", fileName,(unsigned long)resumeData.length);
-//			}
-//		}];
+		NSString *fileName = [self resumeDataPathForUrl:url];
+		[resumeData writeToFile:fileName atomically:YES];
+		DLog(@"Saved resume data: %@ size: %lu", fileName,(unsigned long)resumeData.length);
 	}
+}
+
+- (NSData *)resumeDataForUrl:(NSURL *)url
+{
+	NSString *resumeDataFileName = [self resumeDataPathForUrl:url];
+	if ([[NSFileManager defaultManager] fileExistsAtPath:resumeDataFileName])
+	{
+		NSData *resumeData = [NSData dataWithContentsOfFile:resumeDataFileName];
+		NSError *error;
+		if (![[NSFileManager defaultManager] removeItemAtPath:resumeDataFileName error:&error])
+			DLog(@"Couldn't remove resumeData file: %@, %@",resumeDataFileName,error);
+		
+		return resumeData;
+	}
+	return nil;
 }
 
 - (NSString *)resumeDataPathForUrl:(NSURL *)url
 {
 	NSString *path = url.lastPathComponent;
 	path = [path stringByAppendingPathExtension:@"resumableData"];
-	path = [DataHandler pathForTempFile:path];
+	path = [DataHandler pathForCachedFile:path];
 	return path;
 }
+
+
 
 @end

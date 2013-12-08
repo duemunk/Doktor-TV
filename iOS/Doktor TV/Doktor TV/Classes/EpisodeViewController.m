@@ -22,7 +22,6 @@
 @interface EpisodeViewController ()
 
 @property (nonatomic, weak) NSURLSessionDownloadTask *downloadTask;
-@property (nonatomic, weak) NSProgress *progress;
 
 @end
 
@@ -48,12 +47,18 @@
     // Dispose of any resources that can be recreated.
 }
 
-- (void)viewWillDisappear:(BOOL)animated
+- (void)viewWillAppear:(BOOL)animated
 {
-	if (_progress)
-	{
-		[_progress removeObserver:self forKeyPath:@"fractionCompleted"];
-	}
+	[super viewWillAppear:animated];
+	
+	[self checkDownload];
+}
+
+- (void)viewDidDisappear:(BOOL)animated
+{
+	[super viewDidDisappear:animated];
+	
+	[[NSNotificationCenter defaultCenter] removeObserver:self];
 }
 
 
@@ -61,12 +66,7 @@
 {
 	if (episode != _episode)
 	{
-		if (_episode)
-		{
-			[_episode removeObserver:self forKeyPath:@"video"];
-		}
 		_episode = episode;
-		[_episode addObserver:self forKeyPath:@"video" options:0 context:0];
 		
 		[self layoutButtons];
 		
@@ -86,6 +86,8 @@
 			textView.editable = NO; // Should allow user to change content
 		}
 		textView.text = [NSString stringWithFormat:@"%@ \n%@ \n%@",_episode.title,_episode.subtitle,_episode.desc];
+		
+		[self checkDownload];
 	}
 }
 
@@ -152,19 +154,17 @@
 
 
 
-- (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context
+- (void)checkDownload
 {
-	if ([keyPath isEqualToString:@"video"])
-	{
-		[self layoutButtons];
-	}
-	if ([keyPath isEqualToString:@"fractionCompleted"] && object == self.progress) {
-		dispatch_async(dispatch_get_main_queue(), ^{
-			DLog(@"%@",self.progress.localizedAdditionalDescription);
-			downloadButton.title = [NSString stringWithFormat:@"Henter %.0f%%",ceilf(100.0f*self.progress.fractionCompleted)];
-		});
-	}
+	[[DRHandler sharedInstance] getVideoLinkForEpisode:self.episode completion:^(NSString *urlString)
+	 {
+		 [[FileDownloadHandler sharedInstance] findExistingDownload:urlString backgroundTransfer:YES observer:self selector:@selector(downloadNotification:) completion:^(NSURLSessionDownloadTask *downloadTask) {
+			 self.downloadTask = downloadTask;
+		 }];
+	 }];
 }
+
+
 
 
 - (void)download
@@ -184,40 +184,48 @@
 		
 		if (_downloadTask)
 		{
-			// Already downloading – pause
-			[[FileDownloadHandler sharedInstance] cancelDownloadTask:self.downloadTask];
-			[self layoutButtons];
-			return;
+			if (_downloadTask.state == NSURLSessionTaskStateRunning)
+			{
+				// Already downloading – pause
+				[self.downloadTask cancelByProducingResumeData:^(NSData *resumeData){}];
+				[self layoutButtons];
+				return;
+			}
+			else
+				[self.downloadTask resume];
 		}
 		
-		[[DRHandler sharedInstance] getVideoLinkForEpisode:self.episode completion:^(NSString *urlString) {
-			
+		[[DRHandler sharedInstance] getVideoLinkForEpisode:self.episode completion:^(NSString *urlString)
+		{
 			DLog(@"Begin download of video for episode %@ in program %@",self.episode.title,((Program *)self.episode.season.program).title);
-			// Download
-			Program *program = (Program *)self.episode.season.program;
-			NSString *fileName = [NSString stringWithFormat:@"EpisodeVideo__%@__%@.mp4",program.drID,self.episode.drID];
 			
-			NSProgress *progress;
-			self.downloadTask = [[FileDownloadHandler sharedInstance] download:urlString
-																	toFileName:fileName
-																	  progress:&progress
-															   completionBlock:^(BOOL succeeded) {
-																   if (succeeded)
-																   {
-																	   self.episode.video = fileName;
-																   }
-																   [progress removeObserver:self forKeyPath:@"fractionCompleted"];
-															   }];
-			self.progress = progress;
-			if (_progress) {
-				[_progress addObserver:self
-						   forKeyPath:@"fractionCompleted"
-							  options:NSKeyValueObservingOptionNew
-							  context:NULL];
-			}
+			[[FileDownloadHandler sharedInstance] download:urlString
+													toFile:self.episode.video
+										backgroundTransfer:YES
+												  observer:self
+												  selector:@selector(downloadNotification:) completion:^(NSURLSessionDownloadTask *downloadTask) {
+													  self.downloadTask = downloadTask;
+												  }];
 		}];
 	}
 }
+
+
+
+- (void)downloadNotification:(NSNotification *) notification
+{
+	if ([notification.name isEqualToString:NOTIFICATION_DOWNLOAD_COMPLETE])
+	{
+		[self layoutButtons];
+	}
+	if ([notification.name isEqualToString:NOTIFICATION_DOWNLOAD_PROGRESS])
+	{
+		float progress = [notification.userInfo[kPROGRESS] floatValue];
+		DLog(@"Progess: %f", progress);
+		downloadButton.title = [NSString stringWithFormat:@"Henter %.0f%%",ceilf(100.0f*progress)];
+	}
+}
+
 
 - (void)stream
 {

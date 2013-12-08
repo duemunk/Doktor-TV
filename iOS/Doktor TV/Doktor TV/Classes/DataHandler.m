@@ -278,11 +278,12 @@
 		}
 	}
 	
-	for (NSURL *invalidFileURL in invalidFiles)
+	for (NSString *invalidFileName in invalidFiles)
 	{
 		NSError *error;
-		DLog(@"Delete file %@",invalidFileURL);
-		[[NSFileManager defaultManager] removeItemAtURL:invalidFileURL error:&error];
+		DLog(@"Delete file %@",invalidFileName);
+		[[NSFileManager defaultManager] removeItemAtPath:[DataHandler pathForCachedFile:invalidFileName]
+												  error:&error];
 	}
 	
 	// Clear temp folder
