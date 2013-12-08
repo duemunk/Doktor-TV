@@ -69,6 +69,9 @@
 		self.titleLabel.text = _episode.title;
 		[self setupImage];
 		self.managedObject = _episode;
+		
+		if (episodeViewController)
+			episodeViewController.episode = self.episode;
 	}
 }
 

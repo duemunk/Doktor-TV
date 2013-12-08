@@ -75,6 +75,9 @@
 		[self setupTitle];
 		[self setupImage];
 		[self setupSubscribeButton];
+		
+		if (programCollectionViewController)
+			programCollectionViewController.program = self.program;
 	}
 }
 
