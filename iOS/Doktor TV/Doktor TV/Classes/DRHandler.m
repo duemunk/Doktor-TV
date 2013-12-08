@@ -40,6 +40,8 @@
 {
 	// TODO: Implement refresh of main data (all programs)
 	refreshCompletionHandler(YES);
+	
+	[[DataHandler sharedInstance] saveContext];
 }
 
 
