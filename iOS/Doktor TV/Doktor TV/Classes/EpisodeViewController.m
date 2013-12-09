@@ -212,7 +212,7 @@
 
 
 
-- (void)downloadNotification:(NSNotification *) notification
+- (void)downloadNotification:(NSNotification *)notification
 {
 	if ([notification.name isEqualToString:NOTIFICATION_DOWNLOAD_COMPLETE])
 	{

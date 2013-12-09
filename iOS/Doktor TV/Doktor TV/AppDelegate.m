@@ -39,8 +39,10 @@
 	[FileDownloadHandler sharedInstance];
 #endif
 	
+	application.applicationIconBadgeNumber = 0;
+	
 	// Allow app to wake up and do background fetches
-	[[UIApplication sharedApplication] setMinimumBackgroundFetchInterval:UIApplicationBackgroundFetchIntervalMinimum];
+	[application setMinimumBackgroundFetchInterval:UIApplicationBackgroundFetchIntervalMinimum];
 	
     return YES;
 }
@@ -82,10 +84,27 @@
 
 
 
-- (void)application:(UIApplication *)application handleEventsForBackgroundURLSession:(NSString *)identifier completionHandler:(void (^)())completionHandler
+- (void)application:(UIApplication *)application didReceiveLocalNotification:(UILocalNotification *)notification
 {
-	DLog(@"backgroundURLSession %@",identifier);
+	DLog(@"Did receive local notification");
 }
+
+
+// Is called before download NSURLSession delegate messages are sent
+- (void) application:(UIApplication *)application handleEventsForBackgroundURLSession:(NSString *)identifier completionHandler:(void (^)())completionHandler
+{
+    // You must re-establish a reference to the background session,
+    // or NSURLSessionDownloadDelegate and NSURLSessionDelegate methods will not be called
+    // as no delegate is attached to the session. See backgroundURLSession above.
+	
+    NSLog(@"Rejoining session with identifier %@",identifier);
+
+    // Store the completion handler to update your UI after processing session events
+    [[FileDownloadHandler sharedInstance] wakeSessionWithCompletionHandler:completionHandler sessionIdentifier:identifier];
+}
+
+
+
 
 
 - (void)application:(UIApplication *)application performFetchWithCompletionHandler:(void (^)(UIBackgroundFetchResult))completionHandler

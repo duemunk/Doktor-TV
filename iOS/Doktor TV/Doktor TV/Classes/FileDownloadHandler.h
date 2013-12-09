@@ -9,15 +9,23 @@
 #import <Foundation/Foundation.h>
 
 typedef void (^DRCompletionBlock)(BOOL succeeded);
+typedef void (^CompletionHandlerType)(); // Should be defined in AppDelegate application:handleEventsForBackgroundURLSession:completionHandler:(void (^)())completionHandler
 
 
 #define NOTIFICATION_DOWNLOAD_PROGRESS @"NOTIFICATION_DOWNLOAD_PROGRESS"
 #define kPROGRESS @"kPROGRESS"
 #define NOTIFICATION_DOWNLOAD_COMPLETE @"NOTIFICATION_DOWNLOAD_COMPLETE"
 
+
+
 @interface FileDownloadHandler : NSObject <NSURLSessionDelegate, NSURLSessionDownloadDelegate>
 
+@property (nonatomic, strong) NSURLSession *backgroundTransferSession;
+
 + (FileDownloadHandler *)sharedInstance;
+
+
+- (void)wakeSessionWithCompletionHandler:(CompletionHandlerType)handler sessionIdentifier:(NSString *)identifier;
 
 - (void)download:(NSString *)urlString toFile:(NSString *)fileName backgroundTransfer:(BOOL)backgroundTransfer completion:(void (^)(NSURLSessionDownloadTask *downloadTask))completion;
 - (void)download:(NSString *)urlString toFile:(NSString *)fileName backgroundTransfer:(BOOL)backgroundTransfer observer:(id)observer selector:(SEL)selector completion:(void (^)(NSURLSessionDownloadTask *downloadTask))completion;

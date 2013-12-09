@@ -20,7 +20,8 @@
 @property (nonatomic, strong) NSMutableArray *downloadArray;
 
 @property (nonatomic, strong) NSURLSession *defaultSession;
-@property (nonatomic, strong) NSURLSession *backgroundTransferSession;
+
+@property (strong, nonatomic) NSMutableDictionary *completionHandlerDictionary;
 
 @end
 
@@ -71,6 +72,85 @@
 
 
 
+
+
+
+- (void)wakeSessionWithCompletionHandler:(CompletionHandlerType)handler sessionIdentifier:(NSString *)identifier
+{
+	NSAssert([identifier isEqualToString:self.backgroundTransferSession.configuration.identifier], @"Identifer doesn't match background session");
+	
+	[self addCompletionHandler:handler forSession:identifier];
+}
+
+
+- (void)addCompletionHandler:(CompletionHandlerType)handler forSession:(NSString *)identifier
+{
+    if ([self.completionHandlerDictionary objectForKey:identifier]) {
+        NSLog(@"Error: Got multiple handlers for a single session identifier.  This should not happen.\n");
+    }
+	
+    [self.completionHandlerDictionary setObject:handler forKey:identifier];
+}
+
+- (void)callCompletionHandlerForSession:(NSString *)identifier
+{
+    CompletionHandlerType handler = [self.completionHandlerDictionary objectForKey:identifier];
+	
+    if (handler) {
+        [self.completionHandlerDictionary removeObjectForKey: identifier];
+        NSLog(@"Calling completion handler for session %@", identifier);
+		
+        handler();
+    }
+}
+
+- (NSMutableDictionary *)completionHandlerDictionary
+{
+	if (!_completionHandlerDictionary) {
+		_completionHandlerDictionary = [@{} mutableCopy];
+	}
+	return _completionHandlerDictionary;
+}
+
+
+#pragma mark - NSURLSessionDelegate
+
+// Is called after NSURLSession delegate messages are sent
+- (void)URLSessionDidFinishEventsForBackgroundURLSession:(NSURLSession *)session
+{
+    NSLog(@"Background URL session %@ finished events.\n", session);
+	
+    if (session.configuration.identifier)
+	{
+		// Notify user that all downloads are finished
+		UILocalNotification *notification = [UILocalNotification new];
+		notification.alertBody = NSLocalizedString(@"Dine programmer er blevet hentet", @"");
+		notification.alertAction = NSLocalizedString(@"Se", nil);
+		notification.soundName = UILocalNotificationDefaultSoundName;
+		notification.applicationIconBadgeNumber = 1;
+		[[UIApplication sharedApplication] presentLocalNotificationNow:notification];
+		
+        // Call the handler we stored in -application:handleEventsForBackgroundURLSession:
+        [self callCompletionHandlerForSession:session.configuration.identifier];
+    }
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+#pragma mark - Download methods
 
 
 #define kFILE_NAME @"FILE_NAME"
@@ -151,6 +231,18 @@
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
 #pragma mark - NSURLSessionTaskDelegate
 
 - (void)URLSession:(NSURLSession *)session task:(NSURLSessionTask *)task didCompleteWithError:(NSError *)error
@@ -215,6 +307,11 @@
 {
 	DLog(@"Resuming %@, offset %lld, expectedTotal %lld",downloadTask.originalRequest.URL.path,fileOffset,expectedTotalBytes);
 }
+
+
+
+
+
 
 
 
