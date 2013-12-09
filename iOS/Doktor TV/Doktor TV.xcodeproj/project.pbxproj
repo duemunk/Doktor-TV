@@ -8,6 +8,11 @@
 
 /* Begin PBXBuildFile section */
 		4E03B5FC1852B23A00DA35B7 /* libobjc.A.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 4E03B5FB1852B23A00DA35B7 /* libobjc.A.dylib */; };
+		4E03B6071856524600DA35B7 /* JMStaticContentTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 4E03B6001856524600DA35B7 /* JMStaticContentTableViewCell.m */; };
+		4E03B6081856524600DA35B7 /* JMStaticContentTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4E03B6021856524600DA35B7 /* JMStaticContentTableViewController.m */; };
+		4E03B6091856524600DA35B7 /* JMStaticContentTableViewSection.m in Sources */ = {isa = PBXBuildFile; fileRef = 4E03B6041856524600DA35B7 /* JMStaticContentTableViewSection.m */; };
+		4E03B60A1856524600DA35B7 /* JMStaticContentTextFieldTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 4E03B6061856524600DA35B7 /* JMStaticContentTextFieldTableViewCell.m */; };
+		4E03B60D1856525D00DA35B7 /* SettingsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4E03B60C1856525D00DA35B7 /* SettingsViewController.m */; };
 		4E1F164F183428460068E5BD /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4E1F164E183428460068E5BD /* Foundation.framework */; };
 		4E1F1651183428460068E5BD /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4E1F1650183428460068E5BD /* CoreGraphics.framework */; };
 		4E1F1653183428460068E5BD /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4E1F1652183428460068E5BD /* UIKit.framework */; };
@@ -82,6 +87,15 @@
 
 /* Begin PBXFileReference section */
 		4E03B5FB1852B23A00DA35B7 /* libobjc.A.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libobjc.A.dylib; path = usr/lib/libobjc.A.dylib; sourceTree = SDKROOT; };
+		4E03B5FE1856524600DA35B7 /* JMStaticContentTableViewBlocks.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JMStaticContentTableViewBlocks.h; sourceTree = "<group>"; };
+		4E03B5FF1856524600DA35B7 /* JMStaticContentTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JMStaticContentTableViewCell.h; sourceTree = "<group>"; };
+		4E03B6001856524600DA35B7 /* JMStaticContentTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JMStaticContentTableViewCell.m; sourceTree = "<group>"; };
+		4E03B6011856524600DA35B7 /* JMStaticContentTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JMStaticContentTableViewController.h; sourceTree = "<group>"; };
+		4E03B6021856524600DA35B7 /* JMStaticContentTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JMStaticContentTableViewController.m; sourceTree = "<group>"; };
+		4E03B6031856524600DA35B7 /* JMStaticContentTableViewSection.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JMStaticContentTableViewSection.h; sourceTree = "<group>"; };
+		4E03B6041856524600DA35B7 /* JMStaticContentTableViewSection.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JMStaticContentTableViewSection.m; sourceTree = "<group>"; };
+		4E03B6051856524600DA35B7 /* JMStaticContentTextFieldTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JMStaticContentTextFieldTableViewCell.h; sourceTree = "<group>"; };
+		4E03B6061856524600DA35B7 /* JMStaticContentTextFieldTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JMStaticContentTextFieldTableViewCell.m; sourceTree = "<group>"; };
 		4E1F164B183428460068E5BD /* Doktor TV.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Doktor TV.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		4E1F164E183428460068E5BD /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		4E1F1650183428460068E5BD /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
@@ -226,6 +240,23 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		4E03B5FD1856524600DA35B7 /* JMStaticContentTableViewController */ = {
+			isa = PBXGroup;
+			children = (
+				4E03B5FE1856524600DA35B7 /* JMStaticContentTableViewBlocks.h */,
+				4E03B5FF1856524600DA35B7 /* JMStaticContentTableViewCell.h */,
+				4E03B6001856524600DA35B7 /* JMStaticContentTableViewCell.m */,
+				4E03B6011856524600DA35B7 /* JMStaticContentTableViewController.h */,
+				4E03B6021856524600DA35B7 /* JMStaticContentTableViewController.m */,
+				4E03B6031856524600DA35B7 /* JMStaticContentTableViewSection.h */,
+				4E03B6041856524600DA35B7 /* JMStaticContentTableViewSection.m */,
+				4E03B6051856524600DA35B7 /* JMStaticContentTextFieldTableViewCell.h */,
+				4E03B6061856524600DA35B7 /* JMStaticContentTextFieldTableViewCell.m */,
+			);
+			name = JMStaticContentTableViewController;
+			path = JMStaticContentTableViewController/JMStaticContentTableViewController;
+			sourceTree = "<group>";
+		};
 		4E1F1642183428460068E5BD = {
 			isa = PBXGroup;
 			children = (
@@ -315,6 +346,7 @@
 		4E1F168618343D9B0068E5BD /* Submodules */ = {
 			isa = PBXGroup;
 			children = (
+				4E03B5FD1856524600DA35B7 /* JMStaticContentTableViewController */,
 				4E26310A18521F63006F336B /* TDMScreenEdgePanGestureRecognizer */,
 				4ECF10F01836F4E600D4C62C /* iOS7Colors */,
 				4E1F168A18343DC80068E5BD /* KeepLayout */,
@@ -650,6 +682,7 @@
 				4EFD19BE183D1CEA00FC8DB2 /* SearchScrollViewController.m in Sources */,
 				4EC77AC71843916E004D8E20 /* Model.xcdatamodeld in Sources */,
 				4ECF10E81836EEFF00D4C62C /* ProgramsCollectionViewController.m in Sources */,
+				4E03B6071856524600DA35B7 /* JMStaticContentTableViewCell.m in Sources */,
 				4E1F16B8183440A30068E5BD /* AFURLSessionManager.m in Sources */,
 				4E1F16B5183440A30068E5BD /* AFURLConnectionOperation.m in Sources */,
 				4EC07CEA1844A428005CB25F /* CollectionHeaderView.m in Sources */,
@@ -666,9 +699,11 @@
 				4ECF10F31836F6B600D4C62C /* ZoomCollectionViewController.m in Sources */,
 				4ECF10D81836EB6D00D4C62C /* Season.m in Sources */,
 				4E1F16CB183440AD0068E5BD /* UIAlertView+AFNetworking.m in Sources */,
+				4E03B6081856524600DA35B7 /* JMStaticContentTableViewController.m in Sources */,
 				4E9520FA18384E0800DCC2DF /* Button.m in Sources */,
 				4ECF11141837A52600D4C62C /* UIImage+ImageEffects.m in Sources */,
 				4E2631091850AA57006F336B /* FileDownloadHandler.m in Sources */,
+				4E03B60A1856524600DA35B7 /* JMStaticContentTextFieldTableViewCell.m in Sources */,
 				4ECF10E51836EE4400D4C62C /* UIViewController+Containment.m in Sources */,
 				4E1F16B1183440A30068E5BD /* AFHTTPRequestOperationManager.m in Sources */,
 				4ECF10F61836FA3500D4C62C /* ProgramCollectionViewController.m in Sources */,
@@ -688,6 +723,7 @@
 				4E1F16B4183440A30068E5BD /* AFSecurityPolicy.m in Sources */,
 				4E1F169A1834407D0068E5BD /* NSArray+KeepLayout.m in Sources */,
 				4ECF11231837DA9400D4C62C /* ZoomCollectionViewCell.m in Sources */,
+				4E03B6091856524600DA35B7 /* JMStaticContentTableViewSection.m in Sources */,
 				4E1F16B6183440A30068E5BD /* AFURLRequestSerialization.m in Sources */,
 				4ECF10F9183702FE00D4C62C /* EpisodeCollectionViewCell.m in Sources */,
 				4ECF10D21836E7F600D4C62C /* DataHandler.m in Sources */,

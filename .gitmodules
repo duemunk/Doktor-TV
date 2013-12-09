@@ -10,3 +10,6 @@
 [submodule "iOS/Doktor TV/Doktor TV/Submodules/TDMScreenEdgePanGestureRecognizer"]
 	path = iOS/Doktor TV/Doktor TV/Submodules/TDMScreenEdgePanGestureRecognizer
 	url = https://duemunk@github.com/duemunk/TDMScreenEdgePanGestureRecognizer.git
+[submodule "iOS/Doktor TV/Doktor TV/Submodules/JMStaticContentTableViewController"]
+	path = iOS/Doktor TV/Doktor TV/Submodules/JMStaticContentTableViewController
+	url = https://duemunk@github.com/jakemarsh/JMStaticContentTableViewController.git
