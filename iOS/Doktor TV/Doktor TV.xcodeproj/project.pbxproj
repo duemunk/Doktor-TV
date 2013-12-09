@@ -12,7 +12,7 @@
 		4E03B6081856524600DA35B7 /* JMStaticContentTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4E03B6021856524600DA35B7 /* JMStaticContentTableViewController.m */; };
 		4E03B6091856524600DA35B7 /* JMStaticContentTableViewSection.m in Sources */ = {isa = PBXBuildFile; fileRef = 4E03B6041856524600DA35B7 /* JMStaticContentTableViewSection.m */; };
 		4E03B60A1856524600DA35B7 /* JMStaticContentTextFieldTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 4E03B6061856524600DA35B7 /* JMStaticContentTextFieldTableViewCell.m */; };
-		4E03B60D1856525D00DA35B7 /* SettingsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4E03B60C1856525D00DA35B7 /* SettingsViewController.m */; };
+		4E03B6111856530700DA35B7 /* SettingsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4E03B6101856530700DA35B7 /* SettingsViewController.m */; };
 		4E1F164F183428460068E5BD /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4E1F164E183428460068E5BD /* Foundation.framework */; };
 		4E1F1651183428460068E5BD /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4E1F1650183428460068E5BD /* CoreGraphics.framework */; };
 		4E1F1653183428460068E5BD /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4E1F1652183428460068E5BD /* UIKit.framework */; };
@@ -96,6 +96,8 @@
 		4E03B6041856524600DA35B7 /* JMStaticContentTableViewSection.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JMStaticContentTableViewSection.m; sourceTree = "<group>"; };
 		4E03B6051856524600DA35B7 /* JMStaticContentTextFieldTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JMStaticContentTextFieldTableViewCell.h; sourceTree = "<group>"; };
 		4E03B6061856524600DA35B7 /* JMStaticContentTextFieldTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JMStaticContentTextFieldTableViewCell.m; sourceTree = "<group>"; };
+		4E03B60F1856530700DA35B7 /* SettingsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SettingsViewController.h; path = Classes/SettingsViewController.h; sourceTree = "<group>"; };
+		4E03B6101856530700DA35B7 /* SettingsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = SettingsViewController.m; path = Classes/SettingsViewController.m; sourceTree = "<group>"; };
 		4E1F164B183428460068E5BD /* Doktor TV.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Doktor TV.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		4E1F164E183428460068E5BD /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		4E1F1650183428460068E5BD /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
@@ -255,6 +257,15 @@
 			);
 			name = JMStaticContentTableViewController;
 			path = JMStaticContentTableViewController/JMStaticContentTableViewController;
+			sourceTree = "<group>";
+		};
+		4E03B6121856530C00DA35B7 /* Settings */ = {
+			isa = PBXGroup;
+			children = (
+				4E03B60F1856530700DA35B7 /* SettingsViewController.h */,
+				4E03B6101856530700DA35B7 /* SettingsViewController.m */,
+			);
+			name = Settings;
 			sourceTree = "<group>";
 		};
 		4E1F1642183428460068E5BD = {
@@ -536,6 +547,7 @@
 			children = (
 				4ECF10E01836EDF300D4C62C /* MainViewController.h */,
 				4ECF10E11836EDF300D4C62C /* MainViewController.m */,
+				4E03B6121856530C00DA35B7 /* Settings */,
 				4EC77ABC183F5DBA004D8E20 /* Search */,
 				4ECF11241838246700D4C62C /* For subclassing */,
 				4ECF10E61836EEFF00D4C62C /* ProgramsCollectionViewController.h */,
@@ -700,6 +712,7 @@
 				4ECF10D81836EB6D00D4C62C /* Season.m in Sources */,
 				4E1F16CB183440AD0068E5BD /* UIAlertView+AFNetworking.m in Sources */,
 				4E03B6081856524600DA35B7 /* JMStaticContentTableViewController.m in Sources */,
+				4E03B6111856530700DA35B7 /* SettingsViewController.m in Sources */,
 				4E9520FA18384E0800DCC2DF /* Button.m in Sources */,
 				4ECF11141837A52600D4C62C /* UIImage+ImageEffects.m in Sources */,
 				4E2631091850AA57006F336B /* FileDownloadHandler.m in Sources */,
