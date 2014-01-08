@@ -1,0 +1,10 @@
+platform :ios, '7.0' 
+
+target "Doktor TV" do
+	pod "DMTestSettings", :git => "https://github.com/duemunk/DMTestSettings.git"
+	pod "KeepLayout", :git => "https://github.com/duemunk/KeepLayout.git"
+	pod "JMStaticContentTableViewController", :git => "https://github.com/duemunk/JMStaticContentTableViewController.git"
+	pod "TDMScreenEdgePanGestureRecognizer", :git => "https://github.com/duemunk/TDMScreenEdgePanGestureRecognizer.git"
+	pod "iOS7Colors"
+	pod "AFNetworking"
+end
