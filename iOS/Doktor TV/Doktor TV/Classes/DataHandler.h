@@ -32,7 +32,7 @@
 
 - (void)associateObject:(NSManagedObject *)managedObject;
 
-+ (BOOL)fileExists:(NSString *)filename;
++ (BOOL)fileExists:(NSString *)filename persistent:(BOOL)persistent;
 + (NSString *)pathForFile:(NSString *)filename persistent:(BOOL)persistent;
 
 //- (void)cleanUpCachedLocalFiles;
