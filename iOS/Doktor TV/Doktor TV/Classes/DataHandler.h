@@ -22,7 +22,6 @@
 + (DataHandler *)sharedInstance;
 
 - (void)saveContext;
-- (NSURL *)applicationDocumentsDirectory;
 
 - (NSArray *)programs;
 
@@ -34,9 +33,8 @@
 - (void)associateObject:(NSManagedObject *)managedObject;
 
 + (BOOL)fileExists:(NSString *)filename;
-+ (NSString *)pathForTempFile:(NSString *)filename;
-+ (NSString *)pathForCachedFile:(NSString *)filename;
++ (NSString *)pathForFile:(NSString *)filename persistent:(BOOL)persistent;
 
-- (void)cleanUpCachedLocalFiles;
+//- (void)cleanUpCachedLocalFiles;
 
 @end

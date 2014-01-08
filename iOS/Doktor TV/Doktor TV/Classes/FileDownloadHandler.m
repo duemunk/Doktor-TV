@@ -154,11 +154,19 @@
 
 
 #define kFILE_NAME @"FILE_NAME"
+#define kPERSISTENT @"kPERSISTENT"
 - (void)download:(NSString *)urlString toFile:(NSString *)fileName backgroundTransfer:(BOOL)backgroundTransfer completion:(void (^)(NSURLSessionDownloadTask *downloadTask))completion
 {
 	[self download:urlString toFile:fileName backgroundTransfer:backgroundTransfer observer:nil selector:0 completion:completion];
 }
 - (void)download:(NSString *)urlString toFile:(NSString *)fileName backgroundTransfer:(BOOL)backgroundTransfer observer:(id)observer selector:(SEL)selector completion:(void (^)(NSURLSessionDownloadTask *downloadTask))completion
+{
+	[self download:urlString toFile:fileName backgroundTransfer:backgroundTransfer observer:observer selector:selector completion:completion persistent:YES]; // Default to store persistent and not in Caches
+}
+/**
+ @param persistent File is stored persistently. For non-persistent file is save in Caches directory and might be deleted by OS. Use  method pathForFile:persistent: to get file path for filename
+ */
+- (void)download:(NSString *)urlString toFile:(NSString *)fileName backgroundTransfer:(BOOL)backgroundTransfer observer:(id)observer selector:(SEL)selector completion:(void (^)(NSURLSessionDownloadTask *downloadTask))completion persistent:(BOOL)persistent
 {
 	NSParameterAssert(urlString);
 	NSParameterAssert(fileName);
@@ -171,12 +179,14 @@
 		if (!downloadTask)
 		{
 			NSURL *url = [NSURL URLWithString:urlString];
-			
+			// First check for resume data
 			NSData *resumeData = [self resumeDataForUrl:url];
+			// If no resume data, create new downloadTask
 			downloadTask = resumeData ? [session downloadTaskWithResumeData:resumeData] : [session downloadTaskWithURL:url];
 		}
 		
-		[[NSUserDefaults standardUserDefaults] setObject:@{kFILE_NAME:fileName}
+		[[NSUserDefaults standardUserDefaults] setObject:@{kFILE_NAME:fileName,
+														   kPERSISTENT:@(persistent)}
 												  forKey:@(downloadTask.taskIdentifier).stringValue];
 		
 		[downloadTask resume];
@@ -276,25 +286,35 @@
 		return;
 	}
 	
-	NSURL *cachePath = [NSURL fileURLWithPath:[DataHandler pathForCachedFile:fileName]];
-	NSLog(@"File downloaded \nto: \n%@, \nmoving to: \n%@", location, cachePath);
+	NSNumber *persistent = info[kPERSISTENT];
+	if (!persistent) {
+		persistent = @YES; // Default
+		DLog(@"Persistence not set for task %lu",(unsigned long)downloadTask.taskIdentifier);
+	}
+	
+	NSString *filePath = [DataHandler pathForFile:fileName persistent:persistent.boolValue];
+	NSURL *fileURL = [NSURL fileURLWithPath:filePath];
+	NSLog(@"File downloaded \nto: \n%@, \nmoving to: \n%@", location, fileURL);
 	
 	NSFileManager *fileManager = [NSFileManager defaultManager];
 	if ([fileManager fileExistsAtPath:location.path isDirectory:NO])
 	{
-		if ([fileManager fileExistsAtPath:cachePath.path isDirectory:NO])
+		if ([fileManager fileExistsAtPath:fileURL.path isDirectory:NO])
 		{
-			DLog(@"Already exists %@",cachePath);
+			DLog(@"Already exists %@",fileURL);
 			[fileManager removeItemAtURL:location error:nil];
 			return;
 		}
 		else
 		{
 			NSError *fileMoveError;
-			if (![fileManager moveItemAtURL:location toURL:cachePath error:&fileMoveError]) {
+			if (![fileManager moveItemAtURL:location toURL:fileURL error:&fileMoveError]) {
 				DLog(@"%@",fileMoveError);
 				return;
 			}
+			
+			// Tell iCloud not to backup this file
+			[self addSkipBackupAttributeToItemAtURL:fileURL];
 		}
 	}
 	
@@ -390,123 +410,123 @@
 }
 
 
-- (NSURLSessionDownloadTask *)download:(NSString *)urlString toFileName:(NSString *)fileName completionBlock:(void (^)(BOOL succeeded))completionBlock
-{
-	// Progress
-	NSProgress *progress;
-	NSURLSessionDownloadTask *downloadTask = [self download:urlString toFileName:fileName progress:&progress completionBlock:completionBlock];
-	if (downloadTask)
-	{
-		[progress addObserver:self
-				   forKeyPath:@"fractionCompleted"
-					  options:NSKeyValueObservingOptionNew
-					  context:NULL];
-	}
-	return downloadTask;
-}
-
-- (NSURLSessionDownloadTask *)download:(NSString *)urlString toFileName:(NSString *)fileName progress:(NSProgress * __autoreleasing *)progress completionBlock:(void (^)(BOOL succeeded))completionBlock
-{
-	return nil;
-	
-	
-	NSURLSessionDownloadTask *downloadTask;
-	
-	NSURL *url = [NSURL URLWithString:urlString];
-	NSURL *tempPath = [NSURL fileURLWithPath:[DataHandler pathForTempFile:fileName] isDirectory:NO];
-	
-	
-	// Destination
-	NSURL *(^destination)(NSURL *targetPath, NSURLResponse *response) = ^NSURL *(NSURL *targetPath, NSURLResponse *response) {
-		//[NSString stringWithFormat:@"%@__%@",urlString.lastPathComponent,response.suggestedFilename];
-		return tempPath;
-	};
-	
-	
-	// Completion handler
-	void (^completionHandler)(NSURLResponse *response, NSURL *filePath, NSError *error) = ^(NSURLResponse *response, NSURL *filePath, NSError *error) {
-		if (error) {
-			DLog(@"%@",error);
-			completionBlock(NO);
-			return;
-		}
-		NSURL *cachePath = [NSURL fileURLWithPath:[DataHandler pathForCachedFile:fileName]];
-		NSLog(@"File downloaded \nto: \n%@, \nmoving to: \n%@", filePath, cachePath);
-		
-		
-		if ([[NSFileManager defaultManager] fileExistsAtPath:filePath.path isDirectory:NO])
-		{
-			if ([[NSFileManager defaultManager] fileExistsAtPath:cachePath.path isDirectory:NO]) {
-				DLog(@"Already exists %@",cachePath);
-			}
-			
-			NSError *fileMoveError;
-			if (![[NSFileManager defaultManager] moveItemAtURL:filePath toURL:cachePath error:&fileMoveError]) {
-				DLog(@"%@",fileMoveError);
-				completionBlock(NO);
-				return;
-			}
-			completionBlock(YES);
-		}
-	};
-	
-	
-	
-	// Check if already downloading
-	for (NSURLSessionDownloadTask *_downloadTask in self.sessionManager.downloadTasks)
-	{
-		NSURL *_url = _downloadTask.originalRequest.URL;
-		if ([_url isEqual:url])
-		{
-			downloadTask = _downloadTask;
-		}
-	}
-	
-	
-	if (downloadTask)
-	{
-		downloadTask = [self.sessionManager downloadTaskWithRequest:downloadTask.currentRequest
-														   progress:progress
-														destination:destination
-												  completionHandler:completionHandler];
-		DLog(@"Resuming download \nurl: \n%@ \nto: \n%@",urlString,tempPath);
-	}
-//	// Check if resumable data is available
-//	NSString *resumeDataFileName = [self resumeDataPathForUrl:url];
-//	else if ([[NSFileManager defaultManager] fileExistsAtPath:resumeDataFileName])
+//- (NSURLSessionDownloadTask *)download:(NSString *)urlString toFileName:(NSString *)fileName completionBlock:(void (^)(BOOL succeeded))completionBlock
+//{
+//	// Progress
+//	NSProgress *progress;
+//	NSURLSessionDownloadTask *downloadTask = [self download:urlString toFileName:fileName progress:&progress completionBlock:completionBlock];
+//	if (downloadTask)
 //	{
-//		NSData *resumeData = [NSData dataWithContentsOfFile:resumeDataFileName];
-//		NSError *error;
-//		if (![[NSFileManager defaultManager] removeItemAtPath:resumeDataFileName error:&error]) {
-//			DLog(@"Couldn't remove resumeData file: %@, %@",resumeDataFileName,error);
-//			return nil;
+//		[progress addObserver:self
+//				   forKeyPath:@"fractionCompleted"
+//					  options:NSKeyValueObservingOptionNew
+//					  context:NULL];
+//	}
+//	return downloadTask;
+//}
+
+//- (NSURLSessionDownloadTask *)download:(NSString *)urlString toFileName:(NSString *)fileName progress:(NSProgress * __autoreleasing *)progress completionBlock:(void (^)(BOOL succeeded))completionBlock
+//{
+//	return nil;
+//	
+//	
+//	NSURLSessionDownloadTask *downloadTask;
+//	
+//	NSURL *url = [NSURL URLWithString:urlString];
+//	NSURL *tempPath = [NSURL fileURLWithPath:[DataHandler pathForCachedFile:fileName] isDirectory:NO];
+//	
+//	
+//	// Destination
+//	NSURL *(^destination)(NSURL *targetPath, NSURLResponse *response) = ^NSURL *(NSURL *targetPath, NSURLResponse *response) {
+//		//[NSString stringWithFormat:@"%@__%@",urlString.lastPathComponent,response.suggestedFilename];
+//		return tempPath;
+//	};
+//	
+//	
+//	// Completion handler
+//	void (^completionHandler)(NSURLResponse *response, NSURL *filePath, NSError *error) = ^(NSURLResponse *response, NSURL *filePath, NSError *error) {
+//		if (error) {
+//			DLog(@"%@",error);
+//			completionBlock(NO);
+//			return;
 //		}
-//		downloadTask = [self.sessionManager downloadTaskWithResumeData:resumeData
-//															  progress:progress
-//														   destination:destination
-//													 completionHandler:completionHandler];
+//		NSURL *cachePath = [NSURL fileURLWithPath:[DataHandler pathForCachedFile:fileName]];
+//		NSLog(@"File downloaded \nto: \n%@, \nmoving to: \n%@", filePath, cachePath);
+//		
+//		
+//		if ([[NSFileManager defaultManager] fileExistsAtPath:filePath.path isDirectory:NO])
+//		{
+//			if ([[NSFileManager defaultManager] fileExistsAtPath:cachePath.path isDirectory:NO]) {
+//				DLog(@"Already exists %@",cachePath);
+//			}
+//			
+//			NSError *fileMoveError;
+//			if (![[NSFileManager defaultManager] moveItemAtURL:filePath toURL:cachePath error:&fileMoveError]) {
+//				DLog(@"%@",fileMoveError);
+//				completionBlock(NO);
+//				return;
+//			}
+//			completionBlock(YES);
+//		}
+//	};
+//	
+//	
+//	
+//	// Check if already downloading
+//	for (NSURLSessionDownloadTask *_downloadTask in self.sessionManager.downloadTasks)
+//	{
+//		NSURL *_url = _downloadTask.originalRequest.URL;
+//		if ([_url isEqual:url])
+//		{
+//			downloadTask = _downloadTask;
+//		}
+//	}
+//	
+//	
+//	if (downloadTask)
+//	{
+//		downloadTask = [self.sessionManager downloadTaskWithRequest:downloadTask.currentRequest
+//														   progress:progress
+//														destination:destination
+//												  completionHandler:completionHandler];
 //		DLog(@"Resuming download \nurl: \n%@ \nto: \n%@",urlString,tempPath);
 //	}
-	else
-	{
-		// Regular download
-		NSURLRequest *request = [NSURLRequest requestWithURL:url];
-		
-		downloadTask = [self.sessionManager downloadTaskWithRequest:request
-														   progress:progress
-														destination:destination
-												  completionHandler:completionHandler];
-		
-		DLog(@"Starting download \nurl: \n%@ \nto: \n%@",urlString,tempPath);
-	}
-	
-	if (downloadTask) {
-		[downloadTask resume];
-		downloadTask.taskDescription = fileName;
-	}
-	
-	return downloadTask;
-}
+////	// Check if resumable data is available
+////	NSString *resumeDataFileName = [self resumeDataPathForUrl:url];
+////	else if ([[NSFileManager defaultManager] fileExistsAtPath:resumeDataFileName])
+////	{
+////		NSData *resumeData = [NSData dataWithContentsOfFile:resumeDataFileName];
+////		NSError *error;
+////		if (![[NSFileManager defaultManager] removeItemAtPath:resumeDataFileName error:&error]) {
+////			DLog(@"Couldn't remove resumeData file: %@, %@",resumeDataFileName,error);
+////			return nil;
+////		}
+////		downloadTask = [self.sessionManager downloadTaskWithResumeData:resumeData
+////															  progress:progress
+////														   destination:destination
+////													 completionHandler:completionHandler];
+////		DLog(@"Resuming download \nurl: \n%@ \nto: \n%@",urlString,tempPath);
+////	}
+//	else
+//	{
+//		// Regular download
+//		NSURLRequest *request = [NSURLRequest requestWithURL:url];
+//		
+//		downloadTask = [self.sessionManager downloadTaskWithRequest:request
+//														   progress:progress
+//														destination:destination
+//												  completionHandler:completionHandler];
+//		
+//		DLog(@"Starting download \nurl: \n%@ \nto: \n%@",urlString,tempPath);
+//	}
+//	
+//	if (downloadTask) {
+//		[downloadTask resume];
+//		downloadTask.taskDescription = fileName;
+//	}
+//	
+//	return downloadTask;
+//}
 
 
 
@@ -598,9 +618,36 @@
 {
 	NSString *path = url.lastPathComponent;
 	path = [path stringByAppendingPathExtension:@"resumableData"];
-	path = [DataHandler pathForCachedFile:path];
+	path = [DataHandler pathForFile:path persistent:NO];
 	return path;
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+- (BOOL)addSkipBackupAttributeToItemAtURL:(NSURL *)URL
+{
+    assert([[NSFileManager defaultManager] fileExistsAtPath:URL.path]);
+	
+    NSError *error = nil;
+    BOOL success = [URL setResourceValue:@YES
+                                  forKey: NSURLIsExcludedFromBackupKey error: &error];
+    if(!success){
+        NSLog(@"Error excluding %@ from backup %@", URL.lastPathComponent, error);
+    }
+    return success;
+}
+
 
 
 

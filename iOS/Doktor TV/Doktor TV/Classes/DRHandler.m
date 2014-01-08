@@ -205,13 +205,13 @@
 	{
 		NSString *fileName = imageUrlString;
 		
-		BOOL noImageFileExists = ![UIImage imageWithContentsOfFile:[DataHandler pathForCachedFile:fileName]];
+		BOOL noImageFileExists = ![UIImage imageWithContentsOfFile:[DataHandler pathForFile:fileName persistent:NO]];
 		if (noImageFileExists)
 		{
 			DLog(@"Image not available (local) for program %@",program.title);
 			
 			imageUrlString = [imageUrlString stringByAppendingString:@"?width=200&height=200"];
-			[self download:imageUrlString toFileName:fileName forObject:program key:@"image"];
+			[self download:imageUrlString toFileName:fileName forObject:program key:@"image" persistent:NO block:0];
 		}
 		else
 			DLog(@"Image exists (local) for program %@",program.title);
@@ -221,22 +221,16 @@
 
 
 
-
-- (void)download:(NSString *)urlString toFileName:(NSString *)filename forObject:(NSManagedObject *)object key:(NSString *)key
-{
-	[self download:urlString toFileName:filename forObject:object key:key block:^(NSUInteger bytesRead, long long totalBytesRead, long long totalBytesExpectedToRead) {
-		DLog(@"Progess: %f", (float)totalBytesRead / (float)totalBytesExpectedToRead);
-	}];
-}
-
-- (void)download:(NSString *)urlString toFileName:(NSString *)filename forObject:(NSManagedObject *)object key:(NSString *)key block:(void (^)(NSUInteger bytesRead, long long totalBytesRead, long long totalBytesExpectedToRead))progressBlock
+- (void)download:(NSString *)urlString toFileName:(NSString *)filename forObject:(NSManagedObject *)object key:(NSString *)key persistent:(BOOL)persistent block:(void (^)(NSUInteger bytesRead, long long totalBytesRead, long long totalBytesExpectedToRead))progressBlock
 {
 	NSURLRequest *request = [NSURLRequest requestWithURL:[NSURL URLWithString:urlString]];
 	AFHTTPRequestOperation *operation = [[AFHTTPRequestOperation alloc] initWithRequest:request];
 	
-	[operation setDownloadProgressBlock:progressBlock];
+	if (progressBlock) {
+		[operation setDownloadProgressBlock:progressBlock];
+	}
 	
-	NSString *path = [DataHandler pathForCachedFile:filename];
+	NSString *path = [DataHandler pathForFile:filename persistent:persistent];
 	operation.outputStream = [NSOutputStream outputStreamToFileAtPath:path append:NO];
 	
 	DLog(@"Begins download of %@ to %@",urlString,filename);

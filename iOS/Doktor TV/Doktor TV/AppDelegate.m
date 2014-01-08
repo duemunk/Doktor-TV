@@ -33,7 +33,7 @@
 	
     [self.window makeKeyAndVisible];
 	
-	[[DataHandler sharedInstance] cleanUpCachedLocalFiles];
+//	[[DataHandler sharedInstance] cleanUpCachedLocalFiles];
 	
 #if DEBUG
 	[FileDownloadHandler sharedInstance];

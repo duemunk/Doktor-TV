@@ -166,6 +166,7 @@
 
 
 
+#define STORE_VIDEO_PERSISTENT YES
 
 - (void)download
 {
@@ -174,7 +175,7 @@
 	{
 		DLog(@"Video available %@ for episode %@",self.episode.video,self.episode.title);
 		
-		NSString *urlString = [DataHandler pathForCachedFile:self.episode.video];
+		NSString *urlString = [DataHandler pathForFile:self.episode.video persistent:STORE_VIDEO_PERSISTENT];
 		NSURL *url = [NSURL fileURLWithPath:urlString];
 		[self playVideoWithURL:url movieSourceType:MPMovieSourceTypeFile];
 	}
@@ -203,9 +204,11 @@
 													toFile:self.episode.video
 										backgroundTransfer:YES
 												  observer:self
-												  selector:@selector(downloadNotification:) completion:^(NSURLSessionDownloadTask *downloadTask) {
+												  selector:@selector(downloadNotification:)
+												completion:^(NSURLSessionDownloadTask *downloadTask) {
 													  self.downloadTask = downloadTask;
-												  }];
+												  }
+												persistent:STORE_VIDEO_PERSISTENT];
 		}];
 	}
 }
@@ -273,7 +276,7 @@
 	}
 	
 	
-	UIImage *image = [UIImage imageWithContentsOfFile:[DataHandler pathForCachedFile:self.episode.image]];
+	UIImage *image = [UIImage imageWithContentsOfFile:[DataHandler pathForFile:self.episode.image persistent:NO]];
 	NSDictionary *songInfo = @{MPMediaItemPropertyTitle : self.episode.title,
 							   MPMediaItemPropertyArtist : @"Doktor TV",
 							   MPMediaItemPropertyPlaybackDuration : @(self.episode.duration.floatValue/1000.0f),

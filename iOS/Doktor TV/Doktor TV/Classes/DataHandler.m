@@ -85,7 +85,7 @@
         return _persistentStoreCoordinator;
     }
     
-    NSURL *storeURL = [[self applicationDocumentsDirectory] URLByAppendingPathComponent:@"Model.sqlite"];
+    NSURL *storeURL = [[DataHandler documentDirectory] URLByAppendingPathComponent:@"Model.sqlite"];
     
     NSError *error = nil;
     _persistentStoreCoordinator = [[NSPersistentStoreCoordinator alloc] initWithManagedObjectModel:[self managedObjectModel]];
@@ -121,13 +121,6 @@
     return _persistentStoreCoordinator;
 }
 
-#pragma mark - Application's Documents directory
-
-// Returns the URL to the application's Documents directory.
-- (NSURL *)applicationDocumentsDirectory
-{
-    return [[[NSFileManager defaultManager] URLsForDirectory:NSDocumentDirectory inDomains:NSUserDomainMask] lastObject];
-}
 
 
 
@@ -203,98 +196,88 @@
 
 #pragma mark - File Handling
 
-+ (NSString *)documentPath
++ (NSURL *)documentDirectory
 {
-	NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
-	NSString *path = paths.firstObject;
-	return path;
+	return [[NSFileManager defaultManager] URLsForDirectory:NSDocumentDirectory inDomains:NSUserDomainMask].lastObject;
+	
 }
-
-#define cacheDirectory @"Cache"
-#define tempDirectory @"Temp"
-
-+ (NSString *)cachePath
++ (NSURL *)cacheDirectory
 {
-	NSString *cachePath = [[DataHandler documentPath] stringByAppendingPathComponent:cacheDirectory];
-	if (![[NSFileManager defaultManager] fileExistsAtPath:cachePath])
+	return [[NSFileManager defaultManager] URLsForDirectory:NSCachesDirectory inDomains:NSUserDomainMask].lastObject;
+}
+#define storeDirectory @"Store"
++ (NSURL *)persistentDirectory
+{
+	NSURL *storeURL = [[DataHandler documentDirectory] URLByAppendingPathComponent:storeDirectory isDirectory:YES];
+	NSString *storePath = storeURL.path;
+	if (![[NSFileManager defaultManager] fileExistsAtPath:storeURL.path])
 	{
 		NSError *error;
-		[[NSFileManager defaultManager] createDirectoryAtPath:cachePath withIntermediateDirectories:NO attributes:nil error:&error]; //Create folder
+		[[NSFileManager defaultManager] createDirectoryAtPath:storePath withIntermediateDirectories:NO attributes:nil error:&error]; //Create folder
 	}
-	return cachePath;
+	return storeURL;
 }
-+ (NSString *)tempPath
++ (NSString *)directoryPathPersistent:(BOOL)persistent
 {
-	NSString *tempPath = [[DataHandler documentPath] stringByAppendingPathComponent:tempDirectory];
-	if (![[NSFileManager defaultManager] fileExistsAtPath:tempPath])
-	{
-		NSError *error;
-		[[NSFileManager defaultManager] createDirectoryAtPath:tempPath withIntermediateDirectories:NO attributes:nil error:&error]; //Create folder
-	}
-	return tempPath;
+	return persistent ? [DataHandler persistentDirectory].path : [DataHandler cacheDirectory].path;
 }
-
-+ (NSString *)pathForTempFile:(NSString *)filename
++ (NSString *)pathForFile:(NSString *)filename persistent:(BOOL)persistent
 {
-	return [[DataHandler tempPath] stringByAppendingPathComponent:filename];
+	return [[DataHandler directoryPathPersistent:persistent] stringByAppendingPathComponent:filename];
 }
-+ (NSString *)pathForCachedFile:(NSString *)filename
++ (BOOL)fileExists:(NSString *)filename persistent:(BOOL)persistent
 {
-	return [[DataHandler cachePath] stringByAppendingPathComponent:filename];
-}
-+ (BOOL)fileExists:(NSString *)filename
-{
-	BOOL fileExists = [[NSFileManager defaultManager] fileExistsAtPath:[DataHandler pathForCachedFile:filename] isDirectory:NO];
+	BOOL fileExists = [[NSFileManager defaultManager] fileExistsAtPath:[DataHandler pathForFile:filename persistent:persistent] isDirectory:NO];
 	return fileExists;
 }
 
 
 
-- (void)cleanUpCachedLocalFiles
-{
-	NSError *error;
-	NSArray *allFiles = [[NSFileManager defaultManager] contentsOfDirectoryAtPath:[DataHandler cachePath]
-																			error:&error];
-	
-	NSMutableArray *invalidFiles = [allFiles pathsMatchingExtensions:@[@"jpg",@"mp4"]].mutableCopy;
-	
-	// TODO: on iOS file:///private/var/ vs. file:///var/
-	for (Program *program in self.programs)
-	{
-		NSString *fileName = program.image;
-		NSUInteger index = [invalidFiles indexOfObject:fileName];
-		if (index != NSNotFound) {
-			[invalidFiles removeObjectAtIndex:index];
-		}
-		
-		for (Season *season in program.seasons) {
-			for (Episode *episode in season.episodes) {
-				NSString *fileName = episode.image;
-				NSUInteger index = [invalidFiles indexOfObject:fileName];
-				if (index != NSNotFound) {
-					[invalidFiles removeObjectAtIndex:index];
-				}
-			}
-		}
-	}
-	
-	for (NSString *invalidFileName in invalidFiles)
-	{
-		NSError *error;
-		DLog(@"Delete file %@",invalidFileName);
-		[[NSFileManager defaultManager] removeItemAtPath:[DataHandler pathForCachedFile:invalidFileName]
-												  error:&error];
-	}
-	
-	// Clear temp folder
-//	allFiles = [[NSFileManager defaultManager] contentsOfDirectoryAtPath:[DataHandler tempPath]
+//- (void)cleanUpCachedLocalFiles
+//{
+//	NSError *error;
+//	NSArray *allFiles = [[NSFileManager defaultManager] contentsOfDirectoryAtPath:[DataHandler directoryPersistent:YES]
 //																			error:&error];
-//	for (NSURL *invalidFileURL in allFiles)
+//	
+//	NSMutableArray *invalidFiles = [allFiles pathsMatchingExtensions:@[@"jpg",@"mp4"]].mutableCopy;
+//	
+//	// TODO: on iOS file:///private/var/ vs. file:///var/
+//	for (Program *program in self.programs)
+//	{
+//		NSString *fileName = program.image;
+//		NSUInteger index = [invalidFiles indexOfObject:fileName];
+//		if (index != NSNotFound) {
+//			[invalidFiles removeObjectAtIndex:index];
+//		}
+//		
+//		for (Season *season in program.seasons) {
+//			for (Episode *episode in season.episodes) {
+//				NSString *fileName = episode.image;
+//				NSUInteger index = [invalidFiles indexOfObject:fileName];
+//				if (index != NSNotFound) {
+//					[invalidFiles removeObjectAtIndex:index];
+//				}
+//			}
+//		}
+//	}
+//	
+//	for (NSString *invalidFileName in invalidFiles)
 //	{
 //		NSError *error;
-//		DLog(@"Delete temp file %@",invalidFileURL);
-//		[[NSFileManager defaultManager] removeItemAtURL:invalidFileURL error:&error];
+//		DLog(@"Delete file %@",invalidFileName);
+//		[[NSFileManager defaultManager] removeItemAtPath:[DataHandler pathForCachedFile:invalidFileName]
+//												  error:&error];
 //	}
-}
+//	
+//	// Clear temp folder
+////	allFiles = [[NSFileManager defaultManager] contentsOfDirectoryAtPath:[DataHandler tempPath]
+////																			error:&error];
+////	for (NSURL *invalidFileURL in allFiles)
+////	{
+////		NSError *error;
+////		DLog(@"Delete temp file %@",invalidFileURL);
+////		[[NSFileManager defaultManager] removeItemAtURL:invalidFileURL error:&error];
+////	}
+//}
 
 @end

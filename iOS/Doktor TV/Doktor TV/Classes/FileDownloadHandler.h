@@ -29,6 +29,7 @@ typedef void (^CompletionHandlerType)(); // Should be defined in AppDelegate app
 
 - (void)download:(NSString *)urlString toFile:(NSString *)fileName backgroundTransfer:(BOOL)backgroundTransfer completion:(void (^)(NSURLSessionDownloadTask *downloadTask))completion;
 - (void)download:(NSString *)urlString toFile:(NSString *)fileName backgroundTransfer:(BOOL)backgroundTransfer observer:(id)observer selector:(SEL)selector completion:(void (^)(NSURLSessionDownloadTask *downloadTask))completion;
+- (void)download:(NSString *)urlString toFile:(NSString *)fileName backgroundTransfer:(BOOL)backgroundTransfer observer:(id)observer selector:(SEL)selector completion:(void (^)(NSURLSessionDownloadTask *downloadTask))completion persistent:(BOOL)persistent;
 /** Find download task, and if available, add observer
  @param urlString The URL of the source file.
  @param backgroundTransfer Look for download task in background transfers

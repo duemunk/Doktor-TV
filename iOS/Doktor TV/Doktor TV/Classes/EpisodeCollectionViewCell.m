@@ -70,12 +70,13 @@
 	}
 }
 
+#define STORE_IMAGE_PERSISTENT NO
 
 - (void)setupImage
 {
 	if (_episode.image)
 	{
-		NSString *imagePath = [DataHandler pathForCachedFile:_episode.image];
+		NSString *imagePath = [DataHandler pathForFile:_episode.image persistent:STORE_IMAGE_PERSISTENT];
 		
 		if ([[NSFileManager defaultManager] fileExistsAtPath:imagePath])
 		{
@@ -93,7 +94,8 @@
 												  selector:@selector(downloadNotification:)
 												completion:^(NSURLSessionDownloadTask *downloadTask) {
 													self.downloadTask = downloadTask;
-												}];
+												}
+												persistent:STORE_IMAGE_PERSISTENT];
 		}
 	}
 	else
