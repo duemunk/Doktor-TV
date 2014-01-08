@@ -1,0 +1,14 @@
+PODS:
+  - KeepLayout (1.2.2)
+
+DEPENDENCIES:
+  - KeepLayout (from `https://github.com/duemunk/KeepLayout.git`)
+
+EXTERNAL SOURCES:
+  KeepLayout:
+    :git: https://github.com/duemunk/KeepLayout.git
+
+SPEC CHECKSUMS:
+  KeepLayout: 0f80364b513a2a4a6183ffe3740706bf861dec16
+
+COCOAPODS: 0.29.0
