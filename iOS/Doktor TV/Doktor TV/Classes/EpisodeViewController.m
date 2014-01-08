@@ -15,6 +15,8 @@
 
 #import "FileDownloadHandler.h"
 
+#define STORE_VIDEO_PERSISTENT YES
+
 @import AVFoundation;
 
 @import MediaPlayer;
@@ -45,13 +47,6 @@
 {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
-}
-
-- (void)viewWillAppear:(BOOL)animated
-{
-	[super viewWillAppear:animated];
-	
-	[self checkDownload];
 }
 
 - (void)viewDidDisappear:(BOOL)animated
@@ -118,7 +113,7 @@
 	[downloadButton addTarget:self action:@selector(download) forControlEvents:UIControlEventTouchUpInside];
 
 	
-	BOOL hasVideoFile = self.episode.video && [DataHandler fileExists:self.episode.video];
+	BOOL hasVideoFile = self.episode.video && [DataHandler fileExists:self.episode.video persistent:STORE_VIDEO_PERSISTENT];
 	if (hasVideoFile)
 	{
 		DLog(@"Has videofile %@ for episode %@", self.episode.video,self.episode.title);
@@ -166,11 +161,10 @@
 
 
 
-#define STORE_VIDEO_PERSISTENT YES
 
 - (void)download
 {
-	BOOL hasVideoFile = self.episode.video && [DataHandler fileExists:self.episode.video];
+	BOOL hasVideoFile = self.episode.video && [DataHandler fileExists:self.episode.video persistent:STORE_VIDEO_PERSISTENT];
 	if (hasVideoFile)
 	{
 		DLog(@"Video available %@ for episode %@",self.episode.video,self.episode.title);
