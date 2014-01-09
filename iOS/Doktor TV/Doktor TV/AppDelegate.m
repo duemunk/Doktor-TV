@@ -13,6 +13,13 @@
 #import "DRHandler.h"
 #import "FileDownloadHandler.h"
 
+#define DEVELOPMENT 1
+
+
+#if DEVELOPMENT
+#import "DMTestSettings.h"
+#endif
+
 @implementation AppDelegate
 
 - (BOOL)application:(UIApplication *)application willFinishLaunchingWithOptions:(NSDictionary *)launchOptions
@@ -37,6 +44,10 @@
 	
 #if DEBUG
 	[FileDownloadHandler sharedInstance];
+#endif
+	
+#if DEVELOPMENT
+	[DMTestSettings start];
 #endif
 	
 	application.applicationIconBadgeNumber = 0;
