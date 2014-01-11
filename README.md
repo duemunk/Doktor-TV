@@ -72,3 +72,7 @@ https://github.com/blamh/Doktor-TV-DS
 * DR R.... (rekursiv akronym)
 * DRown or DReam
 * Dr. TV
+
+## Data-test-filer
+* <http://apps.simonpaarlberg.com/doktor_tv/test1.json>
+* <http://apps.simonpaarlberg.com/doktor_tv/test2.json>
