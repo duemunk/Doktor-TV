@@ -32,6 +32,7 @@
 		4EC07CEA1844A428005CB25F /* CollectionHeaderView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4EC07CE91844A428005CB25F /* CollectionHeaderView.m */; };
 		4EC77AC71843916E004D8E20 /* Model.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 4EC77AC51843916E004D8E20 /* Model.xcdatamodeld */; };
 		4EC77ACA18439183004D8E20 /* Program.m in Sources */ = {isa = PBXBuildFile; fileRef = 4EC77AC918439183004D8E20 /* Program.m */; };
+		4EC9510C18814C7B00EAB45B /* DRTestSettingsPlugin.m in Sources */ = {isa = PBXBuildFile; fileRef = 4EC9510B18814C7B00EAB45B /* DRTestSettingsPlugin.m */; };
 		4ECF108E1836E79000D4C62C /* CoreData.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4ECF108D1836E79000D4C62C /* CoreData.framework */; };
 		4ECF10D21836E7F600D4C62C /* DataHandler.m in Sources */ = {isa = PBXBuildFile; fileRef = 4ECF10D11836E7F500D4C62C /* DataHandler.m */; };
 		4ECF10D81836EB6D00D4C62C /* Season.m in Sources */ = {isa = PBXBuildFile; fileRef = 4ECF10D71836EB6D00D4C62C /* Season.m */; };
@@ -100,6 +101,8 @@
 		4EC77AC61843916E004D8E20 /* Model.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = Model.xcdatamodel; sourceTree = "<group>"; };
 		4EC77AC818439183004D8E20 /* Program.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Program.h; path = Classes/Program.h; sourceTree = "<group>"; };
 		4EC77AC918439183004D8E20 /* Program.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = Program.m; path = Classes/Program.m; sourceTree = "<group>"; };
+		4EC9510A18814C7B00EAB45B /* DRTestSettingsPlugin.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = DRTestSettingsPlugin.h; path = Classes/DRTestSettingsPlugin.h; sourceTree = "<group>"; };
+		4EC9510B18814C7B00EAB45B /* DRTestSettingsPlugin.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = DRTestSettingsPlugin.m; path = Classes/DRTestSettingsPlugin.m; sourceTree = "<group>"; };
 		4ECF108D1836E79000D4C62C /* CoreData.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreData.framework; path = System/Library/Frameworks/CoreData.framework; sourceTree = SDKROOT; };
 		4ECF10D01836E7F500D4C62C /* DataHandler.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = DataHandler.h; path = Classes/DataHandler.h; sourceTree = "<group>"; };
 		4ECF10D11836E7F500D4C62C /* DataHandler.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = DataHandler.m; path = Classes/DataHandler.m; sourceTree = "<group>"; };
@@ -212,6 +215,7 @@
 				4E1F165D183428470068E5BD /* AppDelegate.h */,
 				4E1F165E183428470068E5BD /* AppDelegate.m */,
 				4EC77ABB183F5AFD004D8E20 /* Appearance.h */,
+				4EC9510918814C6100EAB45B /* TestSettings */,
 				4ECF10FE1837753200D4C62C /* Navigation */,
 				4ECF10D01836E7F500D4C62C /* DataHandler.h */,
 				4ECF10D11836E7F500D4C62C /* DataHandler.m */,
@@ -305,6 +309,15 @@
 				4EFD19BD183D1CEA00FC8DB2 /* SearchScrollViewController.m */,
 			);
 			name = Search;
+			sourceTree = "<group>";
+		};
+		4EC9510918814C6100EAB45B /* TestSettings */ = {
+			isa = PBXGroup;
+			children = (
+				4EC9510A18814C7B00EAB45B /* DRTestSettingsPlugin.h */,
+				4EC9510B18814C7B00EAB45B /* DRTestSettingsPlugin.m */,
+			);
+			name = TestSettings;
 			sourceTree = "<group>";
 		};
 		4ECF10DF1836EB7700D4C62C /* Model */ = {
@@ -525,6 +538,7 @@
 			files = (
 				4EFD19BE183D1CEA00FC8DB2 /* SearchScrollViewController.m in Sources */,
 				4EC77AC71843916E004D8E20 /* Model.xcdatamodeld in Sources */,
+				4EC9510C18814C7B00EAB45B /* DRTestSettingsPlugin.m in Sources */,
 				4ECF10E81836EEFF00D4C62C /* ProgramsCollectionViewController.m in Sources */,
 				4EC07CEA1844A428005CB25F /* CollectionHeaderView.m in Sources */,
 				4ECF10EB1836F0D200D4C62C /* ProgramCollectionViewCell.m in Sources */,

@@ -123,6 +123,73 @@
 
 
 
+- (void)clearCoreData
+{
+	// Delete all objects
+	for (id entity in [self.managedObjectModel entities])
+	{
+		NSFetchRequest *fetchRequest = [NSFetchRequest new];
+		fetchRequest.entity = entity;
+		
+		NSError *error = nil;
+		NSArray *results = [self.managedObjectContext executeFetchRequest:fetchRequest error:&error];
+		if (error)
+		{
+			DLog(@"Err %@",error.description);
+		}
+		
+		for (NSManagedObject *obj in results) {
+			[self.managedObjectContext deleteObject:obj];
+		}
+	}
+	[self saveContext];
+	
+//	// Delete persistent store
+//	[self.managedObjectContext lock];
+//    [self.managedObjectContext reset];
+//    NSPersistentStore *store = [self persistentStoreCoordinator].persistentStores.lastObject;
+//    BOOL resetOk = NO;
+//	
+//    if (store)
+//    {
+//        NSURL *storeUrl = store.URL;
+//        NSError *error;
+//		
+//        if ([self.persistentStoreCoordinator removePersistentStore:store error:&error])
+//        {
+//            _persistentStoreCoordinator = nil;
+//            _managedObjectContext = nil;
+//			
+//            if (![[NSFileManager defaultManager] removeItemAtPath:storeUrl.path error:&error])
+//            {
+//                NSLog(@"\nresetDatastore. Error removing file of persistent store: %@",
+//					  [error localizedDescription]);
+//                resetOk = NO;
+//            }
+//            else
+//            {
+//                //now recreate persistent store
+//                [self persistentStoreCoordinator];
+//                [self.managedObjectContext unlock];
+//                resetOk = YES;
+//            }
+//        }
+//        else
+//        {
+//            NSLog(@"\nresetDatastore. Error removing persistent store: %@",
+//				  [error localizedDescription]);
+//            resetOk = NO;
+//        }
+//        return resetOk;
+//    }
+//    else
+//    {
+//        NSLog(@"\nresetDatastore. Could not find the persistent store");
+//        return resetOk;
+//    }
+}
+
+
 
 #pragma mark - 
 
@@ -232,6 +299,28 @@
 }
 
 
+
+- (void)clearCaches
+{
+	[self clearPath:[DataHandler cacheDirectory].path];
+}
+
+- (void)clearPersistent
+{
+	[self clearPath:[DataHandler persistentDirectory].path];
+}
+
+- (void)clearPath:(NSString *)path
+{
+	NSFileManager *filemgr = [NSFileManager defaultManager];
+	
+	if ([filemgr removeItemAtPath:path error:NULL])
+		NSLog (@"Remove successful");
+	else
+		NSLog (@"Remove failed");
+	
+	[filemgr createDirectoryAtPath:path withIntermediateDirectories:NO attributes:nil error:nil];
+}
 
 //- (void)cleanUpCachedLocalFiles
 //{

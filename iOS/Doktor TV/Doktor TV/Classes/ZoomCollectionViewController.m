@@ -297,28 +297,37 @@
     {
         case NSFetchedResultsChangeInsert:
 		{
-			if (containedInInsert)
-				change[@(type)] = newIndexPath; DLog(@"Insert section %d item %d",indexPath.section,indexPath.item);
+			if (!containedInInsert) {
+				change[@(type)] = newIndexPath;
+				DLog(@"Insert section %d item %d",indexPath.section,indexPath.item);
+			}
 		}
             break;
         case NSFetchedResultsChangeDelete:
 		{
-			if (containedInDelete)
-				change[@(type)] = indexPath; DLog(@"Delete section %d item %d",indexPath.section,indexPath.item);
+			if (!containedInDelete) {
+				change[@(type)] = indexPath;
+				DLog(@"Delete section %d item %d",indexPath.section,indexPath.item);
+			}
 		}
             break;
         case NSFetchedResultsChangeUpdate:
-            change[@(type)] = indexPath; DLog(@"Update section %d item %d",indexPath.section,indexPath.item);
+		{
+            change[@(type)] = indexPath;
+			DLog(@"Update section %d item %d",indexPath.section,indexPath.item);
+		}
             break;
         case NSFetchedResultsChangeMove:
 		{
 			if (!containedInInsert)
 			{
-				change[@(NSFetchedResultsChangeInsert)] = newIndexPath; DLog(@"Insert section %d item %d",indexPath.section,indexPath.item);
+				change[@(NSFetchedResultsChangeInsert)] = newIndexPath;
+				DLog(@"Insert section %d item %d",indexPath.section,indexPath.item);
 			}
 			if (!containedInDelete)
 			{
-				change[@(NSFetchedResultsChangeDelete)] = indexPath; DLog(@"Delete section %d item %d",indexPath.section,indexPath.item);
+				change[@(NSFetchedResultsChangeDelete)] = indexPath;
+				DLog(@"Delete section %d item %d",indexPath.section,indexPath.item);
 			}
 //			else
 //			{
@@ -327,11 +336,16 @@
 		}
             break;
     }
-    [_objectChanges addObject:change];
+	if (change.count) {
+		[_objectChanges addObject:change];
+	}
 }
 
 - (void)controllerDidChangeContent:(NSFetchedResultsController *)controller
 {
+//	[self.collectionView reloadData];
+//	return;
+	
 	if (_sectionChanges.count > 0 && _objectChanges.count > 0)
 	{
 //		[self.collectionView performBatchUpdates:^{

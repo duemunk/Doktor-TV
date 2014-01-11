@@ -29,7 +29,7 @@
 		NSURL *URL = [NSURL URLWithString:@"http://www.dr.dk/mu"];
 		sharedInstance.afHttpSessionManager = [[AFHTTPSessionManager alloc] initWithBaseURL:URL];
 		
-		[sharedInstance queryPrograms];
+//		[sharedInstance queryPrograms];
     });
     return sharedInstance;
 }
@@ -94,6 +94,37 @@
 //		 }];
 //	}
 }
+
+
+- (void)queryPrograms9outof10
+{
+	NSArray *titles = @[@"Abba",@"Rejseholdet",@"Hammerslag",@"Bonderøven",@"På skinner",@"Price*",@"Sporløs",@"Kontant"];
+	[self queryProgramsWithTitles:titles];
+}
+- (void)queryPrograms1outof10
+{
+	NSArray *titles = @[@"Absurdistan",@"Arvingerne"];
+	[self queryProgramsWithTitles:titles];
+}
+- (void)queryProgramsWithTitles:(NSArray *)titles
+{
+	NSString *query =  @"http://www.dr.dk/mu/view/bundles-with-public-asset?BundleType=Series&ChannelType=TV&DrChannel=True";
+	
+	for (NSString *title in titles)
+	{
+		NSString *query1 = [self addTitle:title urlString:query];
+		
+		DLog(@"Reqest %@",query1);
+		[self.afHttpSessionManager GET:query1 parameters:nil success:^(NSURLSessionDataTask *task, id responseObject)
+		 {
+			 DLog(@"Received %@",query1);
+			 [self validateProgramsData:responseObject];
+		 } failure:^(NSURLSessionDataTask *task, NSError *error) {
+			 DLog(@"ERROR: %@",error);
+		 }];
+	}
+}
+
 
 - (NSString *)addLimit:(NSUInteger)limit urlString:(NSString *)urlString
 {

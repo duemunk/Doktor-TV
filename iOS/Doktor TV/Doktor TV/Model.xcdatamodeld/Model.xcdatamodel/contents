@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<model userDefinedModelVersionIdentifier="" type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="3401" systemVersion="13A598" minimumToolsVersion="Xcode 4.3" macOSVersion="Automatic" iOSVersion="Automatic">
+<model userDefinedModelVersionIdentifier="" type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="3401" systemVersion="13B42" minimumToolsVersion="Xcode 4.3" macOSVersion="Automatic" iOSVersion="Automatic">
     <entity name="Episode" representedClassName="Episode" syncable="YES">
         <attribute name="desc" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="dkOnly" optional="YES" attributeType="Boolean" syncable="YES"/>
@@ -22,7 +22,7 @@
         <attribute name="slug" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="subscribe" optional="YES" attributeType="Boolean" defaultValueString="NO" syncable="YES"/>
         <attribute name="title" optional="YES" attributeType="String" syncable="YES"/>
-        <relationship name="seasons" optional="YES" toMany="YES" deletionRule="Nullify" ordered="YES" destinationEntity="Season" inverseName="program" inverseEntity="Season" syncable="YES"/>
+        <relationship name="seasons" optional="YES" toMany="YES" deletionRule="Cascade" ordered="YES" destinationEntity="Season" inverseName="program" inverseEntity="Season" syncable="YES"/>
     </entity>
     <entity name="Season" representedClassName="Season" syncable="YES">
         <attribute name="number" optional="YES" attributeType="Integer 16" defaultValueString="0" syncable="YES"/>
@@ -30,8 +30,8 @@
         <relationship name="program" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Program" inverseName="seasons" inverseEntity="Program" syncable="YES"/>
     </entity>
     <elements>
-        <element name="Episode" positionX="0" positionY="0" width="0" height="0"/>
-        <element name="Program" positionX="0" positionY="0" width="0" height="0"/>
-        <element name="Season" positionX="0" positionY="0" width="0" height="0"/>
+        <element name="Episode" positionX="0" positionY="0" width="128" height="240"/>
+        <element name="Program" positionX="-398" positionY="-45" width="128" height="148"/>
+        <element name="Season" positionX="-209" positionY="9" width="128" height="90"/>
     </elements>
 </model>

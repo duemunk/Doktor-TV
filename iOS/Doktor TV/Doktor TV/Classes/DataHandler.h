@@ -22,6 +22,7 @@
 + (DataHandler *)sharedInstance;
 
 - (void)saveContext;
+- (void)clearCoreData;
 
 - (NSArray *)programs;
 
@@ -35,6 +36,8 @@
 + (BOOL)fileExists:(NSString *)filename persistent:(BOOL)persistent;
 + (NSString *)pathForFile:(NSString *)filename persistent:(BOOL)persistent;
 
+- (void)clearCaches;
+- (void)clearPersistent;
 //- (void)cleanUpCachedLocalFiles;
 
 @end

@@ -18,6 +18,7 @@
 
 #if DEVELOPMENT
 #import "DMTestSettings.h"
+#import "DRTestSettingsPlugin.h"
 #endif
 
 @implementation AppDelegate
@@ -47,7 +48,7 @@
 #endif
 	
 #if DEVELOPMENT
-	[DMTestSettings start];
+	[DMTestSettings startWithPlugins:@[[DRTestSettingsPlugin new]]];
 #endif
 	
 	application.applicationIconBadgeNumber = 0;

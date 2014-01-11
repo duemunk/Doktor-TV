@@ -23,6 +23,11 @@ typedef void (^RefreshCompletionHandler)(BOOL didReceiveNewData);
 - (void)refreshMainData:(RefreshCompletionHandler)refreshCompletionHandler;
 
 - (void)queryPrograms;
+
+// Test queries
+- (void)queryPrograms9outof10;
+- (void)queryPrograms1outof10;
+
 - (void)validateImageForProgram:(Program *)program;
 - (void)validateImageForEpisode:(Episode *)episode;
 - (void)validateEpisodesForProgram:(Program *)program;
