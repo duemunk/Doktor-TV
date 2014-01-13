@@ -12,6 +12,9 @@
 
 #import "AFNetworking.h"
 
+#import "DMTestSettings.h"
+#import "DRTestSettingsPlugin.h"
+
 @implementation DRHandler
 {
 	
@@ -26,10 +29,11 @@
         sharedInstance = [DRHandler new];
         // Do any other initialisation stuff here
 		
-		NSURL *URL = [NSURL URLWithString:@"http://www.dr.dk/mu"];
-		sharedInstance.afHttpSessionManager = [[AFHTTPSessionManager alloc] initWithBaseURL:URL];
+		sharedInstance.afHttpSessionManager = [AFHTTPSessionManager new];
 		
+		sharedInstance.useOwnServer = [[[DMTestSettings sharedInstance] objectForKey:@"kUseOwnServer" withPluginIdentifier:[DRTestSettingsPlugin new].uniqueID] boolValue];
 //		[sharedInstance queryPrograms];
+		[sharedInstance queryPrograms9outof10];
     });
     return sharedInstance;
 }
@@ -98,11 +102,37 @@
 
 - (void)queryPrograms9outof10
 {
+	if (self.useOwnServer)
+	{
+		NSString *query = @"http://apps.simonpaarlberg.com/doktor_tv/test1.json";
+		[self.afHttpSessionManager GET:query parameters:nil success:^(NSURLSessionDataTask *task, id responseObject)
+		 {
+			 DLog(@"Received %@",query);
+			 [self validateProgramsData:responseObject];
+		 } failure:^(NSURLSessionDataTask *task, NSError *error) {
+			 DLog(@"ERROR: %@",error);
+		 }];
+		return;
+	}
+	
 	NSArray *titles = @[@"Abba",@"Rejseholdet",@"Hammerslag",@"Bonderøven",@"På skinner",@"Price*",@"Sporløs",@"Kontant"];
 	[self queryProgramsWithTitles:titles];
 }
 - (void)queryPrograms1outof10
 {
+	if (self.useOwnServer)
+	{
+		NSString *query = @"http://apps.simonpaarlberg.com/doktor_tv/test2.json";
+		[self.afHttpSessionManager GET:query parameters:nil success:^(NSURLSessionDataTask *task, id responseObject)
+		 {
+			 DLog(@"Received %@",query);
+			 [self validateProgramsData:responseObject];
+		 } failure:^(NSURLSessionDataTask *task, NSError *error) {
+			 DLog(@"ERROR: %@",error);
+		 }];
+		return;
+	}
+	
 	NSArray *titles = @[@"Absurdistan",@"Arvingerne"];
 	[self queryProgramsWithTitles:titles];
 }
@@ -165,8 +195,64 @@
 #define kDRKind @"Kind"
 #define kDRUri @"Uri"
 
+#define kOWNUri @"ImageUri"
+
 - (void)validateProgramsData:(NSDictionary *)programsDictionary
 {
+	if (self.useOwnServer)
+	{
+		DLog(@"%@",programsDictionary);
+		
+		NSArray *localPrograms = [[DataHandler sharedInstance] programs];
+		
+		for (NSDictionary *dict in programsDictionary)
+		{
+			NSString *drID = dict[kDRUrn];
+			
+			NSArray *existingLocalPrograms = [localPrograms filteredArrayUsingPredicate:[NSPredicate predicateWithFormat:@"drID = %@",drID]];
+			
+			Program *program;
+			if (existingLocalPrograms.count)
+			{
+				// TODO: Update?
+				program = (Program *)existingLocalPrograms.firstObject;
+				
+				DLog(@"Program already exists %@",program.title);
+			}
+			else
+			{
+				// Create new program
+				program = [[DataHandler sharedInstance] newProgram];
+				program.drID = drID;
+				program.title = dict[kDRTitle];
+				program.slug = dict[kDRSlug];
+				
+				NSString *imageUrlString = dict[kOWNUri];
+				// Set max size
+				imageUrlString = [imageUrlString stringByAppendingString:@"?width=200&height=200"];
+				if (![imageUrlString isEqualToString:program.imageUrl])
+				{
+					DLog(@"New image url %@ for program %@",imageUrlString,program.title);
+					program.imageUrl = imageUrlString;
+					NSString *fileName = imageUrlString.lastPathComponent;
+					fileName = [fileName stringByAppendingPathExtension:@"jpg"];
+					program.image = fileName;
+				}
+				else
+					DLog(@"Non-changed image url %@ for program %@",imageUrlString,program.title);
+				
+				DLog(@"New program %@",program.title);
+			}
+			
+			
+			
+		}
+		[[DataHandler sharedInstance] saveContext];
+		
+		return;
+	}
+	
+	
 	NSArray *data = programsDictionary[kDRData];
 	
 	NSArray *localPrograms = [[DataHandler sharedInstance] programs];

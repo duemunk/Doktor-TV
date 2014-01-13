@@ -17,6 +17,7 @@ typedef void (^RefreshCompletionHandler)(BOOL didReceiveNewData);
 @interface DRHandler : NSObject
 
 @property (nonatomic, strong) AFHTTPSessionManager *afHttpSessionManager;
+@property (nonatomic, assign) BOOL useOwnServer; // ONLY USE IN DEVELOPMENT
 
 + (DRHandler *)sharedInstance;
 

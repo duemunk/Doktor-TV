@@ -453,6 +453,9 @@
 							com.apple.BackgroundModes = {
 								enabled = 1;
 							};
+							com.apple.InAppPurchase = {
+								enabled = 0;
+							};
 						};
 					};
 					4E1F1665183428470068E5BD = {
@@ -696,7 +699,7 @@
 				INFOPLIST_FILE = "Doktor TV/Doktor TV-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "";
+				PROVISIONING_PROFILE = "51676C25-36BA-43D4-B8DC-7A1A744D72DA";
 				WRAPPER_EXTENSION = app;
 			};
 			name = Debug;
@@ -719,7 +722,7 @@
 				INFOPLIST_FILE = "Doktor TV/Doktor TV-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "";
+				PROVISIONING_PROFILE = "51676C25-36BA-43D4-B8DC-7A1A744D72DA";
 				WRAPPER_EXTENSION = app;
 			};
 			name = Release;
