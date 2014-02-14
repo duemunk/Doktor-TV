@@ -27,7 +27,6 @@
 	layout.minimumInteritemSpacing =
 	layout.minimumLineSpacing = 20.0f;
 	layout.sectionInset = UIEdgeInsetsMake(0.0f, 20.0f, 20.0f, 20.0f);
-	layout.headerReferenceSize = CGSizeMake(10.0f, 10.0f);
 	
 	self = [super initWithCollectionViewLayoutDefaultLayout:layout];
 	if (self) {

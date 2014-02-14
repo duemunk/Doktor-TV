@@ -38,14 +38,11 @@
 
 - (void)setZoom:(BOOL)zoom
 {
-	if (zoom != _zoom)
-	{
-		_zoom = zoom;
-		
-		[self blurBackgroundImage:zoom];
-		[self setupChildViewController];
-		[self setupCloseButton];
-	}
+	[super setZoom:zoom];
+	
+	[self blurBackgroundImage:zoom];
+	[self setupChildViewController];
+	[self setupCloseButton];
 }
 
 - (void)setBackgroundImage:(UIImage *)backgroundImage
@@ -108,14 +105,6 @@
 	}
 	
 	return _titleLabel;
-}
-- (void)close
-{
-	self.zoom = NO;
-	
-	if ([self.delegate respondsToSelector:@selector(zoomCollectionViewCell:changedZoom:)]) {
-		[self.delegate zoomCollectionViewCell:self changedZoom:NO];
-	}
 }
 
 

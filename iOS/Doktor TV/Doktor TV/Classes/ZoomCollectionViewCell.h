@@ -8,17 +8,14 @@
 
 @import UIKit;
 #import "HighlightedLabel.h"
+#import "TDMZoomCollectionViewCell.h"
 
-@protocol ZoomCollectionViewCellDelegate;
-
-@interface ZoomCollectionViewCell : UICollectionViewCell
+@interface ZoomCollectionViewCell : TDMZoomCollectionViewCell
 
 @property (nonatomic, strong) HighlightedLabel *titleLabel;
 @property (nonatomic, strong) UIImage *backgroundImage;
-@property (nonatomic, assign, getter = isZoomed) BOOL zoom;
 @property (nonatomic, assign) UIViewController *childViewController;
 @property (nonatomic, strong) NSManagedObject *managedObject;
-@property (nonatomic, strong) id<ZoomCollectionViewCellDelegate> delegate;
 @property (nonatomic, assign) UIEdgeInsets childViewControllerInsets;
 
 - (void)applyDefaultLabelStyling:(HighlightedLabel *)label;
@@ -26,12 +23,5 @@
 - (void)setupChildViewController;
 
 - (void)didDisappear;
-
-@end
-
-
-@protocol ZoomCollectionViewCellDelegate <NSObject>
-
-- (void)zoomCollectionViewCell:(ZoomCollectionViewCell *)cell changedZoom:(BOOL)zoom;
 
 @end

@@ -32,7 +32,9 @@
 	layout.minimumInteritemSpacing =
 	layout.minimumLineSpacing = 0.0f;
 	
-	self = [super initWithCollectionViewLayoutDefaultLayout:layout];
+	layout.headerReferenceSize = CGSizeMake(200, 60);
+	
+	self = [super initWithCollectionViewLayoutDefaultLayout:layout supportsSupplementaryElement:YES];
 	if (self) {
 	}
 	return self;
@@ -51,6 +53,9 @@
 	self.cellIdentifier = PROGRAM_COLLECTION_CELL_ID;
 	[self.collectionView registerClass:[ProgramCollectionViewCell class] forCellWithReuseIdentifier:self.cellIdentifier];
 	[self.collectionView registerClass:[CollectionHeaderView class] forSupplementaryViewOfKind:UICollectionElementKindSectionHeader withReuseIdentifier:PROGRAM_COLLECTION_HEADER_ID];
+	
+	self.hideHeaderInZoomedMode = YES;
+	self.hideFooterInZoomedMode = YES;
 }
 
 - (void)didReceiveMemoryWarning
@@ -63,7 +68,6 @@
 
 - (void)setZoom:(BOOL)zoom
 {
-	
 	[super setZoom:zoom];
 }
 
@@ -85,25 +89,23 @@
 			header.title = [sectionInfo name].boolValue ? @"Favoritter" : @"";
 			return header;
 		}
-		else
-			return [super collectionView:collectionView viewForSupplementaryElementOfKind:kind atIndexPath:indexPath];
 	}
-	return nil;
+	return [super collectionView:collectionView viewForSupplementaryElementOfKind:kind atIndexPath:indexPath];;
 }
 
 
 #pragma mark - UICollectionViewDelegate
 
-- (CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout*)collectionViewLayout referenceSizeForHeaderInSection:(NSInteger)section
-{
-	if (self.fetchedResultsController.sections.count > 1 && !self.isZoomed) {
-		CGSize size = collectionView.bounds.size;
-		size.height = 60;
-		return size;
-	}
-
-	return CGSizeZero;
-}
+//- (CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout*)collectionViewLayout referenceSizeForHeaderInSection:(NSInteger)section
+//{
+//	if (self.fetchedResultsController.sections.count > 1 && !self.isZoomed) {
+//		CGSize size = collectionView.bounds.size;
+//		size.height = 60;
+//		return size;
+//	}
+//
+//	return [super collectionView:collectionView layout:collectionViewLayout referenceSizeForHeaderInSection:section];
+//}
 
 
 

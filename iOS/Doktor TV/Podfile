@@ -5,6 +5,7 @@ target "Doktor TV" do
 	pod "KeepLayout", :git => "https://github.com/duemunk/KeepLayout.git"
 	pod "JMStaticContentTableViewController", :git => "https://github.com/duemunk/JMStaticContentTableViewController.git"
 	pod "TDMScreenEdgePanGestureRecognizer", :git => "https://github.com/duemunk/TDMScreenEdgePanGestureRecognizer.git"
+	pod "TDMZoomCollectionViewController", :git => "https://tobiasdm@bitbucket.org/tobiasdm/tdmzoomcollectionviewcontroller.git"
 	pod "iOS7Colors"
 	pod "AFNetworking"
 end

@@ -9,9 +9,10 @@
 @import UIKit;
 
 #import "DataHandler.h"
+#import "TDMZoomCollectionViewController.h"
 #import "ZoomCollectionViewCell.h"
 
-@interface ZoomCollectionViewController : UICollectionViewController <NSFetchedResultsControllerDelegate, ZoomCollectionViewCellDelegate>
+@interface ZoomCollectionViewController : TDMZoomCollectionViewController <NSFetchedResultsControllerDelegate>
 
 @property (strong, nonatomic) NSFetchedResultsController *fetchedResultsController;
 @property (strong, nonatomic) NSManagedObjectContext *managedObjectContext;
@@ -23,11 +24,6 @@
 @property (nonatomic, strong) NSString *sectionKey;
 @property (nonatomic, assign) BOOL sectionAscending;
 
-@property (nonatomic, assign, getter = isZoomed) BOOL zoom;
-
-@property (nonatomic, assign) NSString *cellIdentifier;
-
-- (instancetype)initWithCollectionViewLayoutDefaultLayout:(UICollectionViewLayout *)layout;
 - (void)resetFetchResultsController;
 
 @end

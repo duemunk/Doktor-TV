@@ -8,30 +8,23 @@
 
 #import "ZoomCollectionViewController.h"
 
+@interface ZoomCollectionViewController ()
+
+@property (assign, nonatomic) BOOL isZooming;
+
+@end
+
 @implementation ZoomCollectionViewController
 {
     NSMutableArray *_objectChanges;
     NSMutableArray *_sectionChanges;
-	
-	BOOL isZooming;
-	
-	UICollectionViewLayout *defaultLayout;
-}
-
-
-- (instancetype)initWithCollectionViewLayoutDefaultLayout:(UICollectionViewLayout *)layout
-{
-	self = [super initWithCollectionViewLayout:layout];
-	if (self) {
-		defaultLayout = layout;
-		_zoom = NO;
-	}
-	return self;
 }
 
 
 - (void)viewDidLoad
 {
+	[super viewDidLoad];
+	
 	_objectChanges = [NSMutableArray array];
     _sectionChanges = [NSMutableArray array];
 	
@@ -42,16 +35,8 @@
 	self.collectionView.clipsToBounds = YES;
 	
 	self.managedObjectContext = [DataHandler sharedInstance].managedObjectContext;
-	
-	[self.collectionView registerClass:[UICollectionReusableView class] forSupplementaryViewOfKind:UICollectionElementKindSectionHeader withReuseIdentifier:@"HeaderIdentifier"];
 }
 
-
-- (void)willAnimateRotationToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation duration:(NSTimeInterval)duration
-{
-	UICollectionViewLayout *layout = self.isZoomed ? [self zoomedCollectionViewLayout] : defaultLayout;
-	[self.collectionView setCollectionViewLayout:layout animated:YES];
-}
 
 
 #define kCache @"ProgramCache"
@@ -60,24 +45,6 @@
 	[NSFetchedResultsController deleteCacheWithName:kCache];
 	self.fetchedResultsController = nil;
 }
-
-
-
-- (UICollectionViewLayout *)zoomedCollectionViewLayout
-{
-	UICollectionViewFlowLayout *layout = [UICollectionViewFlowLayout new];
-	CGSize itemSize = self.collectionView.bounds.size;
-	UIEdgeInsets insets = self.collectionView.contentInset;
-	itemSize.height -= insets.top + insets.bottom;
-	itemSize.width -= insets.left + insets.right;
-	layout.itemSize = itemSize;
-	layout.minimumInteritemSpacing =
-	layout.minimumLineSpacing = 0.0f;
-	layout.sectionInset = UIEdgeInsetsMake(0, 0, 0, 0);
-	layout.scrollDirection = UICollectionViewScrollDirectionHorizontal;
-	return layout;
-}
-
 
 
 
@@ -104,94 +71,12 @@
 // The cell that is returned must be retrieved from a call to -dequeueReusableCellWithReuseIdentifier:forIndexPath:
 - (UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath
 {
-	ZoomCollectionViewCell *cell = (ZoomCollectionViewCell *)[collectionView dequeueReusableCellWithReuseIdentifier:self.cellIdentifier forIndexPath:indexPath];
-	
+	ZoomCollectionViewCell *cell = (ZoomCollectionViewCell *)[super collectionView:collectionView cellForItemAtIndexPath:indexPath];
 	cell.managedObject = [self.fetchedResultsController objectAtIndexPath:indexPath];
-	cell.zoom = self.isZoomed;
-	cell.delegate = self;
-    
     return cell;
 }
 
-- (UICollectionReusableView *)collectionView:(UICollectionView *)collectionView viewForSupplementaryElementOfKind:(NSString *)kind atIndexPath:(NSIndexPath *)indexPath
-{
-	if ([kind isEqualToString:UICollectionElementKindSectionHeader]) {
-		// FIX: Support changes from fetchcontroller
-		UICollectionReusableView *header = [collectionView dequeueReusableSupplementaryViewOfKind:kind withReuseIdentifier:@"HeaderIdentifier" forIndexPath:indexPath];
-		return header;
-	}
-	return nil;
-}
 
-
-
-
-#pragma mark - UICollectionViewDelegate
-
-
-
-- (void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath
-{
-	self.zoom = !_zoom;
-	
-	ZoomCollectionViewCell *zoomCell = (ZoomCollectionViewCell *)[collectionView cellForItemAtIndexPath:indexPath];
-	if (zoomCell) {
-		zoomCell.zoom = _zoom;
-	}
-}
-
-
-- (void)collectionView:(UICollectionView *)collectionView didEndDisplayingCell:(UICollectionViewCell *)cell forItemAtIndexPath:(NSIndexPath *)indexPath
-{
-	ZoomCollectionViewCell *zoomCell = (ZoomCollectionViewCell *)cell;
-	if (zoomCell) {
-		[zoomCell didDisappear];
-	}
-}
-
-
-
-
-- (void)setZoom:(BOOL)zoom
-{
-	if (!isZooming)
-	{
-		if (zoom != _zoom)
-		{
-			_zoom = zoom;
-		
-			__block UICollectionView *__collectionView = self.collectionView;
-			isZooming = YES;
-			if (!_zoom)
-			{
-				[self.collectionView setCollectionViewLayout:defaultLayout animated:YES completion:^(BOOL finished) {
-					isZooming = NO;
-					__collectionView.pagingEnabled = NO;
-					__collectionView.alwaysBounceVertical = YES;
-				}];
-			}
-			else
-			{
-				[self.collectionView setCollectionViewLayout:[self zoomedCollectionViewLayout] animated:YES completion:^(BOOL finished) {
-					isZooming = NO;
-					__collectionView.alwaysBounceVertical = NO;
-					__collectionView.pagingEnabled = YES;
-				}];
-			}
-		}
-	}
-}
-
-
-
-
-
-#pragma mark - ZoomCollectionViewCellDelegate
-
-- (void)zoomCollectionViewCell:(ZoomCollectionViewCell *)cell changedZoom:(BOOL)zoom
-{
-	self.zoom = cell.zoom;
-}
 
 
 
