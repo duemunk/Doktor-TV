@@ -17,6 +17,11 @@ PODS:
   - AFNetworking/Serialization (2.1.0)
   - AFNetworking/UIKit (2.1.0):
     - AFNetworking/NSURLConnection
+  - CocoaLumberjack (1.8.1):
+    - CocoaLumberjack/Extensions
+  - CocoaLumberjack/Core (1.8.1)
+  - CocoaLumberjack/Extensions (1.8.1):
+    - CocoaLumberjack/Core
   - DMTestSettings (0.3.1)
   - iOS7Colors (2.1.0)
   - JMStaticContentTableViewController (0.1.1)
@@ -26,6 +31,7 @@ PODS:
 
 DEPENDENCIES:
   - AFNetworking
+  - CocoaLumberjack
   - DMTestSettings (from `https://github.com/duemunk/DMTestSettings.git`)
   - iOS7Colors
   - JMStaticContentTableViewController (from `https://github.com/duemunk/JMStaticContentTableViewController.git`)
@@ -47,6 +53,7 @@ EXTERNAL SOURCES:
 
 SPEC CHECKSUMS:
   AFNetworking: c7d7901a83f631414c7eda1737261f696101a5cd
+  CocoaLumberjack: 020378ec400d658923bf5887178394f65f052c90
   DMTestSettings: cc5c7e755e1e7312ed25da2b64aeb92710046f3f
   iOS7Colors: bde8733c6cb28db1065875dcff38667090f58779
   JMStaticContentTableViewController: 6149a7eed4ea06075757dcffff49a93396e2e235

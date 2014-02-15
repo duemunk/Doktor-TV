@@ -228,10 +228,10 @@
 	[session getTasksWithCompletionHandler:^(NSArray *dataTasks, NSArray *uploadTasks, NSArray *downloadTasks)
 	{
 		NSURLSessionDownloadTask *downloadTask;
-		DLog(@"%lu",(unsigned long)downloadTasks.count);
+		DDLogInfo(@"%lu",(unsigned long)downloadTasks.count);
 		for (NSURLSessionDownloadTask *_downloadTask in downloadTasks)
 		{
-			DLog(@"\n\n%@\n\n%@\n\n",url,_downloadTask.originalRequest.URL);
+			DDLogInfo(@"\n\n%@\n\n%@\n\n",url,_downloadTask.originalRequest.URL);
 			if ([url isEqual:_downloadTask.originalRequest.URL])
 				downloadTask = _downloadTask;
 		}
@@ -269,27 +269,27 @@
 - (void)URLSession:(NSURLSession *)session downloadTask:(NSURLSessionDownloadTask *)downloadTask didWriteData:(int64_t)bytesWritten totalBytesWritten:(int64_t)totalBytesWritten totalBytesExpectedToWrite:(int64_t)totalBytesExpectedToWrite
 {
 	float progress = (float)totalBytesWritten / (float)totalBytesExpectedToWrite;
-	DLog(@"Progess: %f", progress);
+	DDLogVerbose(@"Progess: %f", progress);
 	dispatch_async(dispatch_get_main_queue(), ^{
 		[[NSNotificationCenter defaultCenter] postNotificationName:NOTIFICATION_DOWNLOAD_PROGRESS object:downloadTask userInfo:@{kPROGRESS:@(progress)}];
 	});
 }
 - (void)URLSession:(NSURLSession *)session downloadTask:(NSURLSessionDownloadTask *)downloadTask didFinishDownloadingToURL:(NSURL *)location
 {
-	DLog(@"%@",downloadTask);
-	DLog(@"%@",location);
+	DDLogInfo(@"%@",downloadTask);
+	DDLogInfo(@"%@",location);
 	
 	NSDictionary *info = [[NSUserDefaults standardUserDefaults] objectForKey:@(downloadTask.taskIdentifier).stringValue];
 	NSString *fileName = info[kFILE_NAME];
 	if (!fileName) {
-		DLog(@"No filename for task %lu",(unsigned long)downloadTask.taskIdentifier);
+		DDLogInfo(@"No filename for task %lu",(unsigned long)downloadTask.taskIdentifier);
 		return;
 	}
 	
 	NSNumber *persistent = info[kPERSISTENT];
 	if (!persistent) {
 		persistent = @YES; // Default
-		DLog(@"Persistence not set for task %lu",(unsigned long)downloadTask.taskIdentifier);
+		DDLogInfo(@"Persistence not set for task %lu",(unsigned long)downloadTask.taskIdentifier);
 	}
 	
 	NSString *filePath = [DataHandler pathForFile:fileName persistent:persistent.boolValue];
@@ -301,7 +301,7 @@
 	{
 		if ([fileManager fileExistsAtPath:fileURL.path isDirectory:NO])
 		{
-			DLog(@"Already exists %@",fileURL);
+			DDLogInfo(@"Already exists %@",fileURL);
 			[fileManager removeItemAtURL:location error:nil];
 			return;
 		}
@@ -309,7 +309,7 @@
 		{
 			NSError *fileMoveError;
 			if (![fileManager moveItemAtURL:location toURL:fileURL error:&fileMoveError]) {
-				DLog(@"%@",fileMoveError);
+				DDLogError(@"%@",fileMoveError);
 				return;
 			}
 			
@@ -325,7 +325,7 @@
 
 - (void)URLSession:(NSURLSession *)session downloadTask:(NSURLSessionDownloadTask *)downloadTask didResumeAtOffset:(int64_t)fileOffset expectedTotalBytes:(int64_t)expectedTotalBytes
 {
-	DLog(@"Resuming %@, offset %lld, expectedTotal %lld",downloadTask.originalRequest.URL.path,fileOffset,expectedTotalBytes);
+	DDLogInfo(@"Resuming %@, offset %lld, expectedTotal %lld",downloadTask.originalRequest.URL.path,fileOffset,expectedTotalBytes);
 }
 
 
@@ -595,7 +595,7 @@
 	{
 		NSString *fileName = [self resumeDataPathForUrl:url];
 		[resumeData writeToFile:fileName atomically:YES];
-		DLog(@"Saved resume data: %@ size: %lu", fileName,(unsigned long)resumeData.length);
+		DDLogInfo(@"Saved resume data: %@ size: %lu", fileName,(unsigned long)resumeData.length);
 	}
 }
 
@@ -607,7 +607,7 @@
 		NSData *resumeData = [NSData dataWithContentsOfFile:resumeDataFileName];
 		NSError *error;
 		if (![[NSFileManager defaultManager] removeItemAtPath:resumeDataFileName error:&error])
-			DLog(@"Couldn't remove resumeData file: %@, %@",resumeDataFileName,error);
+			DDLogError(@"Couldn't remove resumeData file: %@, %@",resumeDataFileName,error);
 		
 		return resumeData;
 	}

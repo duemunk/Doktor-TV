@@ -116,7 +116,7 @@
 	BOOL hasVideoFile = self.episode.video && [DataHandler fileExists:self.episode.video persistent:STORE_VIDEO_PERSISTENT];
 	if (hasVideoFile)
 	{
-		DLog(@"Has videofile %@ for episode %@", self.episode.video,self.episode.title);
+		DDLogInfo(@"Has videofile %@ for episode %@", self.episode.video,self.episode.title);
 		
 		downloadButton.title = @"Afspil";
 		
@@ -126,7 +126,7 @@
 	}
 	else // Has link, only show play
 	{
-		DLog(@"No videofile for episode %@", self.episode.title);
+		DDLogInfo(@"No videofile for episode %@", self.episode.title);
 		streamButton = [Button new];
 		[self.view addSubview:streamButton];
 		[streamButton addTarget:self action:@selector(stream) forControlEvents:UIControlEventTouchUpInside];
@@ -167,7 +167,7 @@
 	BOOL hasVideoFile = self.episode.video && [DataHandler fileExists:self.episode.video persistent:STORE_VIDEO_PERSISTENT];
 	if (hasVideoFile)
 	{
-		DLog(@"Video available %@ for episode %@",self.episode.video,self.episode.title);
+		DDLogInfo(@"Video available %@ for episode %@",self.episode.video,self.episode.title);
 		
 		NSString *urlString = [DataHandler pathForFile:self.episode.video persistent:STORE_VIDEO_PERSISTENT];
 		NSURL *url = [NSURL fileURLWithPath:urlString];
@@ -175,7 +175,7 @@
 	}
 	else
 	{
-		DLog(@"No video %@ for episode %@",self.episode.video,self.episode.title);
+		DDLogInfo(@"No video %@ for episode %@",self.episode.video,self.episode.title);
 		
 		if (_downloadTask)
 		{
@@ -192,7 +192,7 @@
 		
 		[[DRHandler sharedInstance] getVideoLinkForEpisode:self.episode completion:^(NSString *urlString)
 		{
-			DLog(@"Begin download of video for episode %@ in program %@",self.episode.title,((Program *)self.episode.season.program).title);
+			DDLogInfo(@"Begin download of video for episode %@ in program %@",self.episode.title,((Program *)self.episode.season.program).title);
 			
 			[[FileDownloadHandler sharedInstance] download:urlString
 													toFile:self.episode.video
@@ -218,7 +218,7 @@
 	if ([notification.name isEqualToString:NOTIFICATION_DOWNLOAD_PROGRESS])
 	{
 		float progress = [notification.userInfo[kPROGRESS] floatValue];
-		DLog(@"Progess: %f", progress);
+		DDLogVerbose(@"Progess: %f", progress);
 		downloadButton.title = [NSString stringWithFormat:@"Henter %.0f%%",ceilf(100.0f*progress)];
 	}
 }
@@ -287,13 +287,13 @@
 	int reason = [[notification userInfo][MPMoviePlayerPlaybackDidFinishReasonUserInfoKey] intValue];
 	switch (reason) {
 		case MPMovieFinishReasonPlaybackEnded:
-			DLog(@"Playback ended");
+			DDLogInfo(@"Playback ended");
 			break;
 		case MPMovieFinishReasonUserExited:
-			DLog(@"User exited");
+			DDLogInfo(@"User exited");
 			break;
 		case MPMovieFinishReasonPlaybackError:
-			DLog(@"Playback error");
+			DDLogInfo(@"Playback error");
 			break;
 			
 		default:

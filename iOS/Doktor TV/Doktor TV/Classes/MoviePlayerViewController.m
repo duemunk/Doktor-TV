@@ -59,35 +59,35 @@
 	
 	switch (event.subtype) {
 		case UIEventSubtypeRemoteControlPlay:
-			DLog(@"Remote play");
+			DDLogInfo(@"Remote play");
 			[self.moviePlayer play];
 			break;
 		case UIEventSubtypeRemoteControlPause:
-			DLog(@"Remote pause");
+			DDLogInfo(@"Remote pause");
 			[self.moviePlayer pause];
 			break;
 		case UIEventSubtypeRemoteControlStop:
-			DLog(@"Remote stop");
+			DDLogInfo(@"Remote stop");
 			[self.moviePlayer stop];
 			break;
 		case UIEventSubtypeRemoteControlTogglePlayPause:
-			DLog(@"Remote toggle play/pause");
+			DDLogInfo(@"Remote toggle play/pause");
 			if (self.moviePlayer.playbackState == MPMoviePlaybackStatePlaying)
 				[self.moviePlayer pause];
 			else
 				[self.moviePlayer play];
 			break;
 		case UIEventSubtypeRemoteControlBeginSeekingForward:
-			DLog(@"Remote begin seeking forward");
+			DDLogInfo(@"Remote begin seeking forward");
 			[self.moviePlayer beginSeekingForward];
 			break;
 		case UIEventSubtypeRemoteControlBeginSeekingBackward:
-			DLog(@"Remote begin seeking backward");
+			DDLogInfo(@"Remote begin seeking backward");
 			[self.moviePlayer beginSeekingBackward];
 			break;
 		case UIEventSubtypeRemoteControlEndSeekingForward:
 		case UIEventSubtypeRemoteControlEndSeekingBackward:
-			DLog(@"Remote end seeking");
+			DDLogInfo(@"Remote end seeking");
 			[self.moviePlayer endSeeking];
 			break;
 		case UIEventSubtypeRemoteControlNextTrack:
@@ -97,7 +97,7 @@
 			self.moviePlayer.currentPlaybackTime -= 15.0f;
 			break;
 		default:
-			DLog(@"Remote unused");
+			DDLogInfo(@"Remote unused");
 			break;
 	}
 	

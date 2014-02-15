@@ -54,7 +54,7 @@
 - (NSInteger)numberOfSectionsInCollectionView:(UICollectionView *)collectionView
 {
 	NSUInteger count = self.fetchedResultsController.sections.count;
-	DLog(@"%lu",(unsigned long)count);
+	DDLogVerbose(@"%lu",(unsigned long)count);
     return count;
 }
 
@@ -62,7 +62,7 @@
 {
     id <NSFetchedResultsSectionInfo> sectionInfo = self.fetchedResultsController.sections[section];
 	NSUInteger count = [sectionInfo numberOfObjects];
-	DLog(@"%lu",(unsigned long)count);
+	DDLogVerbose(@"%lu",(unsigned long)count);
     return count;
 }
 
@@ -130,7 +130,7 @@
 	if (![self.fetchedResultsController performFetch:&error]) {
 		// Replace this implementation with code to handle the error appropriately.
 		// abort() causes the application to generate a crash log and terminate. You should not use this function in a shipping application, although it may be useful during development.
-		DLog(@"Unresolved error %@, %@", error, [error userInfo]);
+		DDLogError(@"Unresolved error %@, %@", error, [error userInfo]);
 		abort();
 	}
     
@@ -144,10 +144,10 @@
     
     switch(type) {
         case NSFetchedResultsChangeInsert:
-            change[@(type)] = @(sectionIndex); DLog(@"Insert section %d",sectionIndex);
+            change[@(type)] = @(sectionIndex); DDLogVerbose(@"Insert section %d",sectionIndex);
             break;
         case NSFetchedResultsChangeDelete:
-            change[@(type)] = @(sectionIndex); DLog(@"Delete section %d",sectionIndex);
+            change[@(type)] = @(sectionIndex); DDLogVerbose(@"Delete section %d",sectionIndex);
             break;
     }
     
@@ -184,7 +184,7 @@
 		{
 			if (!containedInInsert) {
 				change[@(type)] = newIndexPath;
-				DLog(@"Insert section %d item %d",indexPath.section,indexPath.item);
+				DDLogVerbose(@"Insert section %d item %d",indexPath.section,indexPath.item);
 			}
 		}
             break;
@@ -192,14 +192,14 @@
 		{
 			if (!containedInDelete) {
 				change[@(type)] = indexPath;
-				DLog(@"Delete section %d item %d",indexPath.section,indexPath.item);
+				DDLogVerbose(@"Delete section %d item %d",indexPath.section,indexPath.item);
 			}
 		}
             break;
         case NSFetchedResultsChangeUpdate:
 		{
             change[@(type)] = indexPath;
-			DLog(@"Update section %d item %d",indexPath.section,indexPath.item);
+			DDLogVerbose(@"Update section %d item %d",indexPath.section,indexPath.item);
 		}
             break;
         case NSFetchedResultsChangeMove:
@@ -207,12 +207,12 @@
 			if (!containedInInsert)
 			{
 				change[@(NSFetchedResultsChangeInsert)] = newIndexPath;
-				DLog(@"Insert section %d item %d",indexPath.section,indexPath.item);
+				DDLogVerbose(@"Insert section %d item %d",indexPath.section,indexPath.item);
 			}
 			if (!containedInDelete)
 			{
 				change[@(NSFetchedResultsChangeDelete)] = indexPath;
-				DLog(@"Delete section %d item %d",indexPath.section,indexPath.item);
+				DDLogVerbose(@"Delete section %d item %d",indexPath.section,indexPath.item);
 			}
 //			else
 //			{

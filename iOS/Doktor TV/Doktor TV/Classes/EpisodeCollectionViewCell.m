@@ -54,7 +54,7 @@
 		if (_downloadTask) {
 			if (self.downloadTask.state == NSURLSessionTaskStateRunning)
 			{
-				DLog(@"Cell had running downloadtask %@",_downloadTask.taskDescription);
+				DDLogInfo(@"Cell had running downloadtask %@",_downloadTask.taskDescription);
 				[self.downloadTask suspend];
 			}
 		}
@@ -114,7 +114,7 @@
 	if ([notification.name isEqualToString:NOTIFICATION_DOWNLOAD_PROGRESS])
 	{
 		float progress = [notification.userInfo[kPROGRESS] floatValue];
-		DLog(@"Progess: %f", progress);
+		DDLogVerbose(@"Progess: %f", progress);
 	}
 }
 
@@ -142,7 +142,7 @@
 	if (_downloadTask) {
 		if (self.downloadTask.state == NSURLSessionTaskStateRunning)
 		{
-			DLog(@"Cell had running downloadtask %@",_downloadTask.taskDescription);
+			DDLogInfo(@"Cell had running downloadtask %@",_downloadTask.taskDescription);
 			[self.downloadTask suspend];
 		}
 	}

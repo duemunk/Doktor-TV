@@ -22,10 +22,16 @@
 	#import "Appearance.h"
 	#define isPhone UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPhone
 
-	#ifdef DEBUG
-	#define DLog( s, ... ) NSLog( @"%sl%d | %@", __func__, __LINE__, [NSString stringWithFormat:(s), ##__VA_ARGS__] )
-	#else
-	#define DLog( s, ... )
-	#endif
+	#import "DDLog.h"
+#if DEBUG
+	static const int ddLogLevel = LOG_LEVEL_DEBUG;
+#else
+	static const int ddLogLevel = LOG_LEVEL_WARN;
+#endif
+//	#ifdef DEBUG
+//	#define DLog( s, ... ) NSLog( @"%sl%d | %@", __func__, __LINE__, [NSString stringWithFormat:(s), ##__VA_ARGS__] )
+//	#else
+//	#define DLog( s, ... )
+//	#endif
 
 #endif

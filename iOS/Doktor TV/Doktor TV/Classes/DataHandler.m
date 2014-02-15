@@ -37,12 +37,12 @@
         if ([managedObjectContext hasChanges] && ![managedObjectContext save:&error]) {
 			// Replace this implementation with code to handle the error appropriately.
 			// abort() causes the application to generate a crash log and terminate. You should not use this function in a shipping application, although it may be useful during development.
-            DLog(@"Unresolved error %@, %@", error, [error userInfo]);
+            DDLogError(@"Unresolved error %@, %@", error, [error userInfo]);
             abort();
         }
 		else
 		{
-			DLog(@"Saved context succesfully");
+			DDLogInfo(@"Saved context succesfully");
 		}
     }
 }
@@ -114,7 +114,7 @@
          Lightweight migration will only work for a limited set of schema changes; consult "Core Data Model Versioning and Data Migration Programming Guide" for details.
          
          */
-        DLog(@"Unresolved error %@, %@", error, [error userInfo]);
+        DDLogError(@"Unresolved error %@, %@", error, [error userInfo]);
         abort();
     }
     
@@ -135,7 +135,7 @@
 		NSArray *results = [self.managedObjectContext executeFetchRequest:fetchRequest error:&error];
 		if (error)
 		{
-			DLog(@"Err %@",error.description);
+			DDLogError(@"Err %@",error.description);
 		}
 		
 		for (NSManagedObject *obj in results) {
@@ -204,7 +204,7 @@
 	NSArray *results = [self.managedObjectContext executeFetchRequest:fetchRequest error:&error];
 	if (error)
 	{
-		DLog(@"Err %@",error.description);
+		DDLogError(@"Err %@",error.description);
 	}
 	return results;
 }
@@ -235,7 +235,7 @@
 
 - (NSManagedObject *)newManagedObjectWithKey:(NSString *)key
 {
-	DLog(@"Key %@",key);
+	DDLogVerbose(@"Key %@",key);
 	NSManagedObjectModel *managedObjectModel = self.managedObjectContext.persistentStoreCoordinator.managedObjectModel;
 	
 	NSEntityDescription *entity = [[managedObjectModel entitiesByName] objectForKey:key];
@@ -246,7 +246,7 @@
 
 - (NSManagedObject *)newManagedObjectUnassociatedWithKey:(NSString *)key
 {
-	DLog(@"Key %@",key);
+	DDLogInfo(@"Key %@",key);
 	NSEntityDescription *entity = [NSEntityDescription entityForName:key inManagedObjectContext:self.managedObjectContext];
 	NSManagedObject *unassociatedObject = [[NSManagedObject alloc] initWithEntity:entity insertIntoManagedObjectContext:nil];
 	return unassociatedObject;
