@@ -126,8 +126,10 @@
 - (void)clearCoreData
 {
 	// Delete all objects
-	for (id entity in [self.managedObjectModel entities])
+	for (NSEntityDescription *entity in [self.managedObjectModel entities])
 	{
+		DDLogInfo(@"Deleting entity with name %@",entity.name);
+		
 		NSFetchRequest *fetchRequest = [NSFetchRequest new];
 		fetchRequest.entity = entity;
 		
@@ -162,7 +164,7 @@
 //			
 //            if (![[NSFileManager defaultManager] removeItemAtPath:storeUrl.path error:&error])
 //            {
-//                NSLog(@"\nresetDatastore. Error removing file of persistent store: %@",
+//                DDLogError(@"\nresetDatastore. Error removing file of persistent store: %@",
 //					  [error localizedDescription]);
 //                resetOk = NO;
 //            }
@@ -184,7 +186,7 @@
 //    }
 //    else
 //    {
-//        NSLog(@"\nresetDatastore. Could not find the persistent store");
+//        DDLogWarn(@"\nresetDatastore. Could not find the persistent store");
 //        return resetOk;
 //    }
 }

@@ -392,6 +392,8 @@
 
 - (void)validateEpisodeData:(NSDictionary *)episodesDictionary forProgram:(Program *)program
 {
+	NSParameterAssert(program);
+	
 	NSArray *data = episodesDictionary[kDRData];
 	
 	Season *season = program.seasons.firstObject;
@@ -486,6 +488,12 @@
 #define kDRBitrate @"Bitrate"
 - (void)getVideoLinkForEpisode:(Episode *)episode completion:(void (^)(NSString *))completion
 {
+	if (!episode.uri)
+	{
+		DDLogError(@"No video for episode %@ in program %@",episode.title,((Program *)episode.season.program).title);
+		return;
+	}
+	
 	NSString *query = episode.uri;
 	DDLogInfo(@"\nURI: \n %@ \n\n",query);
 	DDLogInfo(@"runVideo w/ uri %@ for episode %@ in program %@",query,episode.title,((Program *)episode.season.program).title);

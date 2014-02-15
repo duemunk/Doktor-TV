@@ -69,7 +69,10 @@
 	self.predicate = [NSPredicate predicateWithFormat:@"season.program = %@", self.program];
 	[self.collectionView reloadData];
 	
-	[[DRHandler sharedInstance] validateEpisodesForProgram:self.program];
+	if (self.program)
+	{
+		[[DRHandler sharedInstance] validateEpisodesForProgram:self.program];
+	}
 }
 
 - (void)setProgram:(Program *)program
