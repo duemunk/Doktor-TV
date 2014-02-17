@@ -27,6 +27,7 @@ PODS:
   - JMStaticContentTableViewController (0.1.1)
   - KeepLayout (1.2.2)
   - TDMScreenEdgePanGestureRecognizer (0.0.1)
+  - TDMSwitchTableViewCell (0.0.1)
   - TDMZoomCollectionViewController (0.0.1)
 
 DEPENDENCIES:
@@ -37,6 +38,7 @@ DEPENDENCIES:
   - JMStaticContentTableViewController (from `https://github.com/duemunk/JMStaticContentTableViewController.git`)
   - KeepLayout (from `https://github.com/duemunk/KeepLayout.git`)
   - TDMScreenEdgePanGestureRecognizer (from `https://github.com/duemunk/TDMScreenEdgePanGestureRecognizer.git`)
+  - TDMSwitchTableViewCell (from `https://github.com/duemunk/TDMSwitchTableViewCell.git`)
   - TDMZoomCollectionViewController (from `https://tobiasdm@bitbucket.org/tobiasdm/tdmzoomcollectionviewcontroller.git`)
 
 EXTERNAL SOURCES:
@@ -48,6 +50,8 @@ EXTERNAL SOURCES:
     :git: https://github.com/duemunk/KeepLayout.git
   TDMScreenEdgePanGestureRecognizer:
     :git: https://github.com/duemunk/TDMScreenEdgePanGestureRecognizer.git
+  TDMSwitchTableViewCell:
+    :git: https://github.com/duemunk/TDMSwitchTableViewCell.git
   TDMZoomCollectionViewController:
     :git: https://tobiasdm@bitbucket.org/tobiasdm/tdmzoomcollectionviewcontroller.git
 
@@ -59,6 +63,7 @@ SPEC CHECKSUMS:
   JMStaticContentTableViewController: 6149a7eed4ea06075757dcffff49a93396e2e235
   KeepLayout: 0f80364b513a2a4a6183ffe3740706bf861dec16
   TDMScreenEdgePanGestureRecognizer: ab6e566026b24974a582ca9259eef01775234ce3
+  TDMSwitchTableViewCell: a8fdff23d192c3a234e469f4c983b335998b70e2
   TDMZoomCollectionViewController: df168832711b58f5a03738db93ab59be4a8fa352
 
 COCOAPODS: 0.29.0

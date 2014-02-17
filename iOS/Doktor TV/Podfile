@@ -1,6 +1,7 @@
 platform :ios, '7.0' 
 
 target "Doktor TV" do
+	pod "TDMSwitchTableViewCell", :git => "https://github.com/duemunk/TDMSwitchTableViewCell.git"
 	pod "DMTestSettings", :git => "https://github.com/duemunk/DMTestSettings.git"
 	pod "KeepLayout", :git => "https://github.com/duemunk/KeepLayout.git"
 	pod "JMStaticContentTableViewController", :git => "https://github.com/duemunk/JMStaticContentTableViewController.git"
