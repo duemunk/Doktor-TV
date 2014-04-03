@@ -27,7 +27,6 @@
 @implementation ProgramCollectionViewCell
 {
 	ProgramCollectionViewController *programCollectionViewController;
-	
 }
 
 - (instancetype)initWithFrame:(CGRect)frame
@@ -67,12 +66,16 @@
 		
 		self.managedObject = _program;
 		
-		[self setupTitle];
 		[self setupImage];
-		[self setupSubscribeButton];
 		
-		if (programCollectionViewController)
-			programCollectionViewController.program = self.program;
+		if (self.isZoomed) {
+			[self setupTitle];
+			[self setupSubscribeButton];
+			
+			if (programCollectionViewController) {
+				programCollectionViewController.program = self.program;
+			}
+		}
 	}
 }
 
@@ -145,8 +148,9 @@
 }
 - (void)setChildViewController:(UIViewController *)childViewController
 {
-	if (childViewController)
+	if (childViewController) {
 		NSAssert([childViewController isKindOfClass:[ProgramCollectionViewController class]], @"Incorrect class");
+	}
 	
 	programCollectionViewController = (ProgramCollectionViewController *)childViewController;
 }

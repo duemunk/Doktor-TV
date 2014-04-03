@@ -144,8 +144,10 @@
 	}
 	else
 	{
-		[self.childViewController.view removeFromSuperview];
-		self.childViewController = nil;
+		if (_childViewController) {
+			[self.childViewController.view removeFromSuperview];
+			self.childViewController = nil;
+		}
 	}
 }
 
